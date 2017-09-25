@@ -29,6 +29,7 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
         
         
         self.intializeMap()
+        self.startHandlingLocationUpdate(isCrucial: true)
         
     }
     

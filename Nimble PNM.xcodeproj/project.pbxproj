@@ -39,6 +39,7 @@
 		28D991111F1CC339006DADE4 /* InstallCMVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D991101F1CC339006DADE4 /* InstallCMVC.swift */; };
 		28D991131F1CD063006DADE4 /* HomeViewCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D991121F1CD063006DADE4 /* HomeViewCollectionCell.swift */; };
 		28D991151F1CD08D006DADE4 /* HomeViewCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28D991141F1CD08D006DADE4 /* HomeViewCollectionCell.xib */; };
+		28E057571F792B5E0066C809 /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E057561F792B5E0066C809 /* LocationHelper.swift */; };
 		28F347341F1CF34C006F9086 /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F347331F1CF34C006F9086 /* BaseVC.swift */; };
 		28F347361F1D065A006F9086 /* AlamofireHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F347351F1D065A006F9086 /* AlamofireHelper.swift */; };
 		28F347381F1DD58C006F9086 /* LoaderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F347371F1DD58C006F9086 /* LoaderVC.swift */; };
@@ -99,6 +100,7 @@
 		28D991101F1CC339006DADE4 /* InstallCMVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallCMVC.swift; sourceTree = "<group>"; };
 		28D991121F1CD063006DADE4 /* HomeViewCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewCollectionCell.swift; sourceTree = "<group>"; };
 		28D991141F1CD08D006DADE4 /* HomeViewCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewCollectionCell.xib; sourceTree = "<group>"; };
+		28E057561F792B5E0066C809 /* LocationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		28F347331F1CF34C006F9086 /* BaseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		28F347351F1D065A006F9086 /* AlamofireHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireHelper.swift; sourceTree = "<group>"; };
 		28F347371F1DD58C006F9086 /* LoaderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoaderVC.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				28F347351F1D065A006F9086 /* AlamofireHelper.swift */,
 				28B6260F1F1746C900D3D69F /* UtilityHelper.swift */,
 				28B626111F1751C000D3D69F /* Extensions.swift */,
+				28E057561F792B5E0066C809 /* LocationHelper.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				28F347341F1CF34C006F9086 /* BaseVC.swift in Sources */,
 				28F347381F1DD58C006F9086 /* LoaderVC.swift in Sources */,
 				28F4D4411F266D1C00E57D0E /* USAnalyzerSettingVC.swift in Sources */,
+				28E057571F792B5E0066C809 /* LocationHelper.swift in Sources */,
 				28F4D4491F2733D300E57D0E /* WorkOrderVC.swift in Sources */,
 				28D991051F18A590006DADE4 /* StartConfigurerVC.swift in Sources */,
 				28D991111F1CC339006DADE4 /* InstallCMVC.swift in Sources */,

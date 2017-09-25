@@ -541,6 +541,7 @@
                         <outlet property="textfieldSelectMacAddress" destination="Wwi-fK-c4h" id="EaL-wc-5Dj"/>
                         <outlet property="viewHolderBox" destination="ihS-E3-BRD" id="5nJ-ws-r93"/>
                         <segue destination="Naa-XH-7NK" kind="show" identifier="segue-to-modem-status" id="vai-LJ-oCM"/>
+                        <segue destination="mg8-zf-lP5" kind="show" identifier="segue-to-geocode" id="Ggw-Yc-qPC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEf-NT-DKe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -899,7 +900,7 @@
                                     <action selector="btnActionSave:" destination="mg8-zf-lP5" eventType="touchUpInside" id="sJ7-Bq-EzJ"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4iS-06-UA1">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4iS-06-UA1">
                                 <rect key="frame" x="8" y="44.5" width="304" height="40"/>
                                 <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -1926,5 +1927,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="GcN-Qs-dNr"/>
+        <segue reference="Ggw-Yc-qPC"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -11,6 +11,8 @@ import UIKit
 class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BarCodeScannerDelegate {
     @IBOutlet weak var labelHeading: UILabel!
 
+    var exposedMacAddress : String = ""
+    
     @IBOutlet weak var textFieldMacAddress: UITextField!
     @IBOutlet weak var tableViewGeocode: UITableView!
     let headerLocation = "Location"
@@ -38,11 +40,33 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     let placeholderContactNode :String = "Node Name"
     
     let illusionForTextfields : CGFloat = 8.0
+    let illusionForBalancingLeftViewTextfields : CGFloat = 40.0
     
     @IBOutlet weak var btnOutletSave: UIButton!
     
-    @IBAction func btnActionSave(_ sender: Any) {
-    }
+    let TAG_CONTACT_FIRST = 2001
+    let TAG_CONTACT_LAST = 2002
+    let TAG_CONTACT_NODE_NAME = 2003
+    let TAG_CONTACT_PHONE = 2004
+    let TAG_CONTACT_ACCOUNT = 2005
+    
+    let TAG_ADDRESS_CITY = 1001
+    let TAG_ADDRESS_STATE = 1002
+    let TAG_ADDRESS_STREET = 1003
+    let TAG_ADDRESS_COUNTRY = 1004
+    let TAG_ADDRESS_ZIP = 1005
+    
+    
+    
+    var disableLatLngSection = false;
+    var disableAddressContactSection = false;
+    
+    var bundleDataLatLong = LocationDS()
+    var bundleDataAddress = AddressDS()
+    var bundleDataContact = ContactDS()
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +82,7 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
         
         self.labelHeading.text = TXT_LBL_GEOCODING_HEAD
         
-        self.textFieldMacAddress.placeIllusion(ofPixels: illusionForTextfields)
+        self.textFieldMacAddress.placeIllusion(ofPixels: illusionForBalancingLeftViewTextfields)
         //Preparing Button To Insert in the Right Of Text field
         let buttonScanBarcode = UIButton(frame: CGRect(x: 0, y: 8, width: 40, height: 24));
         buttonScanBarcode.addTarget(self, action: #selector(buttonScanBarcodePressed(_:)), for: .touchUpInside)
@@ -77,6 +101,11 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
         self.tableViewGeocode.register(nibNameForAddress, forCellReuseIdentifier: "addresscell")
         self.tableViewGeocode.register(nibNameForLocation, forCellReuseIdentifier: "locationcell")
         self.tableViewGeocode.register(nibNameForContact, forCellReuseIdentifier: "contactcell")
+        
+        if self.exposedMacAddress != ""{
+            self.textFieldMacAddress.text = exposedMacAddress
+        }
+        
         
     }
     
@@ -178,23 +207,38 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             cell.btnOutletModify.addTarget(self, action: #selector(btnModifyLatLngPressed(_:)), for: .touchUpInside)
             cell.labelLatLong.backgroundColor = COLOR_NONE
             
+            if disableLatLngSection{
+                cell.isUserInteractionEnabled = false
+            }else{
+                cell.isUserInteractionEnabled = true
+            }
+            
+            //Setting Value
+            if bundleLocation.latitude != ""  && bundleLocation.longitude != ""{
+                cell.labelLatLong.text = "\(bundleLocation.latitude),\(bundleLocation.longitude)"
+            }else{
+                cell.labelLatLong.text = ""
+            }
+            
             
             
             return cell
             
         }else if section == 1{
             let cell = tableViewGeocode.dequeueReusableCell(withIdentifier: "addresscell") as! AddressGeocodeCell
+            
             cell.textfieldAddressCity.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressState.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressStreet.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressCountry.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressZipcode.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             
-            cell.textfieldAddressCity.placeholder = placeholderAddressCity
-            cell.textfieldAddressState.placeholder = placeholderAddressState
-            cell.textfieldAddressStreet.placeholder = placeholderAddressStreet
-            cell.textfieldAddressCountry.placeholder = placeholderAddressCountry
-            cell.textfieldAddressZipcode.placeholder = placeholderAddressZip
+            cell.textfieldAddressCity.delegate = self
+            cell.textfieldAddressState.delegate = self
+            cell.textfieldAddressStreet.delegate = self
+            cell.textfieldAddressCountry.delegate = self
+            cell.textfieldAddressZipcode.delegate = self
+            
             
             cell.textfieldAddressCity.placeIllusion(ofPixels: illusionForTextfields)
             cell.textfieldAddressState.placeIllusion(ofPixels: illusionForTextfields)
@@ -202,28 +246,63 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             cell.textfieldAddressCountry.placeIllusion(ofPixels: illusionForTextfields)
             cell.textfieldAddressZipcode.placeIllusion(ofPixels: illusionForTextfields)
             
-            for eachView in cell.subviews{
-                if eachView.isKind(of: UITextField.self){
-                    let textfield = (eachView as! UITextField)
-                    textfield.placeIllusion(ofPixels: illusionForTextfields)
-                    textfield.delegate = self
-                    
-                }
+            cell.textfieldAddressCity.tag = TAG_ADDRESS_CITY
+            cell.textfieldAddressState.tag = TAG_ADDRESS_STATE
+            cell.textfieldAddressStreet.tag = TAG_ADDRESS_STREET
+            cell.textfieldAddressCountry.tag = TAG_ADDRESS_COUNTRY
+            cell.textfieldAddressZipcode.tag = TAG_ADDRESS_ZIP
+            
+            cell.textfieldAddressCity.placeholder = placeholderAddressCity
+            cell.textfieldAddressState.placeholder = placeholderAddressState
+            cell.textfieldAddressStreet.placeholder = placeholderAddressStreet
+            cell.textfieldAddressCountry.placeholder = placeholderAddressCountry
+            cell.textfieldAddressZipcode.placeholder = placeholderAddressZip
+            
+            if disableAddressContactSection{
+                cell.isUserInteractionEnabled = false
+            }else{
+                cell.isUserInteractionEnabled = true
             }
             
+            
+            //Setting Value
+            cell.textfieldAddressStreet.text = bundleAddress.streetAddress
+            cell.textfieldAddressCity.text = bundleAddress.city
+            cell.textfieldAddressState.text = bundleAddress.state
+            cell.textfieldAddressCountry.text = bundleAddress.country
+            cell.textfieldAddressZipcode.text = bundleAddress.zipcode
+            
 
-            
-            
             
             return cell
             
         }else if section == 2{
             let cell = tableViewGeocode.dequeueReusableCell(withIdentifier: "contactcell") as! ContactGeocodeCell
+            
             cell.textfieldContactPhone.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactLastName.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactNodeName.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactFirstName.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactAccountNumber.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
+            
+            cell.textfieldContactPhone.delegate = self
+            cell.textfieldContactLastName.delegate = self
+            cell.textfieldContactNodeName.delegate = self
+            cell.textfieldContactFirstName.delegate = self
+            cell.textfieldContactAccountNumber.delegate = self
+            
+            
+            cell.textfieldContactPhone.placeIllusion(ofPixels: illusionForTextfields)
+            cell.textfieldContactLastName.placeIllusion(ofPixels: illusionForTextfields)
+            cell.textfieldContactNodeName.placeIllusion(ofPixels: illusionForTextfields)
+            cell.textfieldContactFirstName.placeIllusion(ofPixels: illusionForTextfields)
+            cell.textfieldContactAccountNumber.placeIllusion(ofPixels: illusionForTextfields)
+            
+            cell.textfieldContactPhone.tag = TAG_CONTACT_PHONE
+            cell.textfieldContactLastName.tag = TAG_CONTACT_LAST
+            cell.textfieldContactNodeName.tag = TAG_CONTACT_NODE_NAME
+            cell.textfieldContactFirstName.tag = TAG_CONTACT_FIRST
+            cell.textfieldContactAccountNumber.tag = TAG_CONTACT_ACCOUNT
             
             cell.textfieldContactPhone.placeholder = placeholderContactPhone
             cell.textfieldContactLastName.placeholder = placeholderContactLast
@@ -231,11 +310,18 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             cell.textfieldContactFirstName.placeholder = placeholderContactFirst
             cell.textfieldContactAccountNumber.placeholder = placeholderContactAccount
             
-            cell.textfieldContactPhone.placeIllusion(ofPixels: illusionForTextfields)
-            cell.textfieldContactLastName.placeIllusion(ofPixels: illusionForTextfields)
-            cell.textfieldContactNodeName.placeIllusion(ofPixels: illusionForTextfields)
-            cell.textfieldContactFirstName.placeIllusion(ofPixels: illusionForTextfields)
-            cell.textfieldContactAccountNumber.placeIllusion(ofPixels: illusionForTextfields)
+            if disableAddressContactSection{
+                cell.isUserInteractionEnabled = false
+            }else{
+                cell.isUserInteractionEnabled = true
+            }
+            
+            //Setting Value
+            cell.textfieldContactPhone.text = bundleContact.phoneNumber
+            cell.textfieldContactLastName.text = bundleContact.lastName
+            cell.textfieldContactNodeName.text = bundleContact.nodeName
+            cell.textfieldContactFirstName.text = bundleContact.firstName
+            cell.textfieldContactAccountNumber.text = bundleContact.accountNumber
             
             return cell
             
@@ -260,8 +346,126 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
+        let tag = textField.tag
+        
+        if tag == TAG_ADDRESS_STREET{
+            bundleAddress.streetAddress = textField.text!
+            
+        }else if tag == TAG_ADDRESS_CITY{
+            bundleAddress.city = textField.text!
+            
+        }else if tag == TAG_ADDRESS_STATE{
+            bundleAddress.state = textField.text!
+            
+        }else if tag == TAG_ADDRESS_COUNTRY{
+            bundleAddress.country = textField.text!
+            
+        }else if tag == TAG_ADDRESS_ZIP{
+            bundleAddress.zipcode = textField.text!
+            
+        }else if tag == TAG_CONTACT_FIRST{
+            bundleContact.firstName = textField.text!
+            
+        }else if tag == TAG_CONTACT_LAST{
+             bundleContact.lastName = textField.text!
+            
+        }else if tag == TAG_CONTACT_PHONE{
+            bundleContact.phoneNumber = textField.text!
+            
+        }else if tag == TAG_CONTACT_ACCOUNT{
+            bundleContact.accountNumber = textField.text!
+            
+        }else if tag == TAG_CONTACT_NODE_NAME{
+            bundleContact.nodeName = textField.text!
+            
+        }else{
+            //No Need to Handle
+        }
+        
+        
     }
     
+    //MARK : HELPER FUNCTIONS
+    //0 for Latitude Lngitude Section
+    //1 for Address/Contact Section
+    func disableSection(sectionCode : Int){
+        if sectionCode == 0{
+            disableLatLngSection = true
+         }else{
+            disableAddressContactSection = true
+        }
+    }
+    
+    func validate() -> Bool{
+        
+        var message = ""
+        if !UtilityHelper.isValidMacAddress(testStr: self.textFieldMacAddress.text!){
+            message = ALERT_MSG_GEOCODE_ENTER_VALID_MAC
+        }
+        
+        if message == ""{
+            let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_APP_NAME, message: message, buttonTitle: ALERT_BUTTON_OK, completionHandler: nil)
+            self.present(alert, animated: true, completion: nil)
+            return true
+        }else{
+            return true
+            
+        }
+        
+    }
+    
+    @IBAction func btnActionSave(_ sender: Any) {
+        if validate(){
+            let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
+            let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+            
+            let macAddress = self.textFieldMacAddress.text!
+            
+            let dictParameters = [REQ_PARAM_AUTH_KEY : authKey,
+                                  REQ_PARAM_USERNAME : username,
+                                  REQ_PARAM_MAC_ADDRESS : macAddress,
+                                  REQ_PARAM_GEO_FIRST_NAME : bundleContact.firstName,
+                                  REQ_PARAM_GEO_LAST_NAME : bundleContact.lastName,
+                                  REQ_PARAM_GEO_ACCOUNT : bundleContact.accountNumber,
+                                  REQ_PARAM_GEO_ADDRESS : bundleAddress.streetAddress,
+                                  REQ_PARAM_GEO_CITY : bundleAddress.city,
+                                  REQ_PARAM_GEO_STATE : bundleAddress.state,
+                                  REQ_PARAM_GEO_ZIP : bundleAddress.zipcode,
+                                  REQ_PARAM_GEO_COUNTRY : bundleAddress.country,
+                                  REQ_PARAM_GEO_PHONE : bundleContact.phoneNumber,
+                                  REQ_PARAM_GEO_NODE : bundleContact.nodeName,
+                                  REQ_PARAM_GEO_LAT : bundleLocation.latitude,
+                                  REQ_PARAM_GEO_LNG : bundleLocation.longitude
+            ] as [String : Any];
+            
+            self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_GEOCODE_SAVE, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_GEOCODE_SAVING, sucessCompletionHadler: {
+                responseDict in
+                
+                let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
+                let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
+                
+                if statusCode == 200{
+                    
+                    
+                }else if statusCode == 401{
+                    self.performLogoutAsSessionExpiredDetected()
+                }else{
+                    self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
+                }
+                
+                
+                
+                
+            },failureCompletionHandler: {
+                (errorTitle,errorMessage) in
+                self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
+            })
+
+        }
+       
+        
+        
+    }
     
     
     
@@ -272,28 +476,28 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
 
 
 struct AddressDS{
-    var streetAddress = ""
-    var city = ""
-    var state = ""
-    var country = ""
-    var zipcode = ""
+    var streetAddress = "a"
+    var city = "s"
+    var state = "d"
+    var country = "f"
+    var zipcode = "g"
     
     
 }
 
 struct ContactDS{
-    var firstName = ""
-    var lastName = ""
-    var phoneNumber = ""
-    var accountNumber = ""
-    var nodeName = ""
+    var firstName = "a"
+    var lastName = "s"
+    var phoneNumber = "d"
+    var accountNumber = "f"
+    var nodeName = "g"
     
 }
 
 
 struct LocationDS{
-    var latitude = ""
-    var longitude = ""
+    var latitude = "j"
+    var longitude = "h"
 }
 
 

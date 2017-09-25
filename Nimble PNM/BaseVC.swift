@@ -102,4 +102,31 @@ class BaseVC: UIViewController {
         })
     }
     
+    func startHandlingLocationUpdate(isCrucial : Bool = false){
+        let response = APP_DELEGATE.locationHelper.startUpdating()
+        if (response == CONST_MSG_LOCATION_SERVICE_GRANTED){
+                //Location Updates has been started
+            
+        }else{
+            let alert = UtilityHelper.composeAlertWith(title: APP_NAME, message: response, buttonTitle: ALERT_BUTTON_OK, completionHandler: {
+                action in
+                if isCrucial{
+                    self.navigationController?.popViewController(animated: true)
+                }else{
+                    //Do Nothing
+                }
+            })
+            self.present(alert, animated: true, completion: nil)
+
+        }
+        
+    }
+    
+    func stopHandlingUpdates(){
+        APP_DELEGATE.locationHelper.stopUpdating()
+    }
+    
+    
+    
+    
 }

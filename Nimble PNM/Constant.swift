@@ -88,6 +88,7 @@ let SERVICE_URL_INSTALL_CABLE_MODEM = "/pnmservice/installCableModem"
 
 
 let SERVICE_URL_INSTALL_GET_DS_DATA = "/pnmservice/getModemDownStream"
+let SERVICE_URL_GEOCODE_SAVE = "/pnmservice/saveGeocode"
 
 
 
@@ -111,6 +112,7 @@ let LOADER_MSG_FAILED_MODEMS = "Loading Failed Modems ..."
 let LOADER_MSG_REFRESH_FAILED_MODEMS = "Updating Failed Modems ..."
 let LOADER_MSG_COMPLETE_FAILED_MODEMS = "Completing Failed Modem ..."
 let LOADER_MSG_GETTING_MODEM_STATUS = "Getting Modem Status ..."
+let LOADER_MSG_GEOCODE_SAVING = "Saving Geocode data ..."
 
 let LOADER_MSG_INSTALL_MODEMS = "Installing Modem ..."
 
@@ -167,6 +169,11 @@ let ALERT_MSG_INSTALL_CM_SUCCESS = "Cable modem installed successfully."
 let ALERT_MSG_COMPLETE_MODEM_CONFIRM = "Are you sure you want to complete install this Modem ?"
 let ALERT_MSG_COMPLETE_SUCCESS = "Modem unable to be successfully installed, so marked as complete. Supervisor will be notified."
 let ALERT_MSG_COMPLETE_SUCCESS_BUT_FAILED = "Modem installed but some test cases are failed."
+
+
+//For Geocode Screen
+let ALERT_MSG_GEOCODE_ENTER_VALID_MAC = "Please enter a valid mac address"
+
 
 //Alert Button Names
 let ALERT_BUTTON_OK = "OK"
@@ -230,6 +237,20 @@ let REQ_PARAM_NEW_PASS = "new_pass"
 let REQ_PARAM_MAC_ADDRESS = "mac_address"
 let REQ_PARAM_CMTSID = "cmtsID"
 let REQ_PARAM_PURPOSE = "purpose"
+
+let REQ_PARAM_GEO_FIRST_NAME = "first_name"
+let REQ_PARAM_GEO_LAST_NAME = "last_name"
+let REQ_PARAM_GEO_ACCOUNT = "account_number"
+let REQ_PARAM_GEO_ADDRESS = "address"
+let REQ_PARAM_GEO_CITY = "city"
+let REQ_PARAM_GEO_STATE = "state"
+let REQ_PARAM_GEO_ZIP = "zipcode"
+let REQ_PARAM_GEO_COUNTRY = "country"
+let REQ_PARAM_GEO_PHONE = "phone_number"
+let REQ_PARAM_GEO_NODE = "node_name"
+let REQ_PARAM_GEO_LNG = "latitude"
+let REQ_PARAM_GEO_LAT = "longitude"
+
 
 
 
@@ -301,4 +322,8 @@ let RESPONSE_PARAM_CM_UNCORR = "cmUnCorrCw"
 let RESPONSE_PARAM_CM_CORR = "cmCorrCw"
 let RESPONSE_PARAM_POWER = "power"
 let RESPONSE_PARAM_MER = "mer"
+
+
+
+
 
