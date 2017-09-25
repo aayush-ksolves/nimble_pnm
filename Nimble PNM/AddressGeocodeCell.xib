@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="bCY-4l-iMa" customClass="AddressGeocodeCell" customModule="Nimble_PNM" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bCY-4l-iMa" id="RyL-Ax-0r9">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5ex-GJ-7Pz">
+                        <rect key="frame" x="4" y="4" width="312" height="111.5"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="F9J-ZV-DtV">
+                                <rect key="frame" x="0.0" y="0.0" width="312" height="32"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="8lu-9L-e2P">
+                                <rect key="frame" x="0.0" y="40" width="312" height="31.5"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gle-By-1aX">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="31.5"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3wc-Ph-0Z5">
+                                        <rect key="frame" x="160" y="0.0" width="152" height="31.5"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="RTZ-JC-7k6">
+                                <rect key="frame" x="0.0" y="79.5" width="312" height="32"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gli-lx-c0B">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="32"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="B9X-PS-qv4">
+                                        <rect key="frame" x="160" y="0.0" width="152" height="32"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="5ex-GJ-7Pz" firstAttribute="leading" secondItem="RyL-Ax-0r9" secondAttribute="leading" constant="4" id="6Ar-D3-pAV"/>
+                    <constraint firstAttribute="trailing" secondItem="5ex-GJ-7Pz" secondAttribute="trailing" constant="4" id="6Df-Ct-ie6"/>
+                    <constraint firstAttribute="bottom" secondItem="5ex-GJ-7Pz" secondAttribute="bottom" constant="4" id="e1d-II-HJu"/>
+                    <constraint firstItem="5ex-GJ-7Pz" firstAttribute="top" secondItem="RyL-Ax-0r9" secondAttribute="top" constant="4" id="pa3-5C-dRa"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="textfieldAddressCity" destination="gle-By-1aX" id="Ytd-rq-Cv4"/>
+                <outlet property="textfieldAddressCountry" destination="gli-lx-c0B" id="n9G-Qg-geJ"/>
+                <outlet property="textfieldAddressState" destination="3wc-Ph-0Z5" id="iMy-Tg-yMd"/>
+                <outlet property="textfieldAddressStreet" destination="F9J-ZV-DtV" id="NDm-9k-mGy"/>
+                <outlet property="textfieldAddressZipcode" destination="B9X-PS-qv4" id="0dm-2I-KXy"/>
+            </connections>
+            <point key="canvasLocation" x="324" y="301"/>
+        </tableViewCell>
+    </objects>
+</document>

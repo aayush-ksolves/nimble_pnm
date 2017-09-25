@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="kOU-k5-cZM" customClass="ContactGeocodeCell" customModule="Nimble_PNM" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kOU-k5-cZM" id="c8Y-Y1-Ujm">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Jb3-c0-PeN">
+                        <rect key="frame" x="4" y="4" width="312" height="111.5"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="CCk-GF-hqW">
+                                <rect key="frame" x="0.0" y="0.0" width="312" height="32"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gz9-rb-cn1">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="32"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PW3-Xo-ph1">
+                                        <rect key="frame" x="160" y="0.0" width="152" height="32"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hDF-Wb-EZg">
+                                <rect key="frame" x="0.0" y="40" width="312" height="31.5"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="czI-4f-jEs">
+                                <rect key="frame" x="0.0" y="79.5" width="312" height="32"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hKE-I1-7fN">
+                                        <rect key="frame" x="0.0" y="0.0" width="152" height="32"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XPd-HL-lpg">
+                                        <rect key="frame" x="160" y="0.0" width="152" height="32"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Jb3-c0-PeN" firstAttribute="leading" secondItem="c8Y-Y1-Ujm" secondAttribute="leading" constant="4" id="1Io-p4-7Ar"/>
+                    <constraint firstAttribute="bottom" secondItem="Jb3-c0-PeN" secondAttribute="bottom" constant="4" id="RSu-jz-cZw"/>
+                    <constraint firstItem="Jb3-c0-PeN" firstAttribute="top" secondItem="c8Y-Y1-Ujm" secondAttribute="top" constant="4" id="TRQ-1V-e1J"/>
+                    <constraint firstAttribute="trailing" secondItem="Jb3-c0-PeN" secondAttribute="trailing" constant="4" id="vVW-Tv-jSx"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="textfieldContactAccountNumber" destination="hKE-I1-7fN" id="6zt-1L-0XS"/>
+                <outlet property="textfieldContactFirstName" destination="Gz9-rb-cn1" id="KSz-Yn-IhU"/>
+                <outlet property="textfieldContactLastName" destination="PW3-Xo-ph1" id="C5X-ux-T55"/>
+                <outlet property="textfieldContactNodeName" destination="XPd-HL-lpg" id="Rdr-s5-1hX"/>
+                <outlet property="textfieldContactPhone" destination="hDF-Wb-EZg" id="0T6-YQ-M41"/>
+            </connections>
+            <point key="canvasLocation" x="324" y="301"/>
+        </tableViewCell>
+    </objects>
+</document>
