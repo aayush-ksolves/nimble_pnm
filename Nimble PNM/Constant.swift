@@ -32,10 +32,7 @@ let COLOR_BLUE_IONIC_V1 = UIColor(red: 56/255, green: 126/255, blue: 245/255, al
 
 let COLOR_SCAN_REGION_BORDER = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
 
-
-
 let COLOR_BORDER_GRAY_MODIFIED = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
-
 
 let COLOR_WHITE_AS_GREY = UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1.0)
 let COLOR_WHITE_AS_GREY_LIGHT = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)

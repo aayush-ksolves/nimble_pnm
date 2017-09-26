@@ -184,11 +184,18 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             
         }else if section == 1{
             let cell = tableViewGeocode.dequeueReusableCell(withIdentifier: "addresscell") as! AddressGeocodeCell
+            
             cell.textfieldAddressCity.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressState.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressStreet.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressCountry.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldAddressZipcode.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
+            
+            cell.textfieldAddressCity.delegate = self
+            cell.textfieldAddressState.delegate = self
+            cell.textfieldAddressStreet.delegate = self
+            cell.textfieldAddressCountry.delegate = self
+            cell.textfieldAddressZipcode.delegate = self
             
             cell.textfieldAddressCity.placeholder = placeholderAddressCity
             cell.textfieldAddressState.placeholder = placeholderAddressState
@@ -219,11 +226,18 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             
         }else if section == 2{
             let cell = tableViewGeocode.dequeueReusableCell(withIdentifier: "contactcell") as! ContactGeocodeCell
+            
             cell.textfieldContactPhone.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactLastName.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactNodeName.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactFirstName.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
             cell.textfieldContactAccountNumber.backgroundColor = COLOR_WHITE_AS_GREY_LIGHT
+            
+            cell.textfieldContactPhone.delegate = self
+            cell.textfieldContactLastName.delegate = self
+            cell.textfieldContactNodeName.delegate = self
+            cell.textfieldContactFirstName.delegate = self
+            cell.textfieldContactAccountNumber.delegate = self
             
             cell.textfieldContactPhone.placeholder = placeholderContactPhone
             cell.textfieldContactLastName.placeholder = placeholderContactLast
@@ -262,7 +276,10 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
         
     }
     
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
     
 }

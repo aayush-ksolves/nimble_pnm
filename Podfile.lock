@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.5.0)
+  - Alamofire (4.5.1)
   - ArcGIS-Runtime-SDK-iOS (100.1.0)
 
 DEPENDENCIES:
@@ -7,9 +7,9 @@ DEPENDENCIES:
   - ArcGIS-Runtime-SDK-iOS (= 100.1)
 
 SPEC CHECKSUMS:
-  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   ArcGIS-Runtime-SDK-iOS: 9b9c2478c974ef0b704b853948a19227f3124ceb
 
 PODFILE CHECKSUM: 09bdeb8240c79f6b7e63a860723f87ee746f279d
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.1.1

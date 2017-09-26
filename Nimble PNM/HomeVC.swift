@@ -16,10 +16,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     @IBOutlet weak var labelHeadingHome: UILabel!
     
     
-    var bundleData = NSMutableArray()
-    
-    
-    
+    var bundleData = NSMutableArray()    
     
     let Mod_CM_Anlayzer = "cmanalyzer"
     let Mod_Install_CM = "installCm"
@@ -292,15 +289,5 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     
 }
