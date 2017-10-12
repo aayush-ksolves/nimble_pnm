@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var windowForLoader : UIWindow = UIWindow()
     //var windowForAlert : UIWindow = UIWindow()
     
+    var locationHelper = LocationHelper()
     
     //Instantiate Loader View Controller Dor the application
     var loaderVC : LoaderVC = LoaderVC()
@@ -25,6 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         self.instantiateLoaderWindowOneTime()
+        self.locationHelper.configureLocationManager()
+        
+        
         return true
     }
 

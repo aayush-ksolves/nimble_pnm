@@ -154,7 +154,7 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
                         
                     }, completionHandler2: {
                         action in
-                        self.performAfterInstallationGeocodeProcedure(forWidgetCode: widgetCode)
+                        self.performAfterInstallationGeocodeProcedure(forWidgetCode: widgetCode, macAddress : mac)
                         
                     }, completionHandler3: {
                         action in
@@ -212,7 +212,7 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
         self.performAfterInstallationOKProcedure(forWidgetCode: widgetCode)
         
         
-        //Fire Http Service To Load Modem Status and throw to New Screen with data Loaded
+        //Throw to New Screen with data Loaded from Firing Http Service To Load Modem Status in new screen
         self.performSegue(withIdentifier: "segue-to-modem-status", sender: dataBundle)
         
     }
@@ -223,12 +223,21 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
             let destinationController = segue.destination as! ModemStatusVC
             destinationController.dataBundle = sender as! NSDictionary
             
+        }else if segue.identifier == "segue-to-geocode"{
+            let destinationController = segue.destination as! GeocodeVC
+            destinationController.exposedMacAddress = sender as! String
+            
         }
+        
+        
+        
     }
     
     
-    func performAfterInstallationGeocodeProcedure(forWidgetCode widgetCode:Int){
+    func performAfterInstallationGeocodeProcedure(forWidgetCode widgetCode:Int, macAddress:String){
         self.performAfterInstallationOKProcedure(forWidgetCode: widgetCode)
+        
+        self.performSegue(withIdentifier: "segue-to-geocode", sender: macAddress)
         
     }
     

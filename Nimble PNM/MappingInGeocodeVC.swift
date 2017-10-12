@@ -16,79 +16,147 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
     @IBOutlet weak var mapView: AGSMapView!
     var map : AGSMap!
     
-    var marker = AGSSimpleMarkerSymbol()
+    @IBOutlet weak var buttonUseLocation: UIButton!
+    var GeocodeVC: GeocodeVC!
+    
+    var markerPerson = AGSPictureMarkerSymbol(image: #imageLiteral(resourceName: "spinner-0"))
+    var markerModem = AGSPictureMarkerSymbol(image: #imageLiteral(resourceName: "home-blue"))
     let graphicsOverlay = AGSGraphicsOverlay()
+    var lastGraphics = AGSGraphic()
     
     var currentMarkerPoint: AGSPoint!
     var currentSelectedlatitude : Double!
     var currrentSelectedLongitude : Double!
     
+    let screenWidth: CGFloat = SCREEN_SIZE.width
+    let screenHeight: CGFloat = SCREEN_SIZE.height
+    
     var initialZoomLevel = 16
-        
+    var markerWidth: CGFloat = 30
+    
+    var bundleModemLocation: [AGSPoint] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.intializeMap()
-        
     }
     
+    func initializeBundleModemLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        
+        let tempPoint = AGSPoint(clLocationCoordinate2D: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+        bundleModemLocation.append(tempPoint)
+    }
+
     func intializeMap(){
         //initialize map with `imagery with labels` basemap and an initial location
-        map = AGSMap(basemapType: .imageryWithLabels, latitude: currentSelectedlatitude, longitude: currrentSelectedLongitude, levelOfDetail: initialZoomLevel)
         
-        marker = AGSSimpleMarkerSymbol(style: .circle, color: UIColor.red, size: 12)
+        currentSelectedlatitude = 22.77
+        currrentSelectedLongitude = 77.88
+        
+        for points in bundleModemLocation {
+            addModemMarkerSymbol(markerPoint: points, markerImage: markerModem)
+        }
+        
+        map = AGSMap(basemapType: .streets, latitude: currentSelectedlatitude, longitude: currrentSelectedLongitude, levelOfDetail: initialZoomLevel)
+        
+        markerPerson.height = markerWidth
+        markerPerson.width = markerWidth
+        
+        markerModem.height = markerWidth / 2
+        markerModem.width = markerWidth / 2
+        
         self.mapView.graphicsOverlays.add(graphicsOverlay)
         
-//        currentMarkerPoint =  AGSPoint
-//        addSimpleMarkerSymbol(markerPoint: currentMarkerPoint)
+        currentMarkerPoint =  AGSPoint(clLocationCoordinate2D: CLLocationCoordinate2D(latitude: currentSelectedlatitude, longitude: currrentSelectedLongitude))
+        addPersonMarkerSymbol(markerPoint: currentMarkerPoint, markerImage: markerPerson)
         
+        mapView.contentMode = .scaleAspectFill
         //assign the map to the map view
         self.mapView.map = self.map
         self.mapView.touchDelegate = self
         //self.mapView.map?.minScale = 17
         
+        buttonUseLocation.addTarget(self, action: #selector(buttonUseLocationPressed), for: .touchUpInside)
     }
     
-    func addSimpleMarkerSymbol(markerPoint: AGSPoint) {
-        
-        print("Marker lati and longi")
-        
-        let latitude = markerPoint.x
-        let longitude = markerPoint.y
-        
-        print(latitude)
-        print(longitude)
-        
-        //create point
-        let point = markerPoint
+    func addModemMarkerSymbol(markerPoint: AGSPoint, markerImage: AGSPictureMarkerSymbol) {
         
         //graphic for point using simple marker symbol
-        let graphic = AGSGraphic(geometry: point, symbol: marker, attributes: nil)
+        let graphic = AGSGraphic(geometry: markerPoint, symbol: markerImage, attributes: nil)
         
-        self.graphicsOverlay.graphics.removeAllObjects()
         //add the graphic to the graphics overlay
         self.graphicsOverlay.graphics.add(graphic)
+    }
+    
+    func addPersonMarkerSymbol(markerPoint: AGSPoint, markerImage: AGSPictureMarkerSymbol) {
+                
+        //graphic for point using simple marker symbol
+        let graphic = AGSGraphic(geometry: markerPoint, symbol: markerImage, attributes: nil)
+        
+        self.graphicsOverlay.graphics.remove(lastGraphics)
+        //add the graphic to the graphics overlay
+        self.graphicsOverlay.graphics.add(graphic)
+        lastGraphics = graphic
+    }
+    
+    func buttonUseLocationPressed() {
+        print("Button use location pressed")
+        
+        let currentLatitude = String(format: "%.3f", currentMarkerPoint.toCLLocationCoordinate2D().latitude)
+        let currentLongitude = String(format: "%.3f", currentMarkerPoint.toCLLocationCoordinate2D().longitude)
+        
+        GeocodeVC.bundleLocation.latitude = Double(currentLatitude)!
+        GeocodeVC.bundleLocation.longitude = Double(currentLongitude)!
+        
+        self.navigationController?.popViewController(animated: true)
     }
     
     
     func geoView(_ geoView: AGSGeoView, didTouchDownAtScreenPoint screenPoint: CGPoint, mapPoint: AGSPoint, completion: @escaping (Bool) -> Void) {
         
-        print("ABCD")
-        print(screenPoint)
+        let cornerCoordinates = mapView.visibleArea!.parts.array()[0]
+        let topRightCoordinate = cornerCoordinates.point(at: 0).toCLLocationCoordinate2D()
+//        let bottomRightCoordinate = cornerCoordinates.point(at: 1).toCLLocationCoordinate2D()
+//        let bottomLeftCoordinate = cornerCoordinates.point(at: 2).toCLLocationCoordinate2D()
+        let topLeftCoordinate = cornerCoordinates.point(at: 3).toCLLocationCoordinate2D()
         
-//        if screenPoint == currentMarkerPoint {
+        let factor = (topRightCoordinate.longitude - topLeftCoordinate.longitude)*Double(markerWidth)/(Double(screenWidth)*2)
+        
+        let mapPointLatitude = mapPoint.toCLLocationCoordinate2D().latitude
+        let mapPointLongitude = mapPoint.toCLLocationCoordinate2D().longitude
+        
+        if mapPointLongitude > currentMarkerPoint.x - factor && mapPointLongitude < currentMarkerPoint.x + factor && mapPointLatitude > currentMarkerPoint.y - factor && mapPointLatitude < currentMarkerPoint.y + factor {
+            
             completion ({
                 return true
                 }())
-//        }
+            
+        }else {
+            
+            completion ({
+                return false
+                }())
+            
+        }
     }
+    
     
     //MARK: Touch delegate Map View
     func geoView(_ geoView: AGSGeoView, didTouchDragToScreenPoint screenPoint: CGPoint, mapPoint: AGSPoint) {
-        currentMarkerPoint = mapPoint
-        addSimpleMarkerSymbol(markerPoint: currentMarkerPoint)
-        print(mapPoint)
+        
+        currentMarkerPoint =  AGSPoint(clLocationCoordinate2D: CLLocationCoordinate2D(latitude: mapPoint.toCLLocationCoordinate2D().latitude, longitude: mapPoint.toCLLocationCoordinate2D().longitude))
+        
+        addPersonMarkerSymbol(markerPoint: currentMarkerPoint, markerImage: markerPerson)
+        
+        if screenPoint.x <= markerWidth / 2 || screenPoint.y <= markerWidth / 2 || screenPoint.x >= screenWidth - markerWidth / 2 || screenPoint.y >= screenHeight - 60 - markerWidth / 2 {
+            
+            mapView.setViewpointCenter(mapPoint, completion: {
+                completed in
+                
+            })
+        }
+        
     }
     
    

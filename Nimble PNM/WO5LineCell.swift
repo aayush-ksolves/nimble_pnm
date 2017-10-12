@@ -10,6 +10,12 @@ import UIKit
 
 class WO5LineCell: UITableViewCell {
 
+    @IBOutlet weak var labelSideBar: UILabel!
+    @IBOutlet weak var labelAssignedTo: UILabel!
+    @IBOutlet weak var labelAssignedDate: UILabel!
+    @IBOutlet weak var labelAddress: UILabel!
+    @IBOutlet weak var labelType: UILabel!
+    @IBOutlet weak var labelOrderId: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
