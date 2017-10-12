@@ -91,7 +91,12 @@ let SERVICE_URL_INSTALL_GET_DS_DATA = "/pnmservice/getModemDownStream"
 let SERVICE_URL_GEOCODE_SAVE = "/pnmservice/saveGeocode"
 
 let SERVICE_URL_WO_MARK_FIXED = "/workorderservice/updateWorkOrder"
+let SERVICE_URL_US_ANALYZER_CMTS_LIST = "/pnmservice/listCmts"
+let SERVICE_URL_US_ANALYZER_CMTS_PORT = "/pnmservice/getCmtsPort"
 
+let SERVICE_URL_CM_ANALYZER_GET_MODEM_DATA = "/pnmservice/getModemData"
+let SERVICE_URL_CM_ANALYZER_RE_SCAN_MODEM = "/pnmservice/reScanModem"
+let SERVICE_URL_CM_ANALYZER_GET_DS_DATA = "/pnmservice/getModemDownStream"
 
 
 //Tab Index Governers
@@ -125,6 +130,14 @@ let LOADER_MSG_GETTING_DS_DATA = "Fetching Downstream Data ..."
 let LOADER_MSG_FETCH_TECH_LIST = "Fetching Technician List ..."
 let LOADER_MSG_REASSIGN_WO = "Re-assigning Work Order ..."
 let LOADER_MSG_LOCKING_WO = "Locking Work Order ..."
+let LOADER_MSG_US_CMTS_LIST = "Loading CMTS List ..."
+let LOADER_MSG_US_PORT_LIST = "Loading Upstream Ports ..."
+
+
+let LOADER_MSG_CM_ANALYZER_GET_MODEM_DATA = "Getting Modem Data ..."
+let LOADER_MSG_CM_ANALYZER_RESCAN_MODEM = "Rescanning Modem ..."
+let LOADER_MSG_CM_ANALYZER_LOAD_DS_DATA = "Loading Downstream Data ..."
+
 
 let LOADER_MSG_UPDATE_MODEM_LOCATION = "Updating Modem Location ..."
 
@@ -144,6 +157,10 @@ let ALERT_MSG_SCAN_UNABLE_START = "Unable to start scanning. Please try again."
 let ALERT_MSG_LOGIN_BLANK_USERNAME = "Username can not be blank."
 let ALERT_MSG_LOGIN_BLANK_PASSWORD = "Password can not be blank."
 
+//US Analyzer Alerts
+let ALERT_MSG_US_ANALYZER_BLANK_CMTS = "Please select a CMTS"
+let ALERT_MSG_US_ANALYZER_BLANK_UPSTREAM = "Please select a Upstream Port"
+
 
 let ALERT_MSG_LOGOUT_CONFIRM = "Are you sure you want to logout ?"
 
@@ -156,6 +173,10 @@ let ALERT_MSG_INSTALL_COMPLETE_MODEM = "Complete: means if for some unknown reas
 
 let ALERT_MSG_INSTALL_BLANK_MAC = "Mac Address can not be blank."
 let ALERT_MSG_INSTALL_VALID_MAC = "Please enter a valid mac address."
+
+let ALERT_MSG_CM_ANALYZER_BLANK_MAC = "Mac Address can not be blank."
+let ALERT_MSG_CM_ANALYZER_VALID_MAC = "Please enter a valid mac address."
+
 
 
 // Alert Work Order Screen
@@ -218,6 +239,7 @@ let TXT_LBL_CABLE_MODEL_LOOK_UP_HEAD = "Cable Modem Look Up"
 let TXT_LBL_GEOCODING_HEAD = "Geocoding"
 let TXT_LBL_US_ANALAYZER_HEAD = "Nimble US Analyzer"
 let TXT_LBL_CM_INSTALLER_HEAD = "Nimble CM Installer"
+let TXT_LBL_CM_ANALYZER_HEAD = "CM Analyzer"
 
 
 
@@ -285,6 +307,9 @@ let RESPONSE_PARAM_STATUS_CODE = "status_code"
 let RESPONSE_PARAM_STATUS_MSG = "status_msg"
 let RESPONSE_PARAM_DATA = "data"
 let RESPONSE_PARAM_MODEM_DATA = "modem_data"
+let RESPONSE_PARAM_UPSTREAM = "upstreams"
+let RESPONSE_PARAM_INTERFACE_NAME = "interface_name"
+
 let RESPONSE_PARAM_COMMON = "common"
 let RESPONSE_PARAM_USER_ID = "user_id"
 let RESPONSE_PARAM_LOGOUT_KEY = "logout_key"
@@ -303,6 +328,9 @@ let RESPONSE_PARAM_AUTH_KEY = "auth_key"
 let RESPONSE_PARAM_EMAIL_ID = "email_id"
 let RESPONSE_PARAM_FIRST_NAME = "first_name"
 let RESPONSE_PARAM_ID = "id"
+
+let RESPONSE_PARAM_US_CMTS_ID = "id"
+let RESPONSE_PARAM_US_CMTS_NAME = "cmtsName"
 
 
 let RESPONSE_PARAM_TEST_PASSED_DN = "testPassedDn"
@@ -365,4 +393,17 @@ let RESPONSE_PARAM_MER = "mer"
 let RESPONSE_PARAM_WO_CMTS_ID = "cmts_id"
 let RESPONSE_PARAM_LATITUDE = "latitude"
 let RESPONSE_PARAM_LONGITUDE = "longitude"
+
+
+let RESPONSE_PARAM_ICFR = "MTC"
+
+let RESPONSE_PARAM_MR = "MRLevel"
+
+
+let RESPONSE_PARAM_VTDR = "FarTDR"
+let RESPONSE_PARAM_CORR = "Corr"
+
+
+
+
 

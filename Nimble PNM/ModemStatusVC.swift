@@ -33,10 +33,10 @@ class ModemStatusVC: BaseVC {
     var dataBundle : NSDictionary!
     var bundleBirthCertificate : [BirthCertificateDS] = []
     var tableHeaderModemStatus : TableHeaderDS!
-    var bundleDataMSTable : [ModemStatusDS] = []
-    
-    var tableHeaderDS : TableHeaderDS!
     var bundleDataDSTable : [DownstreamDS] = []
+    var bundleDataMSTable : [ModemStatusDS] = []
+    var tableHeaderDS : TableHeaderDS!
+    
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -58,6 +58,7 @@ class ModemStatusVC: BaseVC {
 
     @IBOutlet weak var constraintDownstreamHeight: NSLayoutConstraint!
     @IBOutlet weak var constraintModemStatusHeight: NSLayoutConstraint!
+    
     func configureUIComponents(){
         self.btnOutletLogout.imageView?.contentMode = .scaleAspectFit
         
@@ -72,15 +73,7 @@ class ModemStatusVC: BaseVC {
         print("a")
         coordinator.animate(alongsideTransition: {
             context in
-            print("b")
-            if size.width > size.height{
-                //Rotating To Landscape
-                self.handleViewRotationToLandscape()
-                
-            }else{
-                //Rotating To Potrait
-                self.handleViewRotationToPotrait()
-            }
+            
             
             
         }, completion: {
@@ -93,17 +86,12 @@ class ModemStatusVC: BaseVC {
     }
     
     func handleViewRotationToPotrait(){
-        //self.plotBirthCertificateTable(forOrientationType: 0)
-        //self.plotModemStatusTable(forOrientationType: 0)
         self.plotDownstreamTable(forOrientationType: 0)
 
-        
     }
     
     
     func handleViewRotationToLandscape(){
-        //self.plotBirthCertificateTable(forOrientationType: 1)
-        //self.plotModemStatusTable(forOrientationType: 1)
         self.plotDownstreamTable(forOrientationType: 1)
         
     }
@@ -184,7 +172,7 @@ class ModemStatusVC: BaseVC {
         var variableY = paddingVertical
         
         let minimumWidthOfCell = 80.0
-        let computedWidthOfCell = (Double(self.viewMSTableHolder.frame.size.width) - (2 * Double(paddingHorizontal)))/Double(totalMScoloumns)
+        let computedWidthOfCell = (Double(SCREEN_SIZE.width - 16) - (2 * paddingHorizontal) - (Double(totalMScoloumns - 1) * Double(gappingHorizontal)))/Double(totalMScoloumns)
 
         var finalWidthOfCell : Double!
         
@@ -283,7 +271,7 @@ class ModemStatusVC: BaseVC {
         var variableY = paddingVertical
         
         let minimumWidthOfCell = 80.0
-        let computedWidthOfCell = (Double(self.viewMSTableHolder.frame.size.width) - (2 * Double(paddingHorizontal)))/Double(totalDScoloumns)
+        let computedWidthOfCell = (Double(SCREEN_SIZE.width - 16) - (2 * paddingHorizontal) - ( Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
         
         var finalWidthOfCell : Double!
         

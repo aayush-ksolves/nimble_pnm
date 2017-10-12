@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2802274A1F8BBB1A00D6C89C /* CMAnalyzerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280227491F8BBB1A00D6C89C /* CMAnalyzerVC.swift */; };
 		2806E21E1F17665100E3CC4F /* Doubts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2806E21D1F17665100E3CC4F /* Doubts.swift */; };
 		282927211F668E0A007D1583 /* LocationGeocodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829271F1F668E0A007D1583 /* LocationGeocodeCell.swift */; };
 		282927221F668E0A007D1583 /* LocationGeocodeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 282927201F668E0A007D1583 /* LocationGeocodeCell.xib */; };
@@ -18,6 +19,10 @@
 		2829272E1F66C542007D1583 /* HeaderViewTableGeocode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829272D1F66C542007D1583 /* HeaderViewTableGeocode.swift */; };
 		282927301F66C5D1007D1583 /* GeocodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829272F1F66C5D1007D1583 /* GeocodeVC.swift */; };
 		2854A5CB1F67F21500E9302D /* MappingInGeocodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2854A5CA1F67F21500E9302D /* MappingInGeocodeVC.swift */; };
+		285F5D931F8CB74E006435EA /* CMModemDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F5D921F8CB74E006435EA /* CMModemDetailVC.swift */; };
+		2872845D1F876AE400DAA47C /* USAnalyzerGraphVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2872845C1F876AE400DAA47C /* USAnalyzerGraphVC.swift */; };
+		287284601F87B08900DAA47C /* TexfieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2872845E1F87B08900DAA47C /* TexfieldCell.swift */; };
+		287284611F87B08900DAA47C /* TextfieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2872845F1F87B08900DAA47C /* TextfieldCell.xib */; };
 		287999D41F556CA300DFA992 /* CMStatusBirthSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287999D21F556CA300DFA992 /* CMStatusBirthSectionCell.swift */; };
 		287999D51F556CA300DFA992 /* CMStatusBirthSectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287999D31F556CA300DFA992 /* CMStatusBirthSectionCell.xib */; };
 		28ACC38A1F162F29007FAF18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ACC3891F162F29007FAF18 /* AppDelegate.swift */; };
@@ -85,6 +90,7 @@
 
 /* Begin PBXFileReference section */
 		15D5D2183834879C89D27FB3 /* Pods-Nimble PNM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nimble PNM.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nimble PNM/Pods-Nimble PNM.debug.xcconfig"; sourceTree = "<group>"; };
+		280227491F8BBB1A00D6C89C /* CMAnalyzerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMAnalyzerVC.swift; sourceTree = "<group>"; };
 		2806E21D1F17665100E3CC4F /* Doubts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Doubts.swift; sourceTree = "<group>"; };
 		2829271F1F668E0A007D1583 /* LocationGeocodeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationGeocodeCell.swift; sourceTree = "<group>"; };
 		282927201F668E0A007D1583 /* LocationGeocodeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LocationGeocodeCell.xib; sourceTree = "<group>"; };
@@ -96,6 +102,10 @@
 		2829272D1F66C542007D1583 /* HeaderViewTableGeocode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewTableGeocode.swift; sourceTree = "<group>"; };
 		2829272F1F66C5D1007D1583 /* GeocodeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeocodeVC.swift; sourceTree = "<group>"; };
 		2854A5CA1F67F21500E9302D /* MappingInGeocodeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingInGeocodeVC.swift; sourceTree = "<group>"; };
+		285F5D921F8CB74E006435EA /* CMModemDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CMModemDetailVC.swift; path = Assets.xcassets/CMModemDetailVC.swift; sourceTree = "<group>"; };
+		2872845C1F876AE400DAA47C /* USAnalyzerGraphVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = USAnalyzerGraphVC.swift; sourceTree = "<group>"; };
+		2872845E1F87B08900DAA47C /* TexfieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TexfieldCell.swift; sourceTree = "<group>"; };
+		2872845F1F87B08900DAA47C /* TextfieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextfieldCell.xib; sourceTree = "<group>"; };
 		287999D21F556CA300DFA992 /* CMStatusBirthSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMStatusBirthSectionCell.swift; sourceTree = "<group>"; };
 		287999D31F556CA300DFA992 /* CMStatusBirthSectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMStatusBirthSectionCell.xib; sourceTree = "<group>"; };
 		28ACC3861F162F29007FAF18 /* Nimble PNM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Nimble PNM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -226,6 +236,9 @@
 				287999D31F556CA300DFA992 /* CMStatusBirthSectionCell.xib */,
 				2829272F1F66C5D1007D1583 /* GeocodeVC.swift */,
 				2854A5CA1F67F21500E9302D /* MappingInGeocodeVC.swift */,
+				2872845C1F876AE400DAA47C /* USAnalyzerGraphVC.swift */,
+				280227491F8BBB1A00D6C89C /* CMAnalyzerVC.swift */,
+				285F5D921F8CB74E006435EA /* CMModemDetailVC.swift */,
 			);
 			path = "Nimble PNM";
 			sourceTree = "<group>";
@@ -294,6 +307,8 @@
 				282927261F668E5D007D1583 /* ContactGeocodeCell.xib */,
 				2829272B1F66C4ED007D1583 /* ViewHeaderViewTableGeocode.xib */,
 				2829272D1F66C542007D1583 /* HeaderViewTableGeocode.swift */,
+				2872845E1F87B08900DAA47C /* TexfieldCell.swift */,
+				2872845F1F87B08900DAA47C /* TextfieldCell.xib */,
 			);
 			name = "Xib's";
 			sourceTree = "<group>";
@@ -444,6 +459,7 @@
 				28F4D4431F26712900E57D0E /* HeaderViewAnalyzerSettings.xib in Resources */,
 				28F4D4371F26646D00E57D0E /* CustomPickerView.xib in Resources */,
 				28F4D42A1F24FEDD00E57D0E /* WO4LineCell.xib in Resources */,
+				287284611F87B08900DAA47C /* TextfieldCell.xib in Resources */,
 				2829272A1F668E75007D1583 /* AddressGeocodeCell.xib in Resources */,
 				53750B361F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib in Resources */,
 				28ACC3911F162F29007FAF18 /* Assets.xcassets in Resources */,
@@ -524,6 +540,8 @@
 				28E057571F792B5E0066C809 /* LocationHelper.swift in Sources */,
 				53750B2E1F8C86D3008D28ED /* WOModemDetailsFirstCell.swift in Sources */,
 				28F4D4491F2733D300E57D0E /* WorkOrderVC.swift in Sources */,
+				285F5D931F8CB74E006435EA /* CMModemDetailVC.swift in Sources */,
+				287284601F87B08900DAA47C /* TexfieldCell.swift in Sources */,
 				28D991051F18A590006DADE4 /* StartConfigurerVC.swift in Sources */,
 				28D991111F1CC339006DADE4 /* InstallCMVC.swift in Sources */,
 				28F4D4451F2671D600E57D0E /* HeaderViewAnalyzerSettings.swift in Sources */,
@@ -544,6 +562,7 @@
 				282927241F668E2B007D1583 /* AddressGeocodeCell.swift in Sources */,
 				28D991131F1CD063006DADE4 /* HomeViewCollectionCell.swift in Sources */,
 				28B6260D1F173BB700D3D69F /* Constant.swift in Sources */,
+				2802274A1F8BBB1A00D6C89C /* CMAnalyzerVC.swift in Sources */,
 				28D991091F1CAC45006DADE4 /* TabBaseController.swift in Sources */,
 				53750B341F8C8990008D28ED /* WOModemDetailsHeaderTop.swift in Sources */,
 				28D991031F18A434006DADE4 /* LoginVC.swift in Sources */,
@@ -555,6 +574,7 @@
 				28F4D4291F24FEDD00E57D0E /* WO4LineCell.swift in Sources */,
 				282927301F66C5D1007D1583 /* GeocodeVC.swift in Sources */,
 				28ACC3A11F1660B5007FAF18 /* MTBBarcodeScanner.m in Sources */,
+				2872845D1F876AE400DAA47C /* USAnalyzerGraphVC.swift in Sources */,
 				28ACC38A1F162F29007FAF18 /* AppDelegate.swift in Sources */,
 				287999D41F556CA300DFA992 /* CMStatusBirthSectionCell.swift in Sources */,
 				28D9910B1F1CB679006DADE4 /* HomeVC.swift in Sources */,

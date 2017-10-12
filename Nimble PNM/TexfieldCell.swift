@@ -1,18 +1,17 @@
 //
-//  SliderCell.swift
+//  TexfieldCell.swift
 //  Nimble PNM
 //
-//  Created by ksolves on 24/07/17.
+//  Created by ksolves on 06/10/17.
 //  Copyright © 2017 ksolves. All rights reserved.
 //
 
 import UIKit
 
-class SliderCell: UITableViewCell {
+class TextfieldCell: UITableViewCell {
+    @IBOutlet weak var textfieldMain: UITextField!
 
-    @IBOutlet weak var sliderOutlet: UISlider!
-    @IBOutlet weak var labelSliderTitle: UILabel!
-    @IBOutlet weak var labelSliderCurrentValue: UILabel!
+    @IBOutlet weak var textfieldContent: UITextField!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
