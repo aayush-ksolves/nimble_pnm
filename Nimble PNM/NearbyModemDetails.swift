@@ -52,7 +52,7 @@ class NearbyModemDetails : BaseVC, AGSGeoViewTouchDelegate, UITableViewDelegate,
         tableViewModemDetails.estimatedRowHeight = 270
         tableViewModemDetails.rowHeight = UITableViewAutomaticDimension
         
-        tableViewModemDetails.backgroundColor = COLOR_WHITE_AS_GREY
+        tableViewModemDetails.backgroundColor = UIColor.clear
         tableViewModemDetails.addBorder(withColor: COLOR_WHITE_AS_GREY, withWidth: 1)
         
         tableViewModemDetails.register(UINib(nibName: "NearbyModemDetailsCell", bundle: nil), forCellReuseIdentifier: "NearbyModemDetailsCell")
@@ -85,6 +85,9 @@ class NearbyModemDetails : BaseVC, AGSGeoViewTouchDelegate, UITableViewDelegate,
     
     func buttonMoreDetailsPressed() {
         
+        let destinationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CMModemDetailVC") as! CMModemDetailVC
+        destinationController.exposedMacAddress = selectedNearbyModemDetails.macAddress
+        self.navigationController?.pushViewController(destinationController, animated: true)
     }
     
     func buttonSavePressed() {

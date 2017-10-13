@@ -184,6 +184,7 @@ let ALERT_MSG_CM_ANALYZER_VALID_MAC = "Please enter a valid mac address."
 let ALERT_TITLE_CONFIRM = "Confirm"
 let ALERT_MSG_WO_REASSIGN = "Are you sure you want to re-assign this work order?"
 let ALERT_MSG_WO_LOCK = "Are you sure you want to lock this work order?"
+let ALERT_MSG_WO_UNLOCK = "Are you sure you want to unlock this work order?"
 
 
 
@@ -342,7 +343,7 @@ let RESPONSE_PARAM_LAST_NAME = "last_name"
 let RESPONSE_PARAM_USER_TYPE = "usertype"
 let RESPONSE_PARAM_ALLOWED_CMTS = "allowed_cmts"
 
-
+let RESPONSE_PARAM_IS_LOCKED = "is_locked"
 
 let RESPONSE_PARAM_ADDRESS = "address"
 let RESPONSE_PARAM_STATUS = "status"

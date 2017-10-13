@@ -18,10 +18,10 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
     var bundleWorkOrderDetails = WorkOrderDetailsDS()
     let footerView = UIView()
     var numberOfSections = 1
-    var arrayTechnicianFeedBack: NSArray!
-    var stringTechnicianFeedback: String!
-    var arrayAttachment: NSArray!
-    var isReassigned = false
+    var isLocked = false
+    
+    let imageLocked: UIImage = #imageLiteral(resourceName: "lock")
+    let imageUnlocked: UIImage = #imageLiteral(resourceName: "unlock")
     
     var tableFooterViewButton : UIButton!
     
@@ -31,16 +31,17 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         self.configureUIComponents()
     }
     
-    func getTechnicianFeedbackText() {
+    func getTechnicianFeedbackText(feedBackArray: NSArray) -> String {
         
-        stringTechnicianFeedback = ""
+        var stringTechnicianFeedback = ""
         stringTechnicianFeedback.append("\n")
         
-        for stringFB in arrayTechnicianFeedBack {
+        for stringFB in feedBackArray {
             stringTechnicianFeedback.append(String(describing: stringFB))
             stringTechnicianFeedback.append("\n")
         }
         
+        return stringTechnicianFeedback
     }
     
     func configureUIComponents() {
@@ -56,10 +57,6 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         tableViewWODetails.register(UINib(nibName: "WOModemDetailsFirstCell", bundle: nil), forCellReuseIdentifier: "WOModemDetailsFirstCell")
         tableViewWODetails.register(UINib(nibName: "WOModemDetailsSecondCell", bundle: nil), forCellReuseIdentifier: "WOModemDetailsSecondCell")
         tableViewWODetails.register(UINib(nibName: "WODetailsAttachmentCell", bundle: nil), forCellReuseIdentifier: "WODetailsAttachmentCell")
-        
-        if bundleWorkOrderDetails.status == "IN PROGRESS" {
-            setTableFooterButton()
-        }
     }
     
     func setTableFooterButton() {
@@ -152,6 +149,16 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
             headerView.buttonReassign.addTarget(self, action: #selector(buttonReassignPressed), for: .touchUpInside)
             headerView.buttonUnlock.addTarget(self, action: #selector(buttonUnlockPressed), for: .touchUpInside)
             
+            headerView.buttonReassign.isEnabled = !isLocked
+            
+            if isLocked {
+                headerView.buttonUnlock.setImage(#imageLiteral(resourceName: "lock"), for: .normal)
+                headerView.buttonReassign.backgroundColor = UIColor.gray
+            }else {
+                headerView.buttonUnlock.setImage(#imageLiteral(resourceName: "unlock"), for: .normal)
+                headerView.buttonReassign.backgroundColor = COLOR_BLUE_IONIC_V1
+            }
+            
             headerView.labelOrderId.text = "Order Id \n\(bundleWorkOrderDetails.orderId)"
             
             return headerView
@@ -199,7 +206,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "WOModemDetailsSecondCell") as! WOModemDetailsSecondCell
                 
-                cell.labelComments.text = stringTechnicianFeedback
+                cell.labelComments.text = self.bundleWorkOrderDetails.feedback
                 
                 return cell
                 
@@ -226,7 +233,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
     // Collection View Data Source And Delegate
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrayAttachment.count
+        return self.bundleWorkOrderDetails.arrayAttachment.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -246,7 +253,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WODetailsImageCollectionViewCell", for: indexPath)  as! WODetailsImageCollectionViewCell
         
-        cell.imageViewPhoto.af_setImage(withURL: URL(string: arrayAttachment.object(at: cellNo) as! String)!)
+        cell.imageViewPhoto.af_setImage(withURL: URL(string: self.bundleWorkOrderDetails.arrayAttachment.object(at: cellNo) as! String)!)
         
         return cell
     }
@@ -255,7 +262,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         
         let cellNo = indexPath.row
         let presentationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ImageViewerVC") as! ImageViewerVC
-        presentationController.exposedImageURL = arrayAttachment.object(at: cellNo) as! String
+        presentationController.exposedImageURL = self.bundleWorkOrderDetails.arrayAttachment.object(at: cellNo) as! String
         self.navigationController?.pushViewController(presentationController, animated: true)
         
     }
@@ -275,7 +282,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
     }
     
     func buttonUnlockPressed() {
-        let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: ALERT_MSG_WO_LOCK, buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
+        let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: getAlertMsgLockUnlock(), buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
             action in
             //Do Nothing
         }, completionHandler2: {
@@ -287,6 +294,24 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         self.present(alert, animated: true, completion: nil)
     }
     
+    func getAlertMsgLockUnlock() -> String {
+        
+        if isLocked {
+            return ALERT_MSG_WO_UNLOCK
+        }else {
+            return ALERT_MSG_WO_LOCK
+        }
+    }
+    
+    func getLockUnlockStatus() -> String{
+        
+        if isLocked {
+            return "0"
+        }else {
+            return "1"
+        }
+    }
+    
     func performActionOnLockUnlock() {
         
         let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
@@ -295,7 +320,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         let dictParameters = [REQ_PARAM_USERNAME: username,
                               REQ_PARAM_AUTH_KEY: authKey,
                               REQ_PARAM_ORDER_ID: bundleWorkOrderDetails.orderId,
-                              REQ_PARAM_IS_LOCKED: "0"
+                              REQ_PARAM_IS_LOCKED: getLockUnlockStatus()
                               ];
         
         self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_WO_LOCK_UNLOCK, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_LOCKING_WO, sucessCompletionHadler: {
@@ -359,14 +384,22 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
                         self.bundleWorkOrderDetails.customerName = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CUST_NAME)!)
                         self.bundleWorkOrderDetails.contact = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHONE_NUMBER)!)
                         self.bundleWorkOrderDetails.cmtsId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_WO_CMTS_ID)!)
-                        self.arrayTechnicianFeedBack = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray
-                        self.arrayAttachment = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
+                        self.bundleWorkOrderDetails.isLocked = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_IS_LOCKED)!)
+                        self.bundleWorkOrderDetails.feedback = self.getTechnicianFeedbackText(feedBackArray: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray)
+                        self.bundleWorkOrderDetails.arrayAttachment = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
                         
+                        if self.bundleWorkOrderDetails.isLocked == "1" {
+                            self.isLocked = true
+                        } else {
+                            self.isLocked = false
+                        }
+                        
+                        if self.bundleWorkOrderDetails.status == "IN PROGRESS" {
+                            self.setTableFooterButton()
+                        }
                    }
-                    
                 }
                 
-                self.getTechnicianFeedbackText()
                 self.tableViewWODetails.reloadData()
                 
             }else if statusCode == 401{
@@ -382,6 +415,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         })
         
     }
+    
     
     @IBAction func btnActionLogout(_ sender: Any) {
         self.performLogout()
@@ -402,6 +436,9 @@ struct WorkOrderDetailsDS{
     var contact : String = ""
     var status : String = ""
     var cmtsId : String = ""
+    var feedback: String = ""
+    var arrayAttachment = NSArray()
+    var isLocked = "0"
 }
 
 
