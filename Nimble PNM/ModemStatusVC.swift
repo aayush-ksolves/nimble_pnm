@@ -78,25 +78,18 @@ class ModemStatusVC: BaseVC {
             
         }, completion: {
             context in
-        print("c")
+            self.plotDownstreamTable()
+            self.plotModemStatusTable()
+            //self.plotBirthCertificateTable()
+        
         })
         
         print("d")
         
     }
     
-    func handleViewRotationToPotrait(){
-        self.plotDownstreamTable(forOrientationType: 0)
-
-    }
     
-    
-    func handleViewRotationToLandscape(){
-        self.plotDownstreamTable(forOrientationType: 1)
-        
-    }
-    
-    func plotBirthCertificateTable(forOrientationType : Int){
+    func plotBirthCertificateTable(){
         
         for eachSubview in self.viewBCTableHolder.subviews{
             eachSubview.removeFromSuperview()
@@ -156,7 +149,7 @@ class ModemStatusVC: BaseVC {
     }
     
     
-    func plotModemStatusTable(forOrientationType : Int){
+    func plotModemStatusTable(){
         
         for eachSubview in self.viewMSTableHolder.subviews{
             eachSubview.removeFromSuperview()
@@ -172,7 +165,7 @@ class ModemStatusVC: BaseVC {
         var variableY = paddingVertical
         
         let minimumWidthOfCell = 80.0
-        let computedWidthOfCell = (Double(SCREEN_SIZE.width - 16) - (2 * paddingHorizontal) - (Double(totalMScoloumns - 1) * Double(gappingHorizontal)))/Double(totalMScoloumns)
+        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - (Double(totalMScoloumns - 1) * Double(gappingHorizontal)))/Double(totalMScoloumns)
 
         var finalWidthOfCell : Double!
         
@@ -256,7 +249,7 @@ class ModemStatusVC: BaseVC {
     }
     
     
-    func plotDownstreamTable(forOrientationType : Int){
+    func plotDownstreamTable(){
         for eachSubview in self.viewDSTableHolder.subviews{
             eachSubview.removeFromSuperview()
         }
@@ -271,7 +264,7 @@ class ModemStatusVC: BaseVC {
         var variableY = paddingVertical
         
         let minimumWidthOfCell = 80.0
-        let computedWidthOfCell = (Double(SCREEN_SIZE.width - 16) - (2 * paddingHorizontal) - ( Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
+        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - ( Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
         
         var finalWidthOfCell : Double!
         
@@ -385,7 +378,7 @@ class ModemStatusVC: BaseVC {
         let cmtsID = "e4da3b7f-bbce-2345-d777-2b0674a318d5"
         let modemMac = "002624829dc4"
         
-        //self.getModemStatus(withMacAddress: modemMac, withCTMSID: cmtsID)
+        self.getModemStatus(withMacAddress: modemMac, withCTMSID: cmtsID)
         
         totalDSrows = 6
         totalDScoloumns = 6
@@ -417,12 +410,7 @@ class ModemStatusVC: BaseVC {
         }
         
         
-        
-        
-        //self.plotDownstreamTable(forOrientationType: getOrientationCode())
-        
-        
-        //self.getDownstreamData(withMacAddress: modemMac)
+        self.getDownstreamData(withMacAddress: modemMac)
         
     }
     
@@ -544,10 +532,9 @@ class ModemStatusVC: BaseVC {
                     
                 }
                 
-                //Prepare the Custom Table View
-                let orientationCode = self.getOrientationCode()
-                self.plotBirthCertificateTable(forOrientationType: orientationCode)
-                self.plotModemStatusTable(forOrientationType: orientationCode)
+                
+                self.plotBirthCertificateTable()
+                self.plotModemStatusTable()
                 
                 
                 
@@ -629,6 +616,7 @@ class ModemStatusVC: BaseVC {
                     
                 }
 
+                self.plotDownstreamTable()
                 
                 
             }else if statusCode == 401{

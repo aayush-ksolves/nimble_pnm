@@ -24,13 +24,18 @@ class CMModemDetailVC: BaseVC {
     @IBOutlet weak var viewMDInfo: UIView!
     @IBOutlet weak var viewDSInfo: UIView!
     
+    var arrayThirdSection : [String] = []
+    
+    
     var totalMDrows : Int = 0
     var totalMDcoloumns : Int = 0
     var MinusHeadingForTableMD = 87.0
     var MinusHeadingForTableDS = 36.0
     
+    @IBOutlet weak var constraintThirdSectionWidth: NSLayoutConstraint!
     
     
+    @IBOutlet weak var viewThirdSection: UIView!
     var totalDSrows : Int = 0
     var totalDScoloumns : Int = 0
     
@@ -54,7 +59,7 @@ class CMModemDetailVC: BaseVC {
         
     }
     
-    //Hansling Screen Orienatations and Table Plotting
+    //Handling Screen Orienatations and Table Plotting
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         print("a")
@@ -62,13 +67,13 @@ class CMModemDetailVC: BaseVC {
             context in
             print("b")
            
-            self.plotModemStatusTable()
-            self.plotDownstreamTable()
+            
             
             
         }, completion: {
             context in
-            print("c")
+            self.plotModemStatusTable()
+            self.plotDownstreamTable()
         })
         
         print("d")
@@ -86,8 +91,10 @@ class CMModemDetailVC: BaseVC {
         
     }
   
-        func plotModemStatusTable(){
+    func plotModemStatusTable(){
 
+        self.plotAllFrequenciesAvailable()
+            
         for eachSubview in self.viewMDInfo.subviews{
             eachSubview.removeFromSuperview()
         }
@@ -101,8 +108,8 @@ class CMModemDetailVC: BaseVC {
         var variableX = paddingHorizontal
         var variableY = paddingVertical
 
-        let minimumWidthOfCell = 40.0
-        let computedWidthOfCell = (Double(SCREEN_SIZE.width - 16) - (2 * paddingHorizontal) - (Double(totalMDcoloumns - 1) * Double(gappingHorizontal)))/Double(totalMDcoloumns)
+        let minimumWidthOfCell = 60.0
+        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - (Double(totalMDcoloumns - 1) * Double(gappingHorizontal)))/Double(totalMDcoloumns)
 
         var finalWidthOfCell : Double!
 
@@ -265,10 +272,14 @@ class CMModemDetailVC: BaseVC {
                         }
                         
                     }else if i == 7{
+                        self.arrayThirdSection.removeAll()
+                        self.arrayThirdSection.append("ALL")
                         tempRecord.recordName = "Freq(MHz)"
+                        
                         
                         for j in 0..<dataArray.count{
                             tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
+                            self.arrayThirdSection.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
                         }
                         
                     }else if i == 8{
@@ -345,6 +356,78 @@ class CMModemDetailVC: BaseVC {
         
     }
     
+    func plotAllFrequenciesAvailable(){
+        for eachSubview in self.viewThirdSection.subviews{
+            eachSubview.removeFromSuperview()
+        }
+        
+        let paddingHorizontal = 0.0
+        var gappingHorizontal = 2.0
+        let paddingVertical = 2.0
+        let gappingVertical = 2.0
+        
+        
+        var variableX = paddingHorizontal
+        var variableY = paddingVertical
+        
+        let minimumWidthOfCell = 60.0
+        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - (Double(self.arrayThirdSection.count - 1) * Double(gappingHorizontal)))/Double(arrayThirdSection.count)
+        
+        var finalWidthOfCell : Double!
+        
+        if computedWidthOfCell >= minimumWidthOfCell{
+            finalWidthOfCell = computedWidthOfCell
+            gappingHorizontal = 2
+        }else{
+            finalWidthOfCell = minimumWidthOfCell
+        }
+        
+        let heightOfCell = 24.0
+        
+        var scrollContentWidthDeterminer = Double()
+        
+        
+        
+        
+            
+            for j in 0 ..< self.arrayThirdSection.count{
+                
+                var buttonForCell = UIButton()
+                //DataSource Usage Governance
+                
+                //Using Modem DS as datasource
+                buttonForCell.frame = CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell)
+                buttonForCell.titleLabel?.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                buttonForCell.backgroundColor = UIColor.red
+                buttonForCell.setTitle(self.arrayThirdSection[j], for: .normal)
+                buttonForCell.tag = j + 1000
+                buttonForCell.addTarget(self, action: #selector(buttonPressedFromAllFrequency(_:)), for: .touchUpInside)
+                
+                    
+                    
+                
+                self.viewThirdSection.addSubview(buttonForCell)
+                //Incrementing X
+                variableX += finalWidthOfCell + gappingHorizontal
+                scrollContentWidthDeterminer = variableX
+                
+            }
+        
+        let totalWidth = scrollContentWidthDeterminer + paddingHorizontal
+        
+        
+        
+        self.constraintThirdSectionWidth.constant = CGFloat(totalWidth)
+        UIView.animate(withDuration: 1.0, animations: {
+            self.view.layoutIfNeeded()
+        })
+        
+    }
+    
+    func buttonPressedFromAllFrequency(_ sender : UIButton){
+        let tag = sender.tag
+        print(tag)
+    }
     
     func loadDSData(forModem modemMac : String){
         let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
@@ -405,6 +488,7 @@ class CMModemDetailVC: BaseVC {
                     
                 }
                 
+                
                 self.plotDownstreamTable()
                 
                 
@@ -442,8 +526,8 @@ class CMModemDetailVC: BaseVC {
         var variableX = paddingHorizontal
         var variableY = paddingVertical
         
-        let minimumWidthOfCell = 40.0
-        let computedWidthOfCell = (Double(SCREEN_SIZE.width - 16) - (2 * paddingHorizontal) - (Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
+        let minimumWidthOfCell = 60.0
+        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - (Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
         
         var finalWidthOfCell : Double!
         
@@ -485,23 +569,23 @@ class CMModemDetailVC: BaseVC {
                         labelForCell.textAlignment = .center
                         
                     }else if j == 1{
-                        labelForCell.text = bundleDataDSTable[j-1].frequency
+                        labelForCell.text = bundleDataDSTable[i-1].frequency
                         labelForCell.textAlignment = .center
                         
                     }else if j == 2{
-                        labelForCell.text = bundleDataDSTable[j-1].power
+                        labelForCell.text = bundleDataDSTable[i-1].power
                         labelForCell.textAlignment = .center
                         
                     }else if j == 3{
-                        labelForCell.text = bundleDataDSTable[j-1].mer
+                        labelForCell.text = bundleDataDSTable[i-1].mer
                         labelForCell.textAlignment = .center
                         
                     }else if j == 4{
-                        labelForCell.text = bundleDataDSTable[j-1].cmCorrCw
+                        labelForCell.text = bundleDataDSTable[i-1].cmCorrCw
                         labelForCell.textAlignment = .center
                         
                     }else if j == 5{
-                        labelForCell.text = bundleDataDSTable[j-1].cmUnCorrCw
+                        labelForCell.text = bundleDataDSTable[i-1].cmUnCorrCw
                         labelForCell.textAlignment = .center
                         
                     }
