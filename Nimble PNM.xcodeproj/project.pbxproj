@@ -72,6 +72,9 @@
 		530AA3F91F8CDDCE00F42875 /* WODetailsImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 530AA3F81F8CDDCE00F42875 /* WODetailsImageCollectionViewCell.xib */; };
 		530AA3FB1F8CF3CC00F42875 /* ImageViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AA3FA1F8CF3CC00F42875 /* ImageViewerVC.swift */; };
 		530AA3FD1F8D08F900F42875 /* AssignTechicianVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AA3FC1F8D08F900F42875 /* AssignTechicianVC.swift */; };
+		530AE7451F9EFED900E60F6F /* NimbleSpectraAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AE7441F9EFED900E60F6F /* NimbleSpectraAnalysis.swift */; };
+		530AE7471F9F169600E60F6F /* SpectraAnalysisDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530AE7461F9F169600E60F6F /* SpectraAnalysisDetails.swift */; };
+		530AE7491F9F16FF00E60F6F /* SpectraAnalysisDetails.xib in Resources */ = {isa = PBXBuildFile; fileRef = 530AE7481F9F16FF00E60F6F /* SpectraAnalysisDetails.xib */; };
 		530C46981F90C3890070585B /* WOSectionQueuedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C46971F90C3890070585B /* WOSectionQueuedCell.swift */; };
 		530C469A1F90C3AB0070585B /* WOSectionQueuedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 530C46991F90C3AB0070585B /* WOSectionQueuedCell.xib */; };
 		530C469E1F90D85D0070585B /* NimbleSpectraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530C469D1F90D85D0070585B /* NimbleSpectraVC.swift */; };
@@ -90,6 +93,11 @@
 		53750B321F8C880F008D28ED /* WOModemDetailsSecondCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53750B311F8C880F008D28ED /* WOModemDetailsSecondCell.xib */; };
 		53750B341F8C8990008D28ED /* WOModemDetailsHeaderTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53750B331F8C8990008D28ED /* WOModemDetailsHeaderTop.swift */; };
 		53750B361F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53750B351F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib */; };
+		53CCAC2F1F9DC43F00452247 /* NimbleSpectraDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CCAC2E1F9DC43E00452247 /* NimbleSpectraDetails.swift */; };
+		53CCAC311F9DE05800452247 /* CMTSDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CCAC301F9DE05800452247 /* CMTSDetails.swift */; };
+		53CCAC331F9DE07D00452247 /* CMTSDetails.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CCAC321F9DE07D00452247 /* CMTSDetails.xib */; };
+		53D58A3F1F9F3EA00025585A /* SpectraAnalysisChartCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53D58A3E1F9F3EA00025585A /* SpectraAnalysisChartCell.xib */; };
+		53D58A411F9F3EB80025585A /* SpectraAnalysisChartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53D58A401F9F3EB80025585A /* SpectraAnalysisChartCell.swift */; };
 		6E30473B3F4BF95537C87167 /* Pods_Nimble_PNM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6D2A5AE4E02632B16202EA9 /* Pods_Nimble_PNM.framework */; };
 /* End PBXBuildFile section */
 
@@ -164,6 +172,9 @@
 		530AA3F81F8CDDCE00F42875 /* WODetailsImageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WODetailsImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		530AA3FA1F8CF3CC00F42875 /* ImageViewerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewerVC.swift; sourceTree = "<group>"; };
 		530AA3FC1F8D08F900F42875 /* AssignTechicianVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssignTechicianVC.swift; sourceTree = "<group>"; };
+		530AE7441F9EFED900E60F6F /* NimbleSpectraAnalysis.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleSpectraAnalysis.swift; sourceTree = "<group>"; };
+		530AE7461F9F169600E60F6F /* SpectraAnalysisDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpectraAnalysisDetails.swift; sourceTree = "<group>"; };
+		530AE7481F9F16FF00E60F6F /* SpectraAnalysisDetails.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpectraAnalysisDetails.xib; sourceTree = "<group>"; };
 		530C46971F90C3890070585B /* WOSectionQueuedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOSectionQueuedCell.swift; sourceTree = "<group>"; };
 		530C46991F90C3AB0070585B /* WOSectionQueuedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOSectionQueuedCell.xib; sourceTree = "<group>"; };
 		530C469D1F90D85D0070585B /* NimbleSpectraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleSpectraVC.swift; sourceTree = "<group>"; };
@@ -182,6 +193,11 @@
 		53750B311F8C880F008D28ED /* WOModemDetailsSecondCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOModemDetailsSecondCell.xib; sourceTree = "<group>"; };
 		53750B331F8C8990008D28ED /* WOModemDetailsHeaderTop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOModemDetailsHeaderTop.swift; sourceTree = "<group>"; };
 		53750B351F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOModemDetailsHeaderTop.xib; sourceTree = "<group>"; };
+		53CCAC2E1F9DC43E00452247 /* NimbleSpectraDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleSpectraDetails.swift; sourceTree = "<group>"; };
+		53CCAC301F9DE05800452247 /* CMTSDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMTSDetails.swift; sourceTree = "<group>"; };
+		53CCAC321F9DE07D00452247 /* CMTSDetails.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMTSDetails.xib; sourceTree = "<group>"; };
+		53D58A3E1F9F3EA00025585A /* SpectraAnalysisChartCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpectraAnalysisChartCell.xib; sourceTree = "<group>"; };
+		53D58A401F9F3EB80025585A /* SpectraAnalysisChartCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpectraAnalysisChartCell.swift; sourceTree = "<group>"; };
 		6668C5120905B7E68F50C23E /* Pods-Nimble PNM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nimble PNM.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nimble PNM/Pods-Nimble PNM.release.xcconfig"; sourceTree = "<group>"; };
 		E6D2A5AE4E02632B16202EA9 /* Pods_Nimble_PNM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nimble_PNM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -337,6 +353,8 @@
 			isa = PBXGroup;
 			children = (
 				530C469D1F90D85D0070585B /* NimbleSpectraVC.swift */,
+				53CCAC2E1F9DC43E00452247 /* NimbleSpectraDetails.swift */,
+				530AE7441F9EFED900E60F6F /* NimbleSpectraAnalysis.swift */,
 			);
 			name = "Nimble Spectra";
 			sourceTree = "<group>";
@@ -346,6 +364,12 @@
 			children = (
 				530C46A01F90E0890070585B /* CMTSDataCell.swift */,
 				530C46A21F90E0B90070585B /* CMTSDataCell.xib */,
+				53CCAC301F9DE05800452247 /* CMTSDetails.swift */,
+				53CCAC321F9DE07D00452247 /* CMTSDetails.xib */,
+				530AE7461F9F169600E60F6F /* SpectraAnalysisDetails.swift */,
+				530AE7481F9F16FF00E60F6F /* SpectraAnalysisDetails.xib */,
+				53D58A401F9F3EB80025585A /* SpectraAnalysisChartCell.swift */,
+				53D58A3E1F9F3EA00025585A /* SpectraAnalysisChartCell.xib */,
 			);
 			name = "Nimble Spectra";
 			sourceTree = "<group>";
@@ -489,6 +513,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53CCAC331F9DE07D00452247 /* CMTSDetails.xib in Resources */,
+				53D58A3F1F9F3EA00025585A /* SpectraAnalysisChartCell.xib in Resources */,
 				530C469A1F90C3AB0070585B /* WOSectionQueuedCell.xib in Resources */,
 				28F4D43F1F266AE100E57D0E /* SliderCell.xib in Resources */,
 				28ACC3941F162F29007FAF18 /* LaunchScreen.storyboard in Resources */,
@@ -507,6 +533,7 @@
 				287999D51F556CA300DFA992 /* CMStatusBirthSectionCell.xib in Resources */,
 				282927281F668E5D007D1583 /* ContactGeocodeCell.xib in Resources */,
 				530AA3F91F8CDDCE00F42875 /* WODetailsImageCollectionViewCell.xib in Resources */,
+				530AE7491F9F16FF00E60F6F /* SpectraAnalysisDetails.xib in Resources */,
 				530AA3F11F8CC48F00F42875 /* WOHeaderFeedback.xib in Resources */,
 				28F4D43B1F26694E00E57D0E /* SwitchCell.xib in Resources */,
 				534E3D511F8DD25300B899E7 /* AssignTechnicianCell.xib in Resources */,
@@ -580,6 +607,7 @@
 				28F347381F1DD58C006F9086 /* LoaderVC.swift in Sources */,
 				28F4D4411F266D1C00E57D0E /* USAnalyzerSettingVC.swift in Sources */,
 				28E057571F792B5E0066C809 /* LocationHelper.swift in Sources */,
+				530AE7451F9EFED900E60F6F /* NimbleSpectraAnalysis.swift in Sources */,
 				53750B2E1F8C86D3008D28ED /* WOModemDetailsFirstCell.swift in Sources */,
 				28F4D4491F2733D300E57D0E /* WorkOrderVC.swift in Sources */,
 				285F5D931F8CB74E006435EA /* CMModemDetailVC.swift in Sources */,
@@ -590,12 +618,14 @@
 				28F4D43A1F26694E00E57D0E /* SwitchCell.swift in Sources */,
 				530AA3F71F8CDDA600F42875 /* WODetailsImageCollectionViewCell.swift in Sources */,
 				534E3D4F1F8DD21900B899E7 /* AssignTechnicianCell.swift in Sources */,
+				530AE7471F9F169600E60F6F /* SpectraAnalysisDetails.swift in Sources */,
 				53750B301F8C87E0008D28ED /* WOModemDetailsSecondCell.swift in Sources */,
 				282927211F668E0A007D1583 /* LocationGeocodeCell.swift in Sources */,
 				5311C5CF1F8F329D004EB155 /* NearbyModemDetailsCell.swift in Sources */,
 				28FB67D61F4DAF6100E85070 /* ModemStatusVC.swift in Sources */,
 				28ACC38C1F162F29007FAF18 /* SyncMobileVC.swift in Sources */,
 				530AA3EF1F8CC45F00F42875 /* WOHeaderFeedback.swift in Sources */,
+				53CCAC311F9DE05800452247 /* CMTSDetails.swift in Sources */,
 				530AA3FB1F8CF3CC00F42875 /* ImageViewerVC.swift in Sources */,
 				28B6260A1F17364C00D3D69F /* BarCodeScannerVC.swift in Sources */,
 				28D9910F1F1CC325006DADE4 /* USAnalyzerVC.swift in Sources */,
@@ -603,6 +633,7 @@
 				28B626101F1746C900D3D69F /* UtilityHelper.swift in Sources */,
 				282927241F668E2B007D1583 /* AddressGeocodeCell.swift in Sources */,
 				28D991131F1CD063006DADE4 /* HomeViewCollectionCell.swift in Sources */,
+				53CCAC2F1F9DC43F00452247 /* NimbleSpectraDetails.swift in Sources */,
 				28B6260D1F173BB700D3D69F /* Constant.swift in Sources */,
 				2802274A1F8BBB1A00D6C89C /* CMAnalyzerVC.swift in Sources */,
 				28D991091F1CAC45006DADE4 /* TabBaseController.swift in Sources */,
@@ -622,6 +653,7 @@
 				28ACC38A1F162F29007FAF18 /* AppDelegate.swift in Sources */,
 				287999D41F556CA300DFA992 /* CMStatusBirthSectionCell.swift in Sources */,
 				28D9910B1F1CB679006DADE4 /* HomeVC.swift in Sources */,
+				53D58A411F9F3EB80025585A /* SpectraAnalysisChartCell.swift in Sources */,
 				5311C5D31F8F3ED6004EB155 /* NearbyModemDetails.swift in Sources */,
 				28F4D42D1F24FEFF00E57D0E /* WO5LineCell.swift in Sources */,
 				28F347361F1D065A006F9086 /* AlamofireHelper.swift in Sources */,

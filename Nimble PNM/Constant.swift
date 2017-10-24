@@ -97,6 +97,9 @@ let SERVICE_URL_US_ANALYZER_CMTS_PORT = "/pnmservice/getCmtsPort"
 let SERVICE_URL_CM_ANALYZER_GET_MODEM_DATA = "/pnmservice/getModemData"
 let SERVICE_URL_CM_ANALYZER_RE_SCAN_MODEM = "/pnmservice/reScanModem"
 let SERVICE_URL_CM_ANALYZER_GET_DS_DATA = "/pnmservice/getModemDownStream"
+let SERVICE_URL_NIMBLE_SPECTRA_GET_CMTS_LIST = "/nimbleSpectra/nimbleSpectraService/getCmtsListWithImpairmentCount"
+let SERVICE_URL_NIMBLE_SPECTRA_GET_CMTS_MODEM_LIST = "/nimbleSpectra/nimbleSpectraService/getModemListByImpairment"
+let SERVICE_URL_NIMBLE_SPECTRA_GET_CHART_DATA = "/nimbleSpectra/nimbleSpectraService/getChartData"
 
 
 //Tab Index Governers
@@ -126,6 +129,10 @@ let LOADER_MSG_INSTALL_MODEMS = "Installing Modem ..."
 
 let LOADER_MSG_GETTING_DS_DATA = "Fetching Downstream Data ..."
 
+let LOADER_MSG_FETCH_CMTS_LIST = "Fetching CMTS List ..."
+let LOADER_MSG_FETCH_MODEM = "Fetching Modem ..."
+
+let LOADER_MSG_FETCH_SPECTRA_DATA = "Fetching Spectra Data ..."
 
 let LOADER_MSG_FETCH_TECH_LIST = "Fetching Technician List ..."
 let LOADER_MSG_REASSIGN_WO = "Re-assigning Work Order ..."
@@ -299,16 +306,21 @@ let REQ_PARAM_RADIUS = "radius"
 
 let REQ_PARAM_ID = "id"
 let REQ_PARAM_FILTER = "filter"
+let REQ_PARAM_TIMESTAMP = "timestamp"
 
 
 let REQ_PARAM_STATUS = "status"
+let REQ_PARAM_CMTS_ID = "cmts_id"
+let REQ_PARAM_IMPAIRMENT_TYPE = "impairment_type"
 
 //SERVICE RESPONSE PARAMETERS
 let RESPONSE_PARAM_STATUS_CODE = "status_code"
 let RESPONSE_PARAM_STATUS_MSG = "status_msg"
 let RESPONSE_PARAM_DATA = "data"
 let RESPONSE_PARAM_MODEM_DATA = "modem_data"
-let RESPONSE_PARAM_UPSTREAM = "upstreams"
+let RESPONSE_PARAM_UPSTREAMS = "upstreams"
+let RESPONSE_PARAM_UPSTREAM = "upstream"
+
 let RESPONSE_PARAM_INTERFACE_NAME = "interface_name"
 
 let RESPONSE_PARAM_COMMON = "common"
@@ -374,6 +386,14 @@ let RESPONSE_PARAM_CMTS_ID = "cmtsID"
 let RESPONSE_PARAM_MAC_ADDRESS = "mac_address"
 let RESPONSE_PARAM_AGE = "age"
 let RESPONSE_PARAM_TIMESTAMP = "timestamp"
+let RESPONSE_PARAM_SERVITY_VAL = "severity_val"
+
+let RESPONSE_PARAM_TIME_STAMP = "time_stamp"
+
+let RESPONSE_PARAM_MODEM_NUMBER = "model_number"
+let RESPONSE_PARAM_IP_ADDRESS = "ip_address"
+let RESPONSE_PARAM_VENDOR = "vendor"
+let RESPONSE_PARAM_TOTAL_POWER = "total_power"
 
 let RESPONSE_PARAM_MODEM_MAC = "modemMAC"
 let RESPONSE_PARAM_SEVERITY = "Severity"
@@ -395,6 +415,22 @@ let RESPONSE_PARAM_WO_CMTS_ID = "cmts_id"
 let RESPONSE_PARAM_LATITUDE = "latitude"
 let RESPONSE_PARAM_LONGITUDE = "longitude"
 
+let RESPONSE_PARAM_NS_CMTS_ID = "cmts_id"
+let RESPONSE_PARAM_NS_CMTSNAME = "cmtsname"
+let RESPONSE_PARAM_NS_FBC_MODEM_POLLED = "fbc_modem_polled"
+let RESPONSE_PARAM_NS_POLL_POS = "poll_pos"
+let RESPONSE_PARAM_NS_POLL_NEG = "poll_neg"
+let RESPONSE_PARAM_NS_NOISE = "noise"
+let RESPONSE_PARAM_NS_RESONANT_PEAK = "resonant_peak"
+let RESPONSE_PARAM_NS_SUCKOUT = "suckout"
+let RESPONSE_PARAM_NS_WAVE = "wave"
+let RESPONSE_PARAM_NS_ROLLOFF = "rolloff"
+let RESPONSE_PARAM_NS_EVENT_COUNT = "event_count"
+let RESPONSE_PARAM_NS_IMPAIRMANT_COUNT = "impairment_count"
+let RESPONSE_PARAM_NS_ADJACENCY = "adjacency"
+let RESPONSE_PARAM_NS_TILT = "tilt"
+
+let RESPONSE_PARAM_NS_IMPAIRMANTS = "impairments"
 
 let RESPONSE_PARAM_ICFR = "MTC"
 

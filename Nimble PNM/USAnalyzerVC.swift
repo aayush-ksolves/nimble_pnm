@@ -189,7 +189,7 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
                 self.bundleUpstreamPortList.removeAll()
                 for eachRecord in relevantDataArray{
                     var tempRecord = UpstreamPortListDS()
-                    let castedRecord = (((eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_UPSTREAM) as! NSArray)[0]) as! NSDictionary
+                    let castedRecord = (((eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_UPSTREAMS) as! NSArray)[0]) as! NSDictionary
                     tempRecord.id = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_ID)!)
                     tempRecord.interfaceName = castedRecord.value(forKey: RESPONSE_PARAM_INTERFACE_NAME) as! String
                     

@@ -46,7 +46,6 @@ class CMModemDetailVC: BaseVC {
         
         configureUIComponents()
         self.getDetails(forModem: exposedMacAddress)
-        self.loadDSData(forModem: exposedMacAddress)
         
     }
     
@@ -167,7 +166,7 @@ class CMModemDetailVC: BaseVC {
 
         self.constraintMDWidth.constant = CGFloat(totalWidth)
         self.constraintMDHeight.constant = CGFloat(MinusHeadingForTableMD + totalHeight)
-        UIView.animate(withDuration: 1.0, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()
         })
 
@@ -285,15 +284,13 @@ class CMModemDetailVC: BaseVC {
                 }
                 
                 self.plotModemStatusTable()
-                
+                self.loadDSData(forModem: self.exposedMacAddress)
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
-            
             
             
         },failureCompletionHandler: {
