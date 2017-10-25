@@ -1,4 +1,4 @@
-//
+ //
 //  CMModelDetailVC.swift
 //  Nimble PNM
 //
@@ -24,16 +24,26 @@ class CMModemDetailVC: BaseVC {
     @IBOutlet weak var viewMDInfo: UIView!
     @IBOutlet weak var viewDSInfo: UIView!
     
+
     var arrayThirdSection : [String] = []
     
     
+
+    var screenSize: CGSize!
+    
+    @IBOutlet weak var labelMacAddress: UILabel!
+
     var totalMDrows : Int = 0
     var totalMDcoloumns : Int = 0
     var MinusHeadingForTableMD = 87.0
     var MinusHeadingForTableDS = 36.0
     
+
     @IBOutlet weak var constraintThirdSectionWidth: NSLayoutConstraint!
     
+
+    let colorHeadings = COLOR_BLUE_IONIC_V1
+
     
     @IBOutlet weak var viewThirdSection: UIView!
     var totalDSrows : Int = 0
@@ -46,70 +56,71 @@ class CMModemDetailVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        configureUIComponents()
         self.getDetails(forModem: exposedMacAddress)
-        self.loadDSData(forModem: exposedMacAddress)
         
         
     }
     
     func configureUIComponents(){
         
-        
-        
+        screenSize = self.view.frame.size
+        labelMacAddress.text = exposedMacAddress
+        viewMDInfo.isHidden = true
+        viewDSInfo.isHidden = true
     }
     
     //Handling Screen Orienatations and Table Plotting
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        print("a")
+        
+        screenSize = size
+        
         coordinator.animate(alongsideTransition: {
             context in
-            print("b")
            
-            
             
             
         }, completion: {
             context in
+
             self.plotModemStatusTable()
             self.plotDownstreamTable()
+
+
+
         })
-        
-        print("d")
-        
-    }
-    
-    func handleViewRotationToPotrait(){
-        //self.plotDownstreamTable(forOrientationType: 0)
-        
-    }
-    
-    
-    func handleViewRotationToLandscape(){
-        //self.plotDownstreamTable(forOrientationType: 1)
         
     }
   
     func plotModemStatusTable(){
 
+
         self.plotAllFrequenciesAvailable()
             
+
+        viewMDInfo.isHidden = false
+        
+
         for eachSubview in self.viewMDInfo.subviews{
             eachSubview.removeFromSuperview()
         }
 
-        let paddingHorizontal = 8.0
-        var gappingHorizontal = 2.0
-        let paddingVertical = 4.0
-        let gappingVertical = 2.0
+        let paddingHorizontal = 1.0
+        var gappingHorizontal = 1.0
+        let paddingVertical = 1.0
+        let gappingVertical = 1.0
 
 
         var variableX = paddingHorizontal
         var variableY = paddingVertical
+        
+        let widthHeadingCell = 120.0
 
-        let minimumWidthOfCell = 60.0
-        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - (Double(totalMDcoloumns - 1) * Double(gappingHorizontal)))/Double(totalMDcoloumns)
+
+        let minimumWidthOfCell = 150.0
+        let computedWidthOfCell = (Double(screenSize.width - 16) - (2 * paddingHorizontal) - (Double(totalMDcoloumns - 1) * Double(gappingHorizontal)))/Double(totalMDcoloumns)
+
 
         var finalWidthOfCell : Double!
 
@@ -124,11 +135,7 @@ class CMModemDetailVC: BaseVC {
 
         var scrollContentWidthDeterminer = Double()
 
-
-
         for i in 0..<totalMDrows{
-
-
 
             for j in 0 ..< totalMDcoloumns{
 
@@ -136,40 +143,39 @@ class CMModemDetailVC: BaseVC {
                 //DataSource Usage Governance
                 
                 //Using Modem DS as datasource
-                labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
-                labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
-                labelForCell.backgroundColor = UIColor.clear
 
                 if j == 0{
+                    labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: widthHeadingCell, height: heightOfCell))
                     labelForCell.text = "\(bundleDataMDTable[i].recordName)"
                     labelForCell.textAlignment = .left
+                    labelForCell.font = UIFont.boldSystemFont(ofSize: SIZE_FONT_MEDIUM)
+                    labelForCell.backgroundColor = colorHeadings
+                    labelForCell.textColor = UIColor.white
+                    variableX += widthHeadingCell + gappingHorizontal
 
                 }else{
+                    labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
                     labelForCell.text = bundleDataMDTable[i].arrayValues[j-1]
                     labelForCell.textAlignment = .center
-
-
+                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                    labelForCell.backgroundColor = UIColor.white
+                    labelForCell.textColor = UIColor.black
+                    variableX += finalWidthOfCell + gappingHorizontal
                 }
                 self.viewMDInfo.addSubview(labelForCell)
 
-
                 //Incrementing X
-                variableX += finalWidthOfCell + gappingHorizontal
                 scrollContentWidthDeterminer = variableX
-
             }
 
             //Incrementing Y and Adjusting X
             variableX = paddingHorizontal
             variableY += heightOfCell + gappingVertical
 
-
         }
 
-        let totalHeight = variableY + paddingVertical
-        let totalWidth = scrollContentWidthDeterminer + paddingHorizontal
-
-
+        let totalHeight = variableY
+        let totalWidth = scrollContentWidthDeterminer
 
         self.constraintMDWidth.constant = CGFloat(totalWidth)
         self.constraintMDHeight.constant = CGFloat(MinusHeadingForTableMD + totalHeight)
@@ -185,7 +191,7 @@ class CMModemDetailVC: BaseVC {
 
     
     func getOrientationCode() -> Int{
-        if SCREEN_SIZE.width > SCREEN_SIZE.height{
+        if screenSize.width > screenSize.height{
             return 1
         }else{
             return 0
@@ -203,7 +209,6 @@ class CMModemDetailVC: BaseVC {
         ] as [String : Any];
         
         
-        
         self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_CM_ANALYZER_GET_MODEM_DATA, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_CM_ANALYZER_GET_MODEM_DATA, sucessCompletionHadler: {
             responseDict in
             
@@ -212,6 +217,8 @@ class CMModemDetailVC: BaseVC {
             
             
             if statusCode == 200{
+                
+                self.loadDSData(forModem: self.exposedMacAddress)
                 let dataArray = (responseDict.value(forKey: "data") as! NSArray)
                 
                 self.bundleDataMDTable.removeAll()
@@ -293,11 +300,9 @@ class CMModemDetailVC: BaseVC {
                     
                     self.bundleDataMDTable.append(tempRecord)
                     
-                    
                 }
                 
                 self.plotModemStatusTable()
-                
                 
                 
             }else if statusCode == 401{
@@ -335,9 +340,7 @@ class CMModemDetailVC: BaseVC {
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
             
             if statusCode == 200{
-                
-                
-                
+                self.getDetails(forModem: self.exposedMacAddress)
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
@@ -492,9 +495,6 @@ class CMModemDetailVC: BaseVC {
                 self.plotDownstreamTable()
                 
                 
-                
-                
-                
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
@@ -513,35 +513,39 @@ class CMModemDetailVC: BaseVC {
     }
     
     func plotDownstreamTable(){
+        
+        viewDSInfo.isHidden = false
+        
         for eachSubview in self.viewDSInfo.subviews{
             eachSubview.removeFromSuperview()
         }
         
-        let paddingHorizontal = 8.0
-        var gappingHorizontal = 2.0
-        let paddingVertical = 4.0
-        let gappingVertical = 2.0
+        let paddingHorizontal = 1.0
+        let gappingHorizontal = 1.0
+        let paddingVertical = 1.0
+        let gappingVertical = 1.0
         
         
         var variableX = paddingHorizontal
         var variableY = paddingVertical
         
-        let minimumWidthOfCell = 60.0
-        let computedWidthOfCell = (Double(self.view.frame.size.width - 16) - (2 * paddingHorizontal) - (Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
+
+        let minimumWidthOfCell = 40.0
+        let computedWidthOfCell = (Double(screenSize.width - 16) - (2 * paddingHorizontal) - (Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
+
         
         var finalWidthOfCell : Double!
         
         if computedWidthOfCell >= minimumWidthOfCell{
             finalWidthOfCell = computedWidthOfCell
-            gappingHorizontal = 2
         }else{
             finalWidthOfCell = minimumWidthOfCell
         }
         
         let heightOfCell = 20.0
+        let heightOfHeaderCell = 60.0
         
         var scrollContentWidthDeterminer = Double()
-        
         
         
         for i in 0..<totalDSrows{
@@ -552,17 +556,19 @@ class CMModemDetailVC: BaseVC {
                 //DataSource Usage Governance
                 if i == 0{
                     //Using Table Header DS as datasource
-                    labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
+                    labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfHeaderCell))
                     labelForCell.text = (tableHeaderDS.values[j] as! String)
-                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                    labelForCell.font = UIFont.boldSystemFont(ofSize: SIZE_FONT_MEDIUM)
                     labelForCell.textAlignment = .center
-                    labelForCell.backgroundColor = UIColor.gray
+                    labelForCell.numberOfLines = 0
+                    labelForCell.backgroundColor = colorHeadings
+                    labelForCell.textColor = UIColor.white
                     
                 }else{
                     //Using Modem DS as datasource
                     labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
                     labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
-                    labelForCell.backgroundColor = UIColor.clear
+                    labelForCell.backgroundColor = UIColor.white
                     
                     if j == 0{
                         labelForCell.text = "\(i)";
@@ -590,10 +596,9 @@ class CMModemDetailVC: BaseVC {
                         
                     }
                     
-                    
                 }
-                self.viewDSInfo.addSubview(labelForCell)
                 
+                self.viewDSInfo.addSubview(labelForCell)
                 
                 //Incrementing X
                 variableX += finalWidthOfCell + gappingHorizontal
@@ -603,15 +608,17 @@ class CMModemDetailVC: BaseVC {
             
             //Incrementing Y and Adjusting X
             variableX = paddingHorizontal
-            variableY += heightOfCell + gappingVertical
             
+            if i == 0 {
+                variableY += heightOfHeaderCell + gappingVertical
+            } else {
+                variableY += heightOfCell + gappingVertical
+            }
             
         }
         
-        let totalHeight = variableY + paddingVertical
-        let totalWidth = scrollContentWidthDeterminer + paddingHorizontal
-        
-        
+        let totalHeight = variableY
+        let totalWidth = scrollContentWidthDeterminer 
         
         self.constraintDSWidth.constant = CGFloat(totalWidth)
         self.constraintDSHeight.constant = CGFloat(MinusHeadingForTableDS + totalHeight)
@@ -626,6 +633,9 @@ class CMModemDetailVC: BaseVC {
     
     
     
+    @IBAction func btnActionRescan(_ sender: Any) {
+        self.performRescan(forModem: exposedMacAddress)
+    }
     
     
 }

@@ -10,16 +10,29 @@ import UIKit
 
 class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
 
-    var bundleRecord = NSMutableArray()
-    
+    fileprivate var bundleRecord: [WorkOrderDS] = []
+    fileprivate var tempBundleRecord: [WorkOrderDS] = []
     
     //Status Definitions
-    let STATUS_COMPLETED = "completed"
-    let STATUS_OPEN = "open"
-    let STATUS_PROGRESS = "In Progress"
-    let STATUS_CLOSED = "closed"
+    let STATUS_FIXED = "FIXED"
+    let STATUS_OPEN = "OPEN"
+    let STATUS_PROGRESS = "IN PROGRESS"
+    let STATUS_CLOSED = "CLOSED"
     
+    let COLOR_FIXED = UIColor.green
+    let COLOR_OPEN = UIColor.red
+    let COLOR_IN_PROGRESS = UIColor.yellow
+    let COLOR_CLOSED = UIColor.blue
     
+    var isOpenSelected = true
+    var isFixedSelected = true
+    var isInProgressSelected = true
+    var isClosedSelected = true
+    
+    let footerView = UIView()
+    var selectedIndex = -1
+    
+    @IBOutlet weak var sementedControlTop: UISegmentedControl!
     //Outlet
     
     @IBOutlet weak var switchOutletOpen: UISwitch!
@@ -39,15 +52,19 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
         super.viewDidLoad()
 
         self.configureUIComponents()
-        self.loadWorkOrderList()
-        
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.loadWorkOrderList()
+    }
     
     func configureUIComponents(){
         tableViewWO.estimatedRowHeight = 150
         self.tableViewWO.rowHeight = UITableViewAutomaticDimension
+        
+        tableViewWO.backgroundColor = COLOR_WHITE_AS_GREY
+        footerView.backgroundColor = COLOR_NONE
         
         self.labelWOHeading.text = TXT_LBL_WO_LIST_HEAD
         
@@ -74,40 +91,55 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
             
             let dataArray = responseDict.value(forKey: RESPONSE_PARAM_DATA) as! NSArray
             
-            self.bundleRecord.removeAllObjects()
+            self.bundleRecord.removeAll()
             if statusCode == 200{
                 for eachRecord in dataArray{
                     var tempWORecord = WorkOrderDS()
-                    tempWORecord.orderNo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!)
-                    tempWORecord.status = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_STATUS)!)
                     
-                    if tempWORecord.status == self.STATUS_OPEN{
-                       // tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
-                        tempWORecord.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                        tempWORecord.type = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
+                    if String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!) != "node" {
                         
-                    }else if tempWORecord.status == self.STATUS_PROGRESS{
-                        //tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
-                        tempWORecord.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                        tempWORecord.type = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
+                        tempWORecord.status = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_STATUS)!).uppercased()
                         
-                    }else if tempWORecord.status == self.STATUS_CLOSED{
-                        //tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
+                        tempWORecord.type = "Modem"
+                        tempWORecord.orderNo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!)
+                        tempWORecord.assignedTo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_TO)!)
+                        tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
                         tempWORecord.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                        tempWORecord.type = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
+                        tempWORecord.macAddress = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_MAC_ADDRESS)!)
+                        tempWORecord.assignedBy = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_BY)!)
+                        tempWORecord.customerName = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CUST_NAME)!)
+                        tempWORecord.contact = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHONE_NUMBER)!)
+                        tempWORecord.cmtsId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_WO_CMTS_ID)!)
+                        tempWORecord.technicianFeedback = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray
+                        tempWORecord.photos = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
                         
-                    }else if tempWORecord.status == self.STATUS_COMPLETED{
-                        //tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
-                        tempWORecord.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                        tempWORecord.type = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
+                        if tempWORecord.status == self.STATUS_OPEN{
+                            tempWORecord.sideBarColor = self.COLOR_OPEN
+                            tempWORecord.numberOfSections = 1
+                            
+                        }else if tempWORecord.status == self.STATUS_PROGRESS{
+                            tempWORecord.sideBarColor = self.COLOR_IN_PROGRESS
+                            tempWORecord.numberOfSections = 2
+                            
+                        }else if tempWORecord.status == self.STATUS_CLOSED{
+                            tempWORecord.sideBarColor = self.COLOR_CLOSED
+                            tempWORecord.numberOfSections = 1
+                            
+                        }else if tempWORecord.status == self.STATUS_FIXED{
+                            tempWORecord.sideBarColor = self.COLOR_FIXED
+                            tempWORecord.numberOfSections = 2
+                            
+                        }else{
+                            print("This shouldn't have happened")
+                        }
                         
-                    }else{
-                        print("This shouldn't have happened")
+                        
+                        self.bundleRecord.append(tempWORecord)
                     }
                     
-                    
-                    self.bundleRecord.add(tempWORecord)
                 }
+                
+            self.tempBundleRecord = self.bundleRecord
             self.tableViewWO.reloadData()
             
             }else if statusCode == 401{
@@ -117,40 +149,73 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
             
-            
-            
-            
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
         })
         
-
-        
     }
-    
-    
-    
     
     //MARK: UITable View Delegates And Datasource
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return tempBundleRecord.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return bundleRecord.count
-        return bundleRecord.count
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        
+        return footerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        if section == tempBundleRecord.count - 1 {
+            return 0
+        }else {
+            return 5
+        }
+        
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellNo = indexPath.row
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customcell_4") as! WO4LineCell
+        let cellNo = indexPath.section
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customcell_5") as! WO5LineCell
+        let cellData = tempBundleRecord[cellNo]
+        
+        cell.labelOrderId.text = cellData.orderNo
+        cell.labelType.text = cellData.type
+        cell.labelAddress.text = cellData.address
+        cell.labelAssignedDate.text = cellData.assignedDate
+        cell.labelAssignedTo.text = cellData.assignedTo
+        cell.labelSideBar.backgroundColor = cellData.sideBarColor
+        
         return cell;
-        
     }
-        
-        
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedIndex = indexPath.section
+        self.performSegue(withIdentifier: "segue-to-work-order-details", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segue-to-work-order-details"{
+            
+            let selectedIndexData = tempBundleRecord[selectedIndex]
+            
+            let destinationController = segue.destination as! WorkOrderModemDetails
+            
+            destinationController.exposedOrderID = selectedIndexData.orderNo
+            
+        }
+    }
+    
+    
     @IBAction func btnActionLogout(_ sender: Any) {
         self.performLogout()
     }
@@ -158,41 +223,68 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
     @IBAction func switchChangedForOpen(_ sender: Any) {
         let switchForOpen = sender as! UISwitch
         if switchForOpen.isOn{
-            
+            isOpenSelected = true
         }else{
-            
+            isOpenSelected = false
         }
         
+        filterData()
     }
     
     @IBAction func switchChangedForFixed(_ sender: Any) {
         let switchForFixed = sender as! UISwitch
         if switchForFixed.isOn{
-            
+            isFixedSelected = true
         }else{
-            
+            isFixedSelected = false
         }
         
+        filterData()
     }
     
     @IBAction func switchChangedProgress(_ sender: Any) {
         let switchForProgress = sender as! UISwitch
         if switchForProgress.isOn{
-            
+            isInProgressSelected = true
         }else{
-            
+            isInProgressSelected = false
         }
         
+        filterData()
     }
     
     @IBAction func switchChangedForClosed(_ sender: Any) {
         let switchForClosed = sender as! UISwitch
         if switchForClosed.isOn{
-            
+            isClosedSelected = true
         }else{
+            isClosedSelected = false
+        }
+        
+        filterData()
+    }
+    
+    func filterData() {
+        
+        tempBundleRecord.removeAll()
+        
+        for data in bundleRecord {
+            
+            if data.status == STATUS_OPEN && isOpenSelected{
+                tempBundleRecord.append(data)
+            } else if data.status == STATUS_FIXED && isFixedSelected{
+                tempBundleRecord.append(data)
+            } else if data.status == STATUS_CLOSED && isClosedSelected{
+                tempBundleRecord.append(data)
+            } else if data.status == STATUS_PROGRESS && isInProgressSelected{
+                tempBundleRecord.append(data)
+            } else {
+                print("Dont append data")
+            }
             
         }
         
+        tableViewWO.reloadData()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -212,9 +304,6 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
         })
     }
     
-    
-    
-    
 }
 
 fileprivate struct WorkOrderDS{
@@ -223,6 +312,16 @@ fileprivate struct WorkOrderDS{
     var status : String = ""
     var assignedDate : String = ""
     var address : String = ""
+    var assignedTo : String = ""
+    var assignedBy : String = ""
+    var customerName : String = ""
+    var contact : String = ""
+    var macAddress : String = ""
+    var cmtsId : String = ""
+    var numberOfSections = 1
+    var technicianFeedback : NSArray!
+    var photos: NSArray!
+    var sideBarColor : UIColor = UIColor.white
 }
 
 

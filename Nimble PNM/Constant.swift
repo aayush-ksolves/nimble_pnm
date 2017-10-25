@@ -32,10 +32,7 @@ let COLOR_BLUE_IONIC_V1 = UIColor(red: 56/255, green: 126/255, blue: 245/255, al
 
 let COLOR_SCAN_REGION_BORDER = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
 
-
-
 let COLOR_BORDER_GRAY_MODIFIED = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
-
 
 let COLOR_WHITE_AS_GREY = UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1.0)
 let COLOR_WHITE_AS_GREY_LIGHT = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
@@ -78,24 +75,31 @@ let SERVICE_URL_HOME_CHECK_MODULES = "/pnmservice/checkModules";
 let SERVICE_URL_PROFILE_CHANGE_PASSWORD = "/pnmservice/changePassword"
 
 let SERVICE_URL_WO_LIST = "/workorderservice/getWorkOrderList"
+let SERVICE_URL_NEARBY_MODEMS = "/pnmservice/modemsByLocation"
 
+
+let SERVICE_URL_WO_TECHNICIAN_LIST = "/workorderservice/getTechnicianList"
+let SERVICE_URL_WO_REASSIGN = "/workorderservice/reAssignWorkOrder"
+let SERVICE_URL_WO_LOCK_UNLOCK = "/workorderservice/lockUnlockWorkOrders"
 
 let SERVICE_URL_INSTALL_LOAD_FAILED = "/pnmservice/getFailedModem"
 let SERVICE_URL_INSTALL_COMPLETE_FAILED = "/pnmservice/completeFailedModem"
 let SERVICE_URL_INSTALL_GET_MODEM_STATUS = "/pnmservice/getModemInstallStatus"
 let SERVICE_URL_INSTALL_CABLE_MODEM = "/pnmservice/installCableModem"
 
-
-
 let SERVICE_URL_INSTALL_GET_DS_DATA = "/pnmservice/getModemDownStream"
 let SERVICE_URL_GEOCODE_SAVE = "/pnmservice/saveGeocode"
 
+let SERVICE_URL_WO_MARK_FIXED = "/workorderservice/updateWorkOrder"
 let SERVICE_URL_US_ANALYZER_CMTS_LIST = "/pnmservice/listCmts"
 let SERVICE_URL_US_ANALYZER_CMTS_PORT = "/pnmservice/getCmtsPort"
 
 let SERVICE_URL_CM_ANALYZER_GET_MODEM_DATA = "/pnmservice/getModemData"
 let SERVICE_URL_CM_ANALYZER_RE_SCAN_MODEM = "/pnmservice/reScanModem"
 let SERVICE_URL_CM_ANALYZER_GET_DS_DATA = "/pnmservice/getModemDownStream"
+
+
+let SERVICE_URL_NIMBLE_SPECTRA_IMPAIR_COUNT = "/nimbleSpectra/nimbleSpectraService/getCmtsListWithImpairmentCount";
 
 
 //Tab Index Governers
@@ -112,6 +116,8 @@ let LOADER_MSG_ANOTHER_LOGOUT = "Logging Out ..."
 let LOADER_MSG_LOGOUT = "Logging Out ..."
 let LOADER_MSG_LOADING_MODULES = "Loading Modules ..."
 let LOADER_MSG_FETCH_WO = "Fetching Work Orders ..."
+let LOADER_MSG_FETCH_WO_DETAILS = "Fetching Work Order Details ..."
+let LOADER_MSG_FETCH_NB_MODEMS = "Fetching Nearby Modems ..."
 let LOADER_MSG_PASSWORD_CHANGE = "Requesting Password Change ..."
 let LOADER_MSG_FAILED_MODEMS = "Loading Failed Modems ..."
 let LOADER_MSG_REFRESH_FAILED_MODEMS = "Updating Failed Modems ..."
@@ -124,6 +130,9 @@ let LOADER_MSG_INSTALL_MODEMS = "Installing Modem ..."
 let LOADER_MSG_GETTING_DS_DATA = "Fetching Downstream Data ..."
 
 
+let LOADER_MSG_FETCH_TECH_LIST = "Fetching Technician List ..."
+let LOADER_MSG_REASSIGN_WO = "Re-assigning Work Order ..."
+let LOADER_MSG_LOCKING_WO = "Locking Work Order ..."
 let LOADER_MSG_US_CMTS_LIST = "Loading CMTS List ..."
 let LOADER_MSG_US_PORT_LIST = "Loading Upstream Ports ..."
 
@@ -133,7 +142,12 @@ let LOADER_MSG_CM_ANALYZER_RESCAN_MODEM = "Rescanning Modem ..."
 let LOADER_MSG_CM_ANALYZER_LOAD_DS_DATA = "Loading Downstream Data ..."
 
 
+let LOADER_MSG_NS_IMPAIR_COUNT = "Loading Impairment Data ..."
 
+
+let LOADER_MSG_UPDATE_MODEM_LOCATION = "Updating Modem Location ..."
+
+let LOADER_MSG_WO_MARKING_FIXED = "Marking As Fixed ..."
 
 //MARK: Alert Definitions
 //Alert Titles
@@ -171,7 +185,12 @@ let ALERT_MSG_CM_ANALYZER_VALID_MAC = "Please enter a valid mac address."
 
 
 
+// Alert Work Order Screen
 
+let ALERT_TITLE_CONFIRM = "Confirm"
+let ALERT_MSG_WO_REASSIGN = "Are you sure you want to re-assign this work order?"
+let ALERT_MSG_WO_LOCK = "Are you sure you want to lock this work order?"
+let ALERT_MSG_WO_UNLOCK = "Are you sure you want to unlock this work order?"
 
 
 
@@ -183,7 +202,7 @@ let ALERT_MSG_CP_NO_MATCH_PASSWORD = "New Password and Confirm Password does not
 let ALERT_MSG_CP_PASSWORD_LENGTH = "Minimum length of password should be 6 characters."
 
 
-
+let ALERT_MSG_UPDATE_MODEM_LOCATION = "Are you sure to change the location of modem ?"
 
 
 let ALERT_MSG_INSTALL_CM_SUCCESS = "Cable modem installed successfully."
@@ -191,6 +210,7 @@ let ALERT_MSG_COMPLETE_MODEM_CONFIRM = "Are you sure you want to complete instal
 let ALERT_MSG_COMPLETE_SUCCESS = "Modem unable to be successfully installed, so marked as complete. Supervisor will be notified."
 let ALERT_MSG_COMPLETE_SUCCESS_BUT_FAILED = "Modem installed but some test cases are failed."
 
+let ALERT_MSG_WO_MARK_FIXED = "Are you sure to mark this work order as fixed ?"
 
 //For Geocode Screen
 let ALERT_MSG_GEOCODE_ENTER_VALID_MAC = "Please enter a valid mac address"
@@ -202,7 +222,8 @@ let ALERT_BUTTON_SHOW_DETAIL = "Show Detail"
 let ALERT_BUTTON_GEOCODE = "Geocode"
 let ALERT_BUTTON_CANCEL = "Cancel"
 let ALERT_BUTTON_LOGOUT = "Logout"
-
+let ALERT_BUTTON_YES = "YES"
+let ALERT_BUTTON_NO = "NO"
 
 // Image Constants Used in the code
 let IMAGE_TORCH_OFF = #imageLiteral(resourceName: "flash_white");
@@ -211,6 +232,7 @@ let IMAGE_TORCH_ON = #imageLiteral(resourceName: "flash_golden");
 
 
 //Constants For Respective Screen
+
 
 
 //SYNC Mobile Screen
@@ -273,13 +295,25 @@ let REQ_PARAM_GEO_NODE = "node_name"
 let REQ_PARAM_GEO_LNG = "latitude"
 let REQ_PARAM_GEO_LAT = "longitude"
 
+let REQ_PARAM_ORDER_ID = "order_id"
+let REQ_PARAM_REASSIGN_TO = "re_assigned_to"
+let REQ_PARAM_REASSIGN_BY = "re_assigned_by"
+let REQ_PARAM_IS_LOCKED = "is_locked"
+let REQ_PARAM_LATITUDE = "latitude"
+let REQ_PARAM_LONGITUDE = "longitude"
+let REQ_PARAM_RADIUS = "radius"
+
+let REQ_PARAM_ID = "id"
+let REQ_PARAM_FILTER = "filter"
 
 
+let REQ_PARAM_STATUS = "status"
 
 //SERVICE RESPONSE PARAMETERS
 let RESPONSE_PARAM_STATUS_CODE = "status_code"
 let RESPONSE_PARAM_STATUS_MSG = "status_msg"
 let RESPONSE_PARAM_DATA = "data"
+let RESPONSE_PARAM_MODEM_DATA = "modem_data"
 let RESPONSE_PARAM_UPSTREAM = "upstreams"
 let RESPONSE_PARAM_INTERFACE_NAME = "interface_name"
 
@@ -291,6 +325,11 @@ let RESPONSE_PARAM_LOGOUT_URL = "logout_URL"
 
 let RESPONSE_PARAM_FREQUENCIES = "frequencies"
 let RESPONSE_PARAM_FREQ = "freq"
+let RESPONSE_PARAM_MTC = "MTC"
+let RESPONSE_PARAM_MR_LVL = "MRLevel"
+let RESPONSE_PARAM_DELAY = "Delay"
+let RESPONSE_PARAM_TDR = "TDR"
+let RESPONSE_PARAM_FAR_TDR = "FarTDR"
 
 let RESPONSE_PARAM_AUTH_KEY = "auth_key"
 let RESPONSE_PARAM_EMAIL_ID = "email_id"
@@ -304,11 +343,13 @@ let RESPONSE_PARAM_US_CMTS_NAME = "cmtsName"
 let RESPONSE_PARAM_TEST_PASSED_DN = "testPassedDn"
 let RESPONSE_PARAM_TEST_PASSED = "testPassed"
 let RESPONSE_PARAM_BC = "birth_certificate"
-
+let RESPONSE_PARAM_BW = "bw"
 
 let RESPONSE_PARAM_LAST_NAME = "last_name"
 let RESPONSE_PARAM_USER_TYPE = "usertype"
+let RESPONSE_PARAM_ALLOWED_CMTS = "allowed_cmts"
 
+let RESPONSE_PARAM_IS_LOCKED = "is_locked"
 
 let RESPONSE_PARAM_ADDRESS = "address"
 let RESPONSE_PARAM_STATUS = "status"
@@ -319,7 +360,12 @@ let RESPONSE_PARAM_CREATION_DATE = "creation_date"
 let RESPONSE_PARAM_CLOSED_DATE = "closed_date"
 
 
-
+let RESPONSE_PARAM_ASSIGNED_TO = "assigned_to"
+let RESPONSE_PARAM_ASSIGNED_BY = "assigned_by"
+let RESPONSE_PARAM_CUST_NAME = "custName"
+let RESPONSE_PARAM_PHONE_NUMBER = "phone_number"
+let RESPONSE_PARAM_TECHNICIAN_FEEDBACK = "technicians_feedback"
+let RESPONSE_PARAM_PHOTOS = "photos"
 
 
 let RESPONSE_PARAM_INTSALL_CM  = "installCm"
@@ -336,7 +382,7 @@ let RESPONSE_PARAM_AGE = "age"
 let RESPONSE_PARAM_TIMESTAMP = "timestamp"
 
 let RESPONSE_PARAM_MODEM_MAC = "modemMAC"
-
+let RESPONSE_PARAM_SEVERITY = "Severity"
 
 let RESPONSE_PARAM_FINAL_STATUS = "final_status"
 let RESPONSE_PARAM_REASON = "reason"
@@ -351,16 +397,19 @@ let RESPONSE_PARAM_CM_CORR = "cmCorrCw"
 let RESPONSE_PARAM_POWER = "power"
 let RESPONSE_PARAM_MER = "mer"
 
+let RESPONSE_PARAM_WO_CMTS_ID = "cmts_id"
+let RESPONSE_PARAM_LATITUDE = "latitude"
+let RESPONSE_PARAM_LONGITUDE = "longitude"
 
-let RESPONSE_PARAM_SEVERITY = "Severity"
+
 let RESPONSE_PARAM_ICFR = "MTC"
-let RESPONSE_PARAM_MTC = "MTC"
+
 let RESPONSE_PARAM_MR = "MRLevel"
-let RESPONSE_PARAM_DELAY = "Delay"
-let RESPONSE_PARAM_TDR = "TDR"
+
+
 let RESPONSE_PARAM_VTDR = "FarTDR"
 let RESPONSE_PARAM_CORR = "Corr"
-let RESPONSE_PARAM_BW = "bw"
+
 
 
 

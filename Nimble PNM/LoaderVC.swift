@@ -41,7 +41,6 @@ class LoaderVC: UIViewController {
         self.imgViewLoader.animationDuration = 0.5;
         
         self.viewLoaderBackground.addCornerRadius(radius: CORNER_RADIUS_STANDARD)
-        
 
     }
     

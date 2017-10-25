@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import CoreLocation
 
 class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BarCodeScannerDelegate {
     @IBOutlet weak var labelHeading: UILabel!
 
     var exposedMacAddress : String = ""
+    let initialLoaderText = "Getting your location ..."
     
     @IBOutlet weak var textFieldMacAddress: UITextField!
     @IBOutlet weak var tableViewGeocode: UITableView!
@@ -57,7 +59,6 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     let TAG_ADDRESS_ZIP = 1005
     
     
-    
     var disableLatLngSection = false;
     var disableAddressContactSection = false;
     
@@ -65,17 +66,22 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     var bundleDataAddress = AddressDS()
     var bundleDataContact = ContactDS()
     
-    
+    var currentLocation = CLLocationCoordinate2D()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        APP_DELEGATE.presentLoader(withMessage: initialLoaderText)
+        self.startHandlingLocationUpdate( isCrucial: true)
         self.configureUIComponents()
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        
-        
+        tableViewGeocode.reloadData()
     }
     
     func configureUIComponents(){
@@ -92,6 +98,9 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
         self.textFieldMacAddress.rightViewMode = .always
         self.textFieldMacAddress.rightView = buttonScanBarcode
         
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action: #selector(pullToRefresh(_:)), for: .valueChanged)
+//        tableViewGeocode.addSubview(refreshControl)
         
         //Regitering Nibs
         let nibNameForAddress = UINib(nibName: "AddressGeocodeCell", bundle: nil)
@@ -106,12 +115,38 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             self.textFieldMacAddress.text = exposedMacAddress
         }
         
+    }
+    
+//    func pullToRefresh(_ refreshControl: UIRefreshControl){
+//        
+//        getCurrentLocation()
+//        refreshControl.endRefreshing()
+//    }
+    
+    func getCurrentLocation() {
+        
+        if APP_DELEGATE.locationHelper.currentLocation != nil {
+            
+            currentLocation = APP_DELEGATE.locationHelper.currentLocation!
+            
+            bundleLocation.latitude = currentLocation.latitude
+            bundleLocation.longitude = currentLocation.longitude
+            
+            if bundleLocation.latitude != 0  && bundleLocation.longitude != 0{
+                APP_DELEGATE.hideLoader()
+                self.stopHandlingUpdates()
+            }
+            
+            tableViewGeocode.reloadData()
+            
+        }else {
+            getCurrentLocation()
+        }
         
     }
     
     func scanningCompleteWithDataString(dataString: String) {
         self.textFieldMacAddress.text = dataString
-        
     }
     
     
@@ -177,7 +212,6 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     }
     
     
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let section = indexPath.section
         if section == 0{
@@ -214,13 +248,12 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             }
             
             //Setting Value
-            if bundleLocation.latitude != ""  && bundleLocation.longitude != ""{
+            if bundleLocation.latitude != 0  && bundleLocation.longitude != 0{
                 cell.labelLatLong.text = "\(bundleLocation.latitude),\(bundleLocation.longitude)"
             }else{
                 cell.labelLatLong.text = ""
+                getCurrentLocation()
             }
-            
-            
             
             return cell
             
@@ -238,7 +271,6 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             cell.textfieldAddressStreet.delegate = self
             cell.textfieldAddressCountry.delegate = self
             cell.textfieldAddressZipcode.delegate = self
-            
             
             cell.textfieldAddressCity.placeIllusion(ofPixels: illusionForTextfields)
             cell.textfieldAddressState.placeIllusion(ofPixels: illusionForTextfields)
@@ -291,7 +323,6 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             cell.textfieldContactFirstName.delegate = self
             cell.textfieldContactAccountNumber.delegate = self
             
-            
             cell.textfieldContactPhone.placeIllusion(ofPixels: illusionForTextfields)
             cell.textfieldContactLastName.placeIllusion(ofPixels: illusionForTextfields)
             cell.textfieldContactNodeName.placeIllusion(ofPixels: illusionForTextfields)
@@ -337,9 +368,9 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segue-to-modify-lat-lng"{
             let destinationController = segue.destination as! MappingInGeocodeVC
-            destinationController.currentSelectedlatitude = 28.35
-            destinationController.currrentSelectedLongitude = 77.3
-            
+            destinationController.currentSelectedlatitude = bundleLocation.latitude
+            destinationController.currrentSelectedLongitude = bundleLocation.longitude
+            destinationController.GeocodeVC = self
         }
     }
     
@@ -403,16 +434,23 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             message = ALERT_MSG_GEOCODE_ENTER_VALID_MAC
         }
         
-        if message == ""{
+        if message != ""{
             let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_APP_NAME, message: message, buttonTitle: ALERT_BUTTON_OK, completionHandler: nil)
             self.present(alert, animated: true, completion: nil)
-            return true
+            return false
         }else{
             return true
             
         }
         
     }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
     
     @IBAction func btnActionSave(_ sender: Any) {
         if validate(){
@@ -446,15 +484,14 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
                 
                 if statusCode == 200{
                     
+                    self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
                     
                 }else if statusCode == 401{
                     self.performLogoutAsSessionExpiredDetected()
                 }else{
                     self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
                 }
-                
-                
-                
+                                
                 
             },failureCompletionHandler: {
                 (errorTitle,errorMessage) in
@@ -468,7 +505,6 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
     }
     
     
-    
 }
 
 
@@ -476,28 +512,28 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
 
 
 struct AddressDS{
-    var streetAddress = "a"
-    var city = "s"
-    var state = "d"
-    var country = "f"
-    var zipcode = "g"
+    var streetAddress = ""
+    var city = ""
+    var state = ""
+    var country = ""
+    var zipcode = ""
     
     
 }
 
 struct ContactDS{
-    var firstName = "a"
-    var lastName = "s"
-    var phoneNumber = "d"
-    var accountNumber = "f"
-    var nodeName = "g"
+    var firstName = ""
+    var lastName = ""
+    var phoneNumber = ""
+    var accountNumber = ""
+    var nodeName = ""
     
 }
 
 
 struct LocationDS{
-    var latitude = "j"
-    var longitude = "h"
+    var latitude: Double = 0
+    var longitude: Double = 0
 }
 
 

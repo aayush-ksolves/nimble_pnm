@@ -188,7 +188,6 @@ class LoginVC: UIViewController,UITextFieldDelegate{
                     }
                     
                     
-                    
                     //Compose Alert With Handler
                     let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_APP_NAME, message: statusMessage as! String, buttonTitle1: ALERT_BUTTON_CANCEL, buttonTitle2: ALERT_BUTTON_LOGOUT, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
                         action in
@@ -205,16 +204,12 @@ class LoginVC: UIViewController,UITextFieldDelegate{
                 }else{
                     self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage as! String, withButtonTitle: ALERT_BUTTON_OK)
                 }
-                
-                
-                
+                                
                 
             },failureCompletionHandler: {
                 (errorTitle,errorMessage) in
                 self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
-            })
-        
-        
+            })        
             
         }
         

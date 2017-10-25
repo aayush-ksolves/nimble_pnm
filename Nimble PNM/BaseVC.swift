@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreLocation
+import AlamofireImage
 
 class BaseVC: UIViewController {
 
@@ -102,8 +104,9 @@ class BaseVC: UIViewController {
         })
     }
     
-    func startHandlingLocationUpdate(isCrucial : Bool = false){
+    func startHandlingLocationUpdate( isCrucial : Bool = false){
         let response = APP_DELEGATE.locationHelper.startUpdating()
+        
         if (response == CONST_MSG_LOCATION_SERVICE_GRANTED){
                 //Location Updates has been started
             

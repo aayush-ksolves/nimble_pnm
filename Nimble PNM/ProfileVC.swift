@@ -148,10 +148,6 @@ class ProfileVC: BaseVC, UICollectionViewDelegateFlowLayout,UICollectionViewDele
         return 8;
     }
     
-    
-
-    
-    
 
 
 }

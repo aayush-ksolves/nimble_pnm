@@ -45,6 +45,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
     }
     
     func startUpdating() -> String{
+        
         if CLLocationManager.locationServicesEnabled(){
             status =  CLLocationManager.authorizationStatus()
             if status == .authorizedAlways || status == .authorizedWhenInUse{
@@ -68,7 +69,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = manager.location?.coordinate
+        currentLocation = (manager.location?.coordinate)!
         print(currentLocation)
     }
     

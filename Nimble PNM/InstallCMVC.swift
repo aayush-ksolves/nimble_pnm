@@ -322,15 +322,11 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
                     self.bundleFailedModems.add(tempFailedModem)
                 }
                 
-                
-                
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
-            
             
             
         },failureCompletionHandler: {
@@ -576,10 +572,6 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
         self.loadFailedModemList()
         
     }
-    
-    
-    
-    
     
     
     @IBAction func btnActionInstallModem(_ sender: Any) {

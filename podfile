@@ -8,4 +8,5 @@ target 'Nimble PNM' do
   # Pods for Nimble PNM
 pod 'Alamofire', '~> 4.5'
 pod 'ArcGIS-Runtime-SDK-iOS', '100.1' 
+pod 'AlamofireImage', '~> 3.3'
 end

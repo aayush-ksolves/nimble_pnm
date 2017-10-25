@@ -16,10 +16,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     @IBOutlet weak var labelHeadingHome: UILabel!
     
     
-    var bundleData = NSMutableArray()
-    
-    
-    
+    var bundleData = NSMutableArray()    
     
     let Mod_CM_Anlayzer = "cmanalyzer"
     let Mod_Install_CM = "installCm"
@@ -27,6 +24,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     let Mod_Geocode = "geocode"
     let Mod_Workorder = "workorderservice"
     let Mod_Nimble_Spectra = "nimbleSpectra"
+    let Mod_NEARBY_MODEMS = "nearbymodems"
     let Mod_Profile = "profile"
     
     let IMG_Mod_CM_Anlayzer : UIImage =  UIImage(named: "cm-lookup")!
@@ -35,6 +33,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     let IMG_Mod_Geocode : UIImage =  UIImage(named: "geocode")!
     let IMG_Mod_Workorder : UIImage =  UIImage(named: "work-order")!
     let IMG_Mod_Nimble_Spectra : UIImage =  UIImage(named: "spectra")!
+    let IMG_Mod_NEARBY_MODEMS : UIImage =  UIImage(named: "nearby-modems")!
     let IMG_Mod_Profile : UIImage =  UIImage(named: "profile")!
     
     let SEGUEID_Mod_CM_Anlayzer : String = "segue-to-cm-analyzer"
@@ -43,6 +42,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     let SEGUEID_Mod_Geocode : String = "segue-to-geocode"
     let SEGUEID_Mod_Workorder : String = "segue-to-workorder"
     let SEGUEID_Mod_Nimble_Spectra : String = "segue-to-nimble-spectra"
+    let SEGUEID_Mod_NEARBY_MODEMS : String = "segue-to-nearby-modems"
     let SEGUEID_Mod_Profile : String = "segue-to-profile"
     
     let TXT_Mod_CM_Anlayzer : String = "CM Analyzer"
@@ -51,6 +51,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     let TXT_Mod_Geocode : String = "Geocode"
     let TXT_Mod_Workorder : String = "Workorder"
     let TXT_Mod_Nimble_Spectra : String = "Nimble Spectra"
+    let TXT_Mod_NEARBY_MODEM : String = "Nearby Modems"
     let TXT_Mod_Profile : String = "Profile"
     
     
@@ -58,6 +59,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.startHandlingLocationUpdate( isCrucial: false)
         self.configureUIComponents()
         self.loadModules()
     }
@@ -151,6 +153,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     
     
     func insertIndependentModules(){
+        self.addModule(module: self.Mod_NEARBY_MODEMS)
         self.addModule(module: Mod_Profile)
     }
     
@@ -200,6 +203,13 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
             ]
         }
         
+        if module == Mod_NEARBY_MODEMS{
+            dictToInsert = ["text":TXT_Mod_NEARBY_MODEM,
+                            "image":IMG_Mod_NEARBY_MODEMS,
+                            "segueID":SEGUEID_Mod_NEARBY_MODEMS
+            ]
+        }
+        
         if module == Mod_Profile{
             dictToInsert = ["text":TXT_Mod_Profile,
                             "image":IMG_Mod_Profile,
@@ -209,9 +219,6 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
         
         self.bundleData.add(dictToInsert)
     }
-    
-    
-    
     
     
     
@@ -261,9 +268,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
             
         }else{
             self.performSegue(withIdentifier: segueIdentifier, sender: nil)
-        }
-        
-        
+        }        
         
     }
     
@@ -292,15 +297,5 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 8;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     
 }
