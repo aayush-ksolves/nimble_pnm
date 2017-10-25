@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="277" id="SX6-Hi-haW" customClass="SpectraAnalysisChartCell" customModule="Nimble_PNM" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="400"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SX6-Hi-haW" id="b89-a6-duK">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="400"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y7L-9r-U57">
+                        <rect key="frame" x="0.0" y="10" width="320" height="320"/>
+                        <color key="backgroundColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="y7L-9r-U57" secondAttribute="height" multiplier="1:1" id="FJH-gS-GKV"/>
+                        </constraints>
+                    </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2G6-nS-bsW">
+                        <rect key="frame" x="170" y="340.5" width="140" height="41.5"/>
+                        <color key="backgroundColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <state key="normal" title="Show Channels">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgo-sA-DCr">
+                        <rect key="frame" x="10" y="341.5" width="140" height="40"/>
+                        <color key="backgroundColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="agL-HG-LKW"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <state key="normal" title="Show Impairments">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="hgo-sA-DCr" firstAttribute="top" secondItem="y7L-9r-U57" secondAttribute="bottom" constant="11.5" id="6gL-zg-0nJ"/>
+                    <constraint firstItem="y7L-9r-U57" firstAttribute="top" secondItem="b89-a6-duK" secondAttribute="top" constant="10" id="L2n-HO-A3f"/>
+                    <constraint firstItem="hgo-sA-DCr" firstAttribute="width" secondItem="2G6-nS-bsW" secondAttribute="width" id="QH0-Eb-blK"/>
+                    <constraint firstItem="2G6-nS-bsW" firstAttribute="leading" secondItem="hgo-sA-DCr" secondAttribute="trailing" constant="20" id="R0F-Cq-15d"/>
+                    <constraint firstItem="hgo-sA-DCr" firstAttribute="centerY" secondItem="2G6-nS-bsW" secondAttribute="centerY" id="VrF-xX-5rd"/>
+                    <constraint firstItem="hgo-sA-DCr" firstAttribute="height" secondItem="2G6-nS-bsW" secondAttribute="height" constant="-1.5" id="Vy0-ZK-hx1"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="hgo-sA-DCr" secondAttribute="bottom" constant="10" id="cnH-GP-omD"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="2G6-nS-bsW" secondAttribute="trailing" constant="2" id="pZ8-hU-fcn"/>
+                    <constraint firstItem="hgo-sA-DCr" firstAttribute="leading" secondItem="b89-a6-duK" secondAttribute="leadingMargin" constant="2" id="pgW-hz-dt9"/>
+                    <constraint firstItem="y7L-9r-U57" firstAttribute="leading" secondItem="b89-a6-duK" secondAttribute="leading" id="xrJ-jp-Ilm"/>
+                    <constraint firstAttribute="trailing" secondItem="y7L-9r-U57" secondAttribute="trailing" id="yPw-ih-u62"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="-110.5" y="54.5"/>
+        </tableViewCell>
+    </objects>
+</document>

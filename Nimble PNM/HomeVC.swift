@@ -59,7 +59,7 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.startHandlingLocationUpdate( isCrucial: false)
+//        self.startHandlingLocationUpdate( isCrucial: false)
         self.configureUIComponents()
         self.loadModules()
     }
