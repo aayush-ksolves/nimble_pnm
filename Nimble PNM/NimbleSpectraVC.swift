@@ -33,7 +33,8 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
         
         configureUIComponents()
         designPickerView()
-        loadCMTS()
+
+        self.loadCMTS()
     }
     
     func configureUIComponents(){
@@ -48,6 +49,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
         
         tableViewCMTSData.register(UINib(nibName: "CMTSDataCell", bundle: nil), forCellReuseIdentifier: "CMTSDataCell")
         
+
     }
     
     func designPickerView() {
@@ -66,6 +68,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
         
     }
     
+    
     func loadCMTS() {
         
         let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
@@ -80,7 +83,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
-            
+        
             self.bundleCMTS.removeAll()
             if statusCode == 200{
                 
@@ -118,10 +121,10 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
                 
+
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)

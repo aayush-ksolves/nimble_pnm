@@ -105,6 +105,9 @@ let SERVICE_URL_NIMBLE_SPECTRA_GET_CMTS_MODEM_LIST = "/nimbleSpectra/nimbleSpect
 let SERVICE_URL_NIMBLE_SPECTRA_GET_CHART_DATA = "/nimbleSpectra/nimbleSpectraService/getChartData"
 
 
+let SERVICE_URL_NIMBLE_SPECTRA_IMPAIR_COUNT = "/nimbleSpectra/nimbleSpectraService/getCmtsListWithImpairmentCount";
+
+
 //Tab Index Governers
 let TAB_INDEX_HOME:Int = 0
 let TAB_INDEX_INSTALL_CM:Int = 1
@@ -147,6 +150,9 @@ let LOADER_MSG_US_PORT_LIST = "Loading Upstream Ports ..."
 let LOADER_MSG_CM_ANALYZER_GET_MODEM_DATA = "Getting Modem Data ..."
 let LOADER_MSG_CM_ANALYZER_RESCAN_MODEM = "Rescanning Modem ..."
 let LOADER_MSG_CM_ANALYZER_LOAD_DS_DATA = "Loading Downstream Data ..."
+
+
+let LOADER_MSG_NS_IMPAIR_COUNT = "Loading Impairment Data ..."
 
 
 let LOADER_MSG_UPDATE_MODEM_LOCATION = "Updating Modem Location ..."

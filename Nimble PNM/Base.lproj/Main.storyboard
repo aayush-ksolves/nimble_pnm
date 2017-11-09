@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
+
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -2028,6 +2029,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Kos-uX-W3L"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kL6-WF-zDe">
+
                         <rect key="frame" x="0.0" y="0.0" width="320" height="1336"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2076,6 +2078,9 @@
                                                         <state key="normal" title="Re-scan">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="btnActionRescan:" destination="iLw-Cw-SPy" eventType="touchUpInside" id="RgN-vc-EMk"/>
+                                                        </connections>
                                                     </button>
                                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Le3-tT-m3i">
                                                         <rect key="frame" x="0.0" y="36" width="304" height="123"/>
@@ -2173,6 +2178,7 @@
                                                     <constraint firstItem="RSb-wq-Py6" firstAttribute="leading" secondItem="9Jd-5d-oAf" secondAttribute="leading" id="x64-NX-VXg"/>
                                                 </constraints>
                                             </view>
+
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rR3-pq-qX0">
                                                 <rect key="frame" x="8" y="435" width="304" height="50"/>
                                                 <subviews>
@@ -2320,16 +2326,20 @@
                                                     <constraint firstItem="QrU-JD-I2T" firstAttribute="leading" secondItem="HVM-dO-qmj" secondAttribute="leading" id="mIg-s7-yoe"/>
                                                     <constraint firstItem="SC9-Qh-QMQ" firstAttribute="top" secondItem="Yoi-5r-CnV" secondAttribute="bottom" id="xJS-Xy-Xqa"/>
                                                     <constraint firstItem="Cf3-qF-MSN" firstAttribute="top" secondItem="QrU-JD-I2T" secondAttribute="bottom" id="ybX-TR-f8h"/>
+
                                                 </constraints>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
+                                            <constraint firstItem="AI3-CU-iF9" firstAttribute="leading" secondItem="PNj-eU-RVQ" secondAttribute="leading" constant="8" id="3z5-f3-mA0"/>
                                             <constraint firstAttribute="trailing" secondItem="1sg-QZ-RvA" secondAttribute="trailing" constant="8" id="4qA-Db-nZV"/>
+
                                             <constraint firstItem="1sg-QZ-RvA" firstAttribute="top" secondItem="PNj-eU-RVQ" secondAttribute="top" constant="15" id="81j-BW-eZp"/>
                                             <constraint firstItem="HVM-dO-qmj" firstAttribute="top" secondItem="CBW-Sc-3nU" secondAttribute="bottom" constant="15" id="Ahx-6G-atC"/>
                                             <constraint firstAttribute="bottom" secondItem="HVM-dO-qmj" secondAttribute="bottom" constant="15" id="GBQ-Sm-Qp9"/>
                                             <constraint firstItem="1sg-QZ-RvA" firstAttribute="leading" secondItem="PNj-eU-RVQ" secondAttribute="leading" constant="8" id="M0P-qv-wft"/>
+
                                             <constraint firstAttribute="trailing" secondItem="9Jd-5d-oAf" secondAttribute="trailing" constant="8" id="RnJ-hg-Diz"/>
                                             <constraint firstItem="HVM-dO-qmj" firstAttribute="leading" secondItem="PNj-eU-RVQ" secondAttribute="leading" constant="8" id="ZKP-Ha-hx8"/>
                                             <constraint firstAttribute="trailing" secondItem="rR3-pq-qX0" secondAttribute="trailing" constant="8" id="cA4-TL-Cqc"/>
@@ -2369,12 +2379,15 @@
                         <outlet property="constraintDSWidth" destination="Xdb-L6-nlM" id="rWP-Kk-5jg"/>
                         <outlet property="constraintMDHeight" destination="6iR-2M-Het" id="sbf-V4-WfL"/>
                         <outlet property="constraintMDWidth" destination="30q-ve-nRu" id="btB-uT-Squ"/>
+
                         <outlet property="labelMacAddress" destination="puy-RH-2j5" id="sLV-uZ-yMq"/>
                         <outlet property="scrollViewFrequency" destination="xas-if-2g3" id="8lL-T5-Bx5"/>
                         <outlet property="viewChartICFR" destination="CQl-d6-uyf" id="F9q-ig-Zba"/>
                         <outlet property="viewCombinedChart" destination="Yoi-5r-CnV" id="q7y-Gz-nul"/>
+
                         <outlet property="viewDSInfo" destination="HKx-sN-Plq" id="c5F-Yv-qEH"/>
                         <outlet property="viewMDInfo" destination="UhH-bd-c95" id="9Qu-4d-2ga"/>
+                        <outlet property="viewThirdSection" destination="LdP-jM-GXo" id="NeS-0a-5AF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="72m-t4-fgE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3257,6 +3270,8 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0Ke-Wx-JP6"/>
+
         <segue reference="GcN-Qs-dNr"/>
+
     </inferredMetricsTieBreakers>
 </document>

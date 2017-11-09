@@ -1,4 +1,4 @@
-//
+ //
 //  CMModelDetailVC.swift
 //  Nimble PNM
 //
@@ -27,16 +27,26 @@ class CMModemDetailVC: BaseVC {
     @IBOutlet weak var viewDSInfo: UIView!
     
     @IBOutlet weak var scrollViewFrequency: UIScrollView!
+
+    var arrayThirdSection : [String] = []
+    
     var screenSize: CGSize!
     
     @IBOutlet weak var labelMacAddress: UILabel!
+
     var totalMDrows : Int = 0
     var totalMDcoloumns : Int = 0
     var MinusHeadingForTableMD = 87.0
     var MinusHeadingForTableDS = 36.0
     
-    let colorHeadings = COLOR_BLUE_IONIC_V1
+
+    @IBOutlet weak var constraintThirdSectionWidth: NSLayoutConstraint!
     
+
+    let colorHeadings = COLOR_BLUE_IONIC_V1
+
+    
+    @IBOutlet weak var viewThirdSection: UIView!
     var totalDSrows : Int = 0
     var totalDScoloumns : Int = 0
     
@@ -81,7 +91,6 @@ class CMModemDetailVC: BaseVC {
         self.viewCombinedChart.backgroundColor = UIColor.white
     }
     
-    
     //Handling Screen Orienatations and Table Plotting
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -97,6 +106,11 @@ class CMModemDetailVC: BaseVC {
             
         }, completion: {
             context in
+
+            self.plotModemStatusTable()
+            self.plotDownstreamTable()
+
+
 
         })
         
@@ -192,11 +206,12 @@ class CMModemDetailVC: BaseVC {
         self.viewChartICFR.animate(xAxisDuration: 0.5)
         self.viewChartICFR.animate(yAxisDuration: 0.5)
     }
+
   
     func plotModemStatusTable(){
 
         viewMDInfo.isHidden = false
-        
+
         for eachSubview in self.viewMDInfo.subviews{
             eachSubview.removeFromSuperview()
         }
@@ -307,6 +322,8 @@ class CMModemDetailVC: BaseVC {
             
             
             if statusCode == 200{
+                
+                self.loadDSData(forModem: self.exposedMacAddress)
                 let dataArray = (responseDict.value(forKey: "data") as! NSArray)
                 
                 self.bundleDataMDTable.removeAll()
@@ -367,11 +384,15 @@ class CMModemDetailVC: BaseVC {
                         }
                         
                     }else if i == 7{
+                        self.arrayThirdSection.removeAll()
+                        self.arrayThirdSection.append("ALL")
                         tempRecord.recordName = "Freq(MHz)"
                         self.arrayFrequency.removeAll()
                         
+                        
                         for j in 0..<dataArray.count{
                             tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
+                            self.arrayThirdSection.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
                         }
                         
                     }else if i == 8{
@@ -472,9 +493,7 @@ class CMModemDetailVC: BaseVC {
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
             
             if statusCode == 200{
-                
-                
-                
+                self.getDetails(forModem: self.exposedMacAddress)
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
@@ -492,7 +511,6 @@ class CMModemDetailVC: BaseVC {
         
         
     }
-    
     
     func loadDSData(forModem modemMac : String){
         let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
@@ -551,6 +569,7 @@ class CMModemDetailVC: BaseVC {
                     
                 }
                 
+                
                 self.plotDownstreamTable()
                 self.populateFrequencySection()
                 
@@ -586,8 +605,10 @@ class CMModemDetailVC: BaseVC {
         var variableX = paddingHorizontal
         var variableY = paddingVertical
         
+
         let minimumWidthOfCell = 40.0
         let computedWidthOfCell = (Double(screenSize.width - 16) - (2 * paddingHorizontal) - (Double(totalDScoloumns - 1) * Double(gappingHorizontal)))/Double(totalDScoloumns)
+
         
         var finalWidthOfCell : Double!
         
@@ -688,6 +709,9 @@ class CMModemDetailVC: BaseVC {
     
     
     
+    @IBAction func btnActionRescan(_ sender: Any) {
+        self.performRescan(forModem: exposedMacAddress)
+    }
     
     
 }

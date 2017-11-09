@@ -42,7 +42,6 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
     var shouldShowImpairments = false
     var shouldShowPortButtons = true
     var isDataAvailable = true
-    var isFirstTime = true
     
     var footerView = UIView()
     var selectedPort = ""
@@ -86,6 +85,8 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
             hideViewButtonContainer()
             loadModemStatistics(portNo: "")
         }
+        
+        self.textFieldFilterByDate.text = exposedTimestamp.components(separatedBy: " ")[0]
     }
     
     func initialPortButtonAction(portNo: String){
@@ -265,11 +266,6 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                     
                     for timeStamp in sortedTimeStampArray {
                         self.bundleTimestamp.append(timeStamp)
-                    }
-                    
-                    if self.bundleTimestamp.count > 0 && self.isFirstTime{
-                        self.isFirstTime = false
-                        self.textFieldFilterByDate.text = self.bundleTimestamp[0]
                     }
                     
                     self.pickerView.reloadAllComponents()
