@@ -12,8 +12,8 @@ import UIKit
 extension UITextField{
     func setPlaceHolder(withText text:String,withColor color:UIColor, withfontName fontName:String, withSize size:CGFloat, shouldPlaceInsetIllusion shouldPlace:Bool){
         let attributes = [
-            NSForegroundColorAttributeName: color,
-            NSFontAttributeName : UIFont(name: fontName , size: size)!
+            NSAttributedStringKey.foregroundColor: color,
+            NSAttributedStringKey.font : UIFont(name: fontName , size: size)!
         ]
         self.attributedPlaceholder = NSAttributedString(string: text, attributes: attributes)
         

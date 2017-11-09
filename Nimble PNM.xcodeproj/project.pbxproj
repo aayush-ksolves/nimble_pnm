@@ -86,6 +86,8 @@
 		534E3D4F1F8DD21900B899E7 /* AssignTechnicianCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E3D4E1F8DD21900B899E7 /* AssignTechnicianCell.swift */; };
 		534E3D511F8DD25300B899E7 /* AssignTechnicianCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 534E3D501F8DD25300B899E7 /* AssignTechnicianCell.xib */; };
 		534E3D561F8E28CE00B899E7 /* NearbyModemsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E3D551F8E28CE00B899E7 /* NearbyModemsVC.swift */; };
+		536FD8951FA0873F00004BCF /* WOQueuedSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536FD8941FA0873F00004BCF /* WOQueuedSectionCell.swift */; };
+		536FD8971FA0874900004BCF /* WOQueuedSectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 536FD8961FA0874900004BCF /* WOQueuedSectionCell.xib */; };
 		53750B2A1F8C8369008D28ED /* WorkOrderModemDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53750B291F8C8369008D28ED /* WorkOrderModemDetails.swift */; };
 		53750B2C1F8C86C2008D28ED /* WOModemDetailsFirstCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53750B2B1F8C86C2008D28ED /* WOModemDetailsFirstCell.xib */; };
 		53750B2E1F8C86D3008D28ED /* WOModemDetailsFirstCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53750B2D1F8C86D3008D28ED /* WOModemDetailsFirstCell.swift */; };
@@ -186,6 +188,8 @@
 		534E3D4E1F8DD21900B899E7 /* AssignTechnicianCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssignTechnicianCell.swift; sourceTree = "<group>"; };
 		534E3D501F8DD25300B899E7 /* AssignTechnicianCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AssignTechnicianCell.xib; sourceTree = "<group>"; };
 		534E3D551F8E28CE00B899E7 /* NearbyModemsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbyModemsVC.swift; sourceTree = "<group>"; };
+		536FD8941FA0873F00004BCF /* WOQueuedSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOQueuedSectionCell.swift; sourceTree = "<group>"; };
+		536FD8961FA0874900004BCF /* WOQueuedSectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOQueuedSectionCell.xib; sourceTree = "<group>"; };
 		53750B291F8C8369008D28ED /* WorkOrderModemDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkOrderModemDetails.swift; sourceTree = "<group>"; };
 		53750B2B1F8C86C2008D28ED /* WOModemDetailsFirstCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOModemDetailsFirstCell.xib; sourceTree = "<group>"; };
 		53750B2D1F8C86D3008D28ED /* WOModemDetailsFirstCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOModemDetailsFirstCell.swift; sourceTree = "<group>"; };
@@ -255,14 +259,14 @@
 				28D991101F1CC339006DADE4 /* InstallCMVC.swift */,
 				28F4D4401F266D1C00E57D0E /* USAnalyzerSettingVC.swift */,
 				28F4D4461F27168D00E57D0E /* ChangePasswordVC.swift */,
-				534E3D541F8E289E00B899E7 /* NearbyModems */,
-				534E3D521F8E1D3700B899E7 /* WorkOrder */,
 				28FB67D51F4DAF6100E85070 /* ModemStatusVC.swift */,
 				287999D21F556CA300DFA992 /* CMStatusBirthSectionCell.swift */,
 				287999D31F556CA300DFA992 /* CMStatusBirthSectionCell.xib */,
 				2829272F1F66C5D1007D1583 /* GeocodeVC.swift */,
 				2854A5CA1F67F21500E9302D /* MappingInGeocodeVC.swift */,
 				2872845C1F876AE400DAA47C /* USAnalyzerGraphVC.swift */,
+				534E3D541F8E289E00B899E7 /* NearbyModems */,
+				534E3D521F8E1D3700B899E7 /* WorkOrder */,
 				530C469C1F90D83D0070585B /* Nimble Spectra */,
 				530C469B1F90D8150070585B /* CMAnalyzer */,
 			);
@@ -381,6 +385,8 @@
 				28F4D4281F24FEDD00E57D0E /* WO4LineCell.xib */,
 				28F4D42B1F24FEFF00E57D0E /* WO5LineCell.swift */,
 				28F4D42C1F24FEFF00E57D0E /* WO5LineCell.xib */,
+				536FD8941FA0873F00004BCF /* WOQueuedSectionCell.swift */,
+				536FD8961FA0874900004BCF /* WOQueuedSectionCell.xib */,
 				53750B2D1F8C86D3008D28ED /* WOModemDetailsFirstCell.swift */,
 				53750B2B1F8C86C2008D28ED /* WOModemDetailsFirstCell.xib */,
 				530C46971F90C3890070585B /* WOSectionQueuedCell.swift */,
@@ -521,6 +527,7 @@
 				53750B2C1F8C86C2008D28ED /* WOModemDetailsFirstCell.xib in Resources */,
 				530C46A31F90E0B90070585B /* CMTSDataCell.xib in Resources */,
 				2829272C1F66C4ED007D1583 /* ViewHeaderViewTableGeocode.xib in Resources */,
+				536FD8971FA0874900004BCF /* WOQueuedSectionCell.xib in Resources */,
 				530AA3F51F8CD70D00F42875 /* WODetailsAttachmentCell.xib in Resources */,
 				5311C5D11F8F32B5004EB155 /* NearbyModemDetailsCell.xib in Resources */,
 				28F4D4431F26712900E57D0E /* HeaderViewAnalyzerSettings.xib in Resources */,
@@ -648,6 +655,7 @@
 				530C46981F90C3890070585B /* WOSectionQueuedCell.swift in Sources */,
 				282927301F66C5D1007D1583 /* GeocodeVC.swift in Sources */,
 				530C469E1F90D85D0070585B /* NimbleSpectraVC.swift in Sources */,
+				536FD8951FA0873F00004BCF /* WOQueuedSectionCell.swift in Sources */,
 				28ACC3A11F1660B5007FAF18 /* MTBBarcodeScanner.m in Sources */,
 				2872845D1F876AE400DAA47C /* USAnalyzerGraphVC.swift in Sources */,
 				28ACC38A1F162F29007FAF18 /* AppDelegate.swift in Sources */,
@@ -796,7 +804,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nimble PNM/Nimble PNM-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -813,7 +821,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "ksolves.Nimble-PNM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nimble PNM/Nimble PNM-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

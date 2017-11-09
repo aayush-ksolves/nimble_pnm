@@ -7,10 +7,12 @@
 //
 
 import UIKit
-
+import Charts
 
 class SpectraAnalysisChartCell : UITableViewCell{
     
-    
-    
+    @IBOutlet weak var buttonShowHideImpairments: UIButton!
+    @IBOutlet weak var buttonShowHideChannels: UIButton!
+
+    @IBOutlet weak var combinedChartView: CombinedChartView!
 }

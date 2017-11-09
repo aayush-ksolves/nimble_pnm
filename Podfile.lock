@@ -3,17 +3,22 @@ PODS:
   - AlamofireImage (3.3.0):
     - Alamofire (~> 4.5)
   - ArcGIS-Runtime-SDK-iOS (100.1.0)
+  - Charts (3.0.4):
+    - Charts/Core (= 3.0.4)
+  - Charts/Core (3.0.4)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5)
   - AlamofireImage (~> 3.3)
   - ArcGIS-Runtime-SDK-iOS (= 100.1)
+  - Charts (= 3.0.4)
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
   ArcGIS-Runtime-SDK-iOS: 9b9c2478c974ef0b704b853948a19227f3124ceb
+  Charts: 0705898046257443f0afbbc3179f4b67507b6e48
 
-PODFILE CHECKSUM: 91efbb8794bc620ac4099cd6388eb3977dd10c36
+PODFILE CHECKSUM: 9f4db4a1221e9f6cf28f3fa1f6dae0c9e50d0622
 
 COCOAPODS: 1.1.1

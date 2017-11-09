@@ -64,7 +64,7 @@ class AssignTechicianVC : BaseVC, UITableViewDataSource, UITableViewDelegate, UI
         viewSubmit.isHidden = true
     }
     
-    func showSubmitView() {
+    @objc func showSubmitView() {
         tableViewAssignTechnician.isHidden = true
         viewTapper.isHidden = true
         viewSubmit.isHidden = false
@@ -145,7 +145,7 @@ class AssignTechicianVC : BaseVC, UITableViewDataSource, UITableViewDelegate, UI
         }
     }
     
-    func buttonSubmitPressed() {
+    @objc func buttonSubmitPressed() {
         
         let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: ALERT_MSG_WO_REASSIGN, buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
             action in

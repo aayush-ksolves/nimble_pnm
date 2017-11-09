@@ -97,7 +97,7 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
     
     
     
-    func buttonPickerDonePressed(_ sender: UIButton){
+    @objc func buttonPickerDonePressed(_ sender: UIButton){
         selectedIndex = self.pickerView.selectedRow(inComponent: 0)
         if selectedIndex != -1 && bundleFailedModems.count > 0{
             let relevantRecord = self.bundleFailedModems[selectedIndex] as! FailedModemDS
@@ -111,7 +111,7 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
         
     }
     
-    func buttonPickerCancelPressed(_ sender: UIButton){
+    @objc func buttonPickerCancelPressed(_ sender: UIButton){
         
         self.textfieldFailedMacAddress.resignFirstResponder()
         
@@ -585,7 +585,7 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
         }
     }
     
-    func buttonScanBarcodePressed(_ sender: UIButton){
+    @objc func buttonScanBarcodePressed(_ sender: UIButton){
         barcodeScanner.delegate = self
         self.present(barcodeScanner, animated: true, completion: nil)
     }

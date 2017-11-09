@@ -64,10 +64,10 @@ class UtilityHelper : NSObject{
         let startFontFamilyAttribute = UIFont(name: startFontString, size: size1)!
         
         let attributedStartString:NSMutableAttributedString = NSMutableAttributedString(string: startString)
-        attributedStartString.addAttributes([NSFontAttributeName:startFontFamilyAttribute], range: rangeForStartString)
+        attributedStartString.addAttributes([NSAttributedStringKey.font:startFontFamilyAttribute], range: rangeForStartString)
         
         if color1 != nil{
-            attributedStartString.addAttributes([NSForegroundColorAttributeName:color1], range: rangeForStartString)
+            attributedStartString.addAttributes([NSAttributedStringKey.foregroundColor:color1], range: rangeForStartString)
         }
         
         
@@ -77,10 +77,10 @@ class UtilityHelper : NSObject{
         let endFontFamilyAttribute = UIFont(name: endFontString, size: size2)!
         
         let attributedEndString:NSMutableAttributedString = NSMutableAttributedString(string: endString)
-        attributedEndString.addAttributes([NSFontAttributeName:endFontFamilyAttribute], range: rangeForEndString)
+        attributedEndString.addAttributes([NSAttributedStringKey.font:endFontFamilyAttribute], range: rangeForEndString)
         
         if color2 != nil{
-            attributedEndString.addAttributes([NSForegroundColorAttributeName:color2], range: rangeForEndString)
+            attributedEndString.addAttributes([NSAttributedStringKey.foregroundColor:color2], range: rangeForEndString)
         }
         
         

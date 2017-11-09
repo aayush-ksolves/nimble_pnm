@@ -55,7 +55,7 @@ class CMAnalyzerVC: BaseVC,BarCodeScannerDelegate {
         print("Scanning Failed Due To Reason code \(reasonCode!)")
     }
     
-    func buttonScanBarcodePressed(_ sender: UIButton){
+    @objc func buttonScanBarcodePressed(_ sender: UIButton){
         barcodeScanner.delegate = self
         self.present(barcodeScanner, animated: true, completion: nil)
     }

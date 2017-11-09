@@ -69,7 +69,7 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         self.textfieldSelectUpstreamPort.inputView = pickerHolder
     }
 
-    func buttonPickerDonePressed(_ sender: UIButton){
+    @objc func buttonPickerDonePressed(_ sender: UIButton){
         selectedIndex = self.pickerView.selectedRow(inComponent: 0)
         
         if activeTextfield == textfieldSelectCMTS{
@@ -99,7 +99,7 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         
     }
     
-    func buttonPickerCancelPressed(_ sender: UIButton){
+    @objc func buttonPickerCancelPressed(_ sender: UIButton){
         if activeTextfield == textfieldSelectCMTS{
             self.textfieldSelectCMTS.resignFirstResponder()
             

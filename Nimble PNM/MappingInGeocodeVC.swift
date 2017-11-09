@@ -100,7 +100,7 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
         lastGraphics = graphic
     }
     
-    func buttonUseLocationPressed() {
+    @objc func buttonUseLocationPressed() {
         print("Button use location pressed")
         
         let currentLatitude = String(format: "%.3f", currentMarkerPoint.toCLLocationCoordinate2D().latitude)

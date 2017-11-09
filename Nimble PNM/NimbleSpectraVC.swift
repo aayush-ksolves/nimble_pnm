@@ -130,7 +130,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
     }
     
     
-    func buttonPickerDonePressed(_ sender: UIButton){
+    @objc func buttonPickerDonePressed(_ sender: UIButton){
         selectedCMTS = self.pickerView.selectedRow(inComponent: 0)
         if selectedCMTS != -1 && bundleCMTS.count > 0{
             let relevantRecord = self.bundleCMTS[selectedCMTS]
@@ -142,7 +142,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
         self.textFieldSelectCMTS.resignFirstResponder()
     }
     
-    func buttonPickerCancelPressed(_ sender: UIButton){
+    @objc func buttonPickerCancelPressed(_ sender: UIButton){
         
         self.textFieldSelectCMTS.resignFirstResponder()
     }
@@ -217,6 +217,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
             destinationController.exposedSelectedCMTSId = selectedIndexData.cmtsId
             destinationController.exposedSelectedCMTSProperty = CMTS_HEADINGS[selectedSection]
             destinationController.exposedCMTSImpairmentType = CMTS_IMPAIRMENT_TYPES[selectedSection]
+            destinationController.exposedSelectedCMTSValue = CMTS_VALUES[selectedSection]
         }
     }
     

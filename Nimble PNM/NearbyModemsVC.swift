@@ -47,7 +47,7 @@ class NearbyModemsVC: BaseVC, AGSGeoViewTouchDelegate {
     
     func getCurrentLocation() {
         
-        if APP_DELEGATE.locationHelper.currentLocation != nil {
+        if (APP_DELEGATE.locationHelper.currentLocation != nil) {
             
             currentCoordinate = APP_DELEGATE.locationHelper.currentLocation!
             

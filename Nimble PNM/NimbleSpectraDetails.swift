@@ -12,6 +12,7 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
     
     var exposedSelectedCMTSName = ""
     var exposedSelectedCMTSProperty = ""
+    var exposedSelectedCMTSValue = 0
     var exposedSelectedCMTSId = ""
     var exposedCMTSImpairmentType = ""
     
@@ -39,7 +40,7 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
     func configureUIComponents() {
         
         labelCMTSName.text = exposedSelectedCMTSName
-        labelSelectedProperty.text = exposedSelectedCMTSProperty
+        labelSelectedProperty.text = "\(exposedSelectedCMTSProperty) (\(exposedSelectedCMTSValue))"
 
         textFieldSearchMACAddress.delegate = self
         textFieldSearchMACAddress.addTarget(self, action: #selector(valueChangedInTextField(_:)), for: .editingChanged)
@@ -163,18 +164,18 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
             destinationController.exposedCMTSId = exposedSelectedCMTSId
             destinationController.exposedCMTSName = exposedSelectedCMTSName
             destinationController.exposedMacAddress = selectedIndexData.macAddress
-            destinationController.exposedMTimestamp = selectedIndexData.timestamp
+            destinationController.exposedTimestamp = selectedIndexData.timestamp
         }
     }
     
-    func buttonStatisticsPressed(_ sender: UIButton) {
+    @objc func buttonStatisticsPressed(_ sender: UIButton) {
         
         selectedModem = sender.tag
         self.performSegue(withIdentifier: "segue-to-spectra-analysis", sender: self)
     }
     
     
-    func valueChangedInTextField(_ textField: UITextField) {
+    @objc func valueChangedInTextField(_ textField: UITextField) {
         
         let newString = textField.text!
         print(newString)

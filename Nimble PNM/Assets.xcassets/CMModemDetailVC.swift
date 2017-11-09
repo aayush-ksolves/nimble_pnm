@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Charts
 
 class CMModemDetailVC: BaseVC {
     
@@ -14,7 +15,8 @@ class CMModemDetailVC: BaseVC {
     //Orientation Type == 1 //For Landscape
     var exposedMacAddress : String!
 
-    @IBOutlet weak var constraintMainContentViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var viewCombinedChart: CombinedChartView!
+    @IBOutlet weak var viewChartICFR: LineChartView!
     @IBOutlet weak var constraintMDWidth: NSLayoutConstraint!
     @IBOutlet weak var constraintDSWidth: NSLayoutConstraint!
     
@@ -24,6 +26,7 @@ class CMModemDetailVC: BaseVC {
     @IBOutlet weak var viewMDInfo: UIView!
     @IBOutlet weak var viewDSInfo: UIView!
     
+    @IBOutlet weak var scrollViewFrequency: UIScrollView!
     var screenSize: CGSize!
     
     @IBOutlet weak var labelMacAddress: UILabel!
@@ -40,13 +43,19 @@ class CMModemDetailVC: BaseVC {
     var tableHeaderDS : TableHeaderDS!
     var bundleDataDSTable : [DownstreamDS] = []
     var bundleDataMDTable : [ModemDetailsDS] = []
+    var arrayFrequency: [Double] = []
+    var bundleICFRData: [LineChartDataSet] = []
+    var bundleTapFreqChartData: [CombinedChartData] = []
+    let arrayColor = [COLOR_DARK_YELLOW, UIColor.blue, UIColor.green, UIColor.purple]
+    
+    let colorBackgroundSelected = COLOR_BLUE_IONIC_V1
+    let colorBackgroundUnselected = COLOR_WHITE_AS_GREY
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUIComponents()
         self.getDetails(forModem: exposedMacAddress)
-        
     }
     
     func configureUIComponents(){
@@ -55,9 +64,25 @@ class CMModemDetailVC: BaseVC {
         labelMacAddress.text = exposedMacAddress
         viewMDInfo.isHidden = true
         viewDSInfo.isHidden = true
+        scrollViewFrequency.isHidden = true
+        
+        self.viewChartICFR.xAxis.labelPosition = .bottom
+        self.viewChartICFR.noDataText = "No Data Available!"
+        self.viewChartICFR.chartDescription?.text = ""
+        self.viewChartICFR.noDataFont = UIFont.systemFont(ofSize: 17)
+        self.viewChartICFR.noDataTextColor = colorBackgroundSelected
+        self.viewChartICFR.backgroundColor = UIColor.white
+        
+        self.viewCombinedChart.xAxis.labelPosition = .bottom
+        self.viewCombinedChart.noDataText = "No Data Available!"
+        self.viewCombinedChart.chartDescription?.text = ""
+        self.viewCombinedChart.noDataFont = UIFont.systemFont(ofSize: 17)
+        self.viewCombinedChart.noDataTextColor = colorBackgroundSelected
+        self.viewCombinedChart.backgroundColor = UIColor.white
     }
     
-    //Hansling Screen Orienatations and Table Plotting
+    
+    //Handling Screen Orienatations and Table Plotting
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
@@ -68,6 +93,7 @@ class CMModemDetailVC: BaseVC {
            
             self.plotModemStatusTable()
             self.plotDownstreamTable()
+            self.populateFrequencySection()
             
         }, completion: {
             context in
@@ -76,15 +102,95 @@ class CMModemDetailVC: BaseVC {
         
     }
     
-    func handleViewRotationToPotrait(){
-        //self.plotDownstreamTable(forOrientationType: 0)
+    
+    func populateFrequencySection() {
         
+        for eachSubview in self.scrollViewFrequency.subviews{
+            eachSubview.removeFromSuperview()
+        }
+        
+        let numberOfButtons = arrayFrequency.count + 1
+        let minimumWidthOfButton = 80.0
+        let horizontalGapping = 1.0
+        var positionX = horizontalGapping
+        let heightOfButton = 48.0
+        let computedWidthOfButton = (Double(screenSize.width - 16))/Double(numberOfButtons)
+        
+        var finalWidthOfButton : Double!
+        
+        if computedWidthOfButton >= minimumWidthOfButton{
+            finalWidthOfButton = computedWidthOfButton
+        }else{
+            finalWidthOfButton = minimumWidthOfButton
+        }
+        
+        for index in -1..<numberOfButtons-1 {
+            
+            let buttonFreq = UIButton.init(frame: CGRect(x: positionX, y: 1, width: finalWidthOfButton, height: heightOfButton))
+            buttonFreq.tag = index
+            buttonFreq.backgroundColor = colorBackgroundUnselected
+            buttonFreq.setTitleColor(UIColor.black, for: .normal)
+            buttonFreq.addTarget(self, action: #selector(buttonFreqInScrollPressed(_:)), for: .touchUpInside)
+            let attribute = [
+                NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15.0),
+                NSAttributedStringKey.foregroundColor : UIColor.black,
+            ]
+            
+            if index == -1{
+                buttonFreq.setAttributedTitle(NSAttributedString(string: "All", attributes: attribute), for: .normal)
+                buttonFreq.sendActions(for: .touchUpInside)
+                scrollViewFrequency.addSubview(buttonFreq)
+                positionX += (finalWidthOfButton+horizontalGapping)
+            }else {
+                buttonFreq.setAttributedTitle(NSAttributedString(string: "\(arrayFrequency[index])MHz", attributes: attribute), for: .normal)
+                if bundleICFRData[index].entryCount > 0 {
+                    scrollViewFrequency.addSubview(buttonFreq)
+                    positionX += (finalWidthOfButton+horizontalGapping)
+                }
+            }
+            
+        }
+        
+        scrollViewFrequency.contentSize = CGSize(width: positionX, height: heightOfButton)
+        scrollViewFrequency.isHidden = false
     }
     
-    
-    func handleViewRotationToLandscape(){
-        //self.plotDownstreamTable(forOrientationType: 1)
+    @objc func buttonFreqInScrollPressed(_ sender: UIButton){
+        print("Button Freq Pressed: \(sender.tag)")
         
+        setAllButtonBackgroundDefault()
+        sender.backgroundColor = colorBackgroundSelected
+        self.drawICFRFrequencyChart(forSection: sender.tag)
+    }
+    
+    func setAllButtonBackgroundDefault() {
+        
+        var tempButton : UIButton!
+        
+        for eachSubview in self.scrollViewFrequency.subviews{
+            tempButton = eachSubview as! UIButton
+            tempButton.backgroundColor = colorBackgroundUnselected
+        }
+    }
+    
+    func drawICFRFrequencyChart(forSection section: Int) {
+        
+        let lineChartData = LineChartData()
+        
+        if section == -1 {
+            for dataSet in bundleICFRData{
+                lineChartData.addDataSet(dataSet)
+            }
+            
+        }else {
+            lineChartData.addDataSet(bundleICFRData[section])
+        }
+        
+        self.viewChartICFR.data = lineChartData
+        self.viewChartICFR.notifyDataSetChanged()
+        self.viewChartICFR.legend.resetCustom()
+        self.viewChartICFR.animate(xAxisDuration: 0.5)
+        self.viewChartICFR.animate(yAxisDuration: 0.5)
     }
   
     func plotModemStatusTable(){
@@ -99,7 +205,6 @@ class CMModemDetailVC: BaseVC {
         var gappingHorizontal = 1.0
         let paddingVertical = 1.0
         let gappingVertical = 1.0
-
 
         var variableX = paddingHorizontal
         var variableY = paddingVertical
@@ -173,8 +278,6 @@ class CMModemDetailVC: BaseVC {
         //self.setMainScrollViewContentHeight()
 
     }
-
-
 
     
     func getOrientationCode() -> Int{
@@ -265,6 +368,7 @@ class CMModemDetailVC: BaseVC {
                         
                     }else if i == 7{
                         tempRecord.recordName = "Freq(MHz)"
+                        self.arrayFrequency.removeAll()
                         
                         for j in 0..<dataArray.count{
                             tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
@@ -280,10 +384,48 @@ class CMModemDetailVC: BaseVC {
                     }
                     
                     self.bundleDataMDTable.append(tempRecord)
-                    
                 }
                 
                 self.plotModemStatusTable()
+                
+                // Fetch Data fot ICFR Chart
+                self.bundleICFRData.removeAll()
+                
+                var tempVar = 0
+                
+                for eachData in dataArray {
+                    let bandwidth = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_BW)!))!
+                    let freq = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))!
+                    var valueX = freq - bandwidth/2
+                    let chartDataString = String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_PRE_EQ_FREQ_RSP_CHART_DATA)!)
+                    
+                    var arrayValueY = [String]()
+                    if let tempDic = self.convertToDictionary(text: chartDataString){
+                        arrayValueY = (tempDic.value(forKey: "y") as! NSArray) as! [String]
+                    }
+                    
+                    let gap = bandwidth/Double(arrayValueY.count-1)
+                    var tempFreqChartBundle: [ChartDataEntry] = []
+                    
+                    for value in arrayValueY {
+                        let valueData = ChartDataEntry(x: Double(valueX),y: Double(value)!)
+                        tempFreqChartBundle.append(valueData)
+                        valueX += gap
+                    }
+                    
+                    let lineData = LineChartDataSet(values: tempFreqChartBundle, label: "\(freq) MHz")
+                    lineData.circleRadius = 0.0
+                    lineData.colors = [self.arrayColor[tempVar]]
+                    self.bundleICFRData.append(lineData)
+                    self.arrayFrequency.append(freq)
+                    
+                    tempVar += 1
+                    
+                    if tempVar >= self.arrayColor.count {
+                        tempVar = 0
+                    }
+                }
+                
                 self.loadDSData(forModem: self.exposedMacAddress)
                 
             }else if statusCode == 401{
@@ -299,6 +441,17 @@ class CMModemDetailVC: BaseVC {
         })
         
         
+    }
+    
+    func convertToDictionary(text: String) -> NSDictionary? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
     }
     
     func performRescan(forModem modemMac : String){
@@ -350,8 +503,6 @@ class CMModemDetailVC: BaseVC {
                               REQ_PARAM_MAC_ADDRESS : modemMac
             ] as [String : Any];
         
-        
-        
         self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_CM_ANALYZER_GET_DS_DATA, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_CM_ANALYZER_LOAD_DS_DATA, sucessCompletionHadler: {
             responseDict in
             
@@ -401,15 +552,13 @@ class CMModemDetailVC: BaseVC {
                 }
                 
                 self.plotDownstreamTable()
-                
+                self.populateFrequencySection()
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
-            
             
             
         },failureCompletionHandler: {

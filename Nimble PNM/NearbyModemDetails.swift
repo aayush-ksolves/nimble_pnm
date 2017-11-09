@@ -79,18 +79,18 @@ class NearbyModemDetails : BaseVC, AGSGeoViewTouchDelegate, UITableViewDelegate,
         self.mapView.touchDelegate = self
     }
     
-    func buttonUpdatePressed() {
+    @objc func buttonUpdatePressed() {
         shouldShowModemLocationView(shouldShow: true)
     }
     
-    func buttonMoreDetailsPressed() {
+    @objc func buttonMoreDetailsPressed() {
         
         let destinationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CMModemDetailVC") as! CMModemDetailVC
         destinationController.exposedMacAddress = selectedNearbyModemDetails.macAddress
         self.navigationController?.pushViewController(destinationController, animated: true)
     }
     
-    func buttonSavePressed() {
+    @objc func buttonSavePressed() {
         
         let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: ALERT_MSG_UPDATE_MODEM_LOCATION, buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
             action in
@@ -141,7 +141,7 @@ class NearbyModemDetails : BaseVC, AGSGeoViewTouchDelegate, UITableViewDelegate,
         
     }
     
-    func buttonCancelPressed(){
+    @objc func buttonCancelPressed(){
         shouldShowModemLocationView(shouldShow: false)
     }
     

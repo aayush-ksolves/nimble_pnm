@@ -37,6 +37,8 @@ let COLOR_BORDER_GRAY_MODIFIED = UIColor(red: 200/255, green: 200/255, blue: 200
 let COLOR_WHITE_AS_GREY = UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: 1.0)
 let COLOR_WHITE_AS_GREY_LIGHT = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
 
+let COLOR_DARK_YELLOW = UIColor(red: 227/255, green: 190/255, blue: 66/255, alpha: 1)
+
 let COLOR_NONE = UIColor.clear
 
 
@@ -65,7 +67,8 @@ let DEFAULTS_AUTO_LOGIN_PASSWORD = "DEFAULTS_AUTO_LOGIN_PASSWORD"
 
 
 //WEB Service URLS
-var BASE_URL :String = "http://10.0.0.22/testing/master2/index.php"
+//var BASE_URL :String = "http://10.0.0.22/testing/master2/index.php"
+var BASE_URL :String = "http://10.1.0.22/testing/master2/index.php"
 
 
 let SERVICE_URL_LOGIN = "/pnmservice/login";
@@ -204,7 +207,7 @@ let ALERT_MSG_CP_PASSWORD_LENGTH = "Minimum length of password should be 6 chara
 
 
 let ALERT_MSG_UPDATE_MODEM_LOCATION = "Are you sure to change the location of modem ?"
-
+let ALERT_MSG_WO_REASSIGN_TO_SELF = "Are you want to assign this workorder to self ?"
 
 let ALERT_MSG_INSTALL_CM_SUCCESS = "Cable modem installed successfully."
 let ALERT_MSG_COMPLETE_MODEM_CONFIRM = "Are you sure you want to complete install this Modem ?"
@@ -307,7 +310,8 @@ let REQ_PARAM_RADIUS = "radius"
 let REQ_PARAM_ID = "id"
 let REQ_PARAM_FILTER = "filter"
 let REQ_PARAM_TIMESTAMP = "timestamp"
-
+let REQ_PARAM_ASSIGNED_TO_ID = "assigned_to_id"
+let REQ_PARAM_RE_ASSIGNED_FROM = "re_assigned_from"
 
 let REQ_PARAM_STATUS = "status"
 let REQ_PARAM_CMTS_ID = "cmts_id"
@@ -320,8 +324,9 @@ let RESPONSE_PARAM_DATA = "data"
 let RESPONSE_PARAM_MODEM_DATA = "modem_data"
 let RESPONSE_PARAM_UPSTREAMS = "upstreams"
 let RESPONSE_PARAM_UPSTREAM = "upstream"
-
+let RESPONSE_PARAM_RESPONSE_DATA = "response_data"
 let RESPONSE_PARAM_INTERFACE_NAME = "interface_name"
+let RESPONSE_PARAM_DISTANCE = "distance"
 
 let RESPONSE_PARAM_COMMON = "common"
 let RESPONSE_PARAM_USER_ID = "user_id"
@@ -331,6 +336,7 @@ let RESPONSE_PARAM_LOGOUT_URL = "logout_URL"
 
 let RESPONSE_PARAM_FREQUENCIES = "frequencies"
 let RESPONSE_PARAM_FREQ = "freq"
+let RESPONSE_PARAM_PRE_EQ_FREQ_RSP_CHART_DATA = "preEqFreqRspChartData"
 let RESPONSE_PARAM_MTC = "MTC"
 let RESPONSE_PARAM_MR_LVL = "MRLevel"
 let RESPONSE_PARAM_DELAY = "Delay"
@@ -345,7 +351,7 @@ let RESPONSE_PARAM_ID = "id"
 let RESPONSE_PARAM_US_CMTS_ID = "id"
 let RESPONSE_PARAM_US_CMTS_NAME = "cmtsName"
 
-
+let RESPONSE_PARAM_DATES = "dates"
 let RESPONSE_PARAM_TEST_PASSED_DN = "testPassedDn"
 let RESPONSE_PARAM_TEST_PASSED = "testPassed"
 let RESPONSE_PARAM_BC = "birth_certificate"
@@ -431,10 +437,13 @@ let RESPONSE_PARAM_NS_ADJACENCY = "adjacency"
 let RESPONSE_PARAM_NS_TILT = "tilt"
 
 let RESPONSE_PARAM_NS_IMPAIRMANTS = "impairments"
+let RESPONSE_PARAM_IMPAIRMANT_DATA = "impairment_data"
 
 let RESPONSE_PARAM_ICFR = "MTC"
 
 let RESPONSE_PARAM_MR = "MRLevel"
+let RESPONSE_PARAM_HIGH_FREQ = "high_frequency"
+let RESPONSE_PARAM_LOW_FREQ = "low_frequency"
 
 
 let RESPONSE_PARAM_VTDR = "FarTDR"

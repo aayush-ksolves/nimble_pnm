@@ -75,7 +75,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         loadWorkOrderDetails()
     }
     
-    func markAsFixedPressed() {
+    @objc func markAsFixedPressed() {
         
         let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: ALERT_MSG_WO_MARK_FIXED, buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
             action in
@@ -267,7 +267,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         
     }
     
-    func buttonReassignPressed(){
+    @objc func buttonReassignPressed(){
         
         self.performSegue(withIdentifier: "segue-to-assign-technician", sender: self)
     }
@@ -281,7 +281,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         }
     }
     
-    func buttonUnlockPressed() {
+    @objc func buttonUnlockPressed() {
         let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: getAlertMsgLockUnlock(), buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
             action in
             //Do Nothing

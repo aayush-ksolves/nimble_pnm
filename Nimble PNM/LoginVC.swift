@@ -177,6 +177,8 @@ class LoginVC: UIViewController,UITextFieldDelegate{
                         return
                     }
                     
+//                    let logoutURL = "http://10.1.0.22/testing/master2/index.php/pnmservice/logoutAnotherPlace"
+                    
                     guard let logoutKey = dataDict.value(forKey: RESPONSE_PARAM_LOGOUT_KEY) as? String else{
                         print("logoutKey Key Cannot Be Found")
                         return

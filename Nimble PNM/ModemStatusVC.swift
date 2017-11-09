@@ -121,7 +121,7 @@ class ModemStatusVC: BaseVC {
             
             //Create Temporary label to determine size
            
-            let sizeDeterminant = NSString(string: eachRecord.value).boundingRect(with: CGSize(width: CGFloat(secondElementWidth), height: CGFloat.greatestFiniteMagnitude) , options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: SIZE_FONT_SMALL)], context: nil)
+            let sizeDeterminant = NSString(string: eachRecord.value).boundingRect(with: CGSize(width: CGFloat(secondElementWidth), height: CGFloat.greatestFiniteMagnitude) , options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: SIZE_FONT_SMALL)], context: nil)
             let heightToSet = ceil(Double(sizeDeterminant.height))
             
             let labelDefiner = UILabel(frame: CGRect(x: constantX1, y: variableY, width: firstElementWidth, height: heightToSet))

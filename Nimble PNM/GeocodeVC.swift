@@ -154,7 +154,7 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
         print("Scanning Failed Due To Reason code \(reasonCode!)")
     }
     
-    func buttonScanBarcodePressed(_ sender: UIButton){
+    @objc func buttonScanBarcodePressed(_ sender: UIButton){
         barcodeScanner.delegate = self
         self.present(barcodeScanner, animated: true, completion: nil)
     }
@@ -360,7 +360,7 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             return UITableViewCell()
         }
     }
-    
+    @objc  
     func btnModifyLatLngPressed(_ sender:UIButton){
         self.performSegue(withIdentifier: "segue-to-modify-lat-lng", sender: self)
     }

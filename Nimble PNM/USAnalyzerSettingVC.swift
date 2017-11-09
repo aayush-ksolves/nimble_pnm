@@ -80,7 +80,7 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     
     //Function Handling Keyboard Appearance
-    func keyboardWillShow(_ notification : NSNotification){
+    @objc func keyboardWillShow(_ notification : NSNotification){
         
         if let keyboardSize = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? CGRect {
             bottomConstraintTableView.constant = keyboardSize.height - 49
@@ -95,7 +95,7 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     
     //Function handling keyboard dissappearance
-    func keyboardWillHide(_ notification : NSNotification){
+    @objc func keyboardWillHide(_ notification : NSNotification){
         
         
         bottomConstraintTableView.constant = 0
@@ -106,7 +106,7 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     
     
-    func buttonPickerDonePressed(_ sender: UIButton){
+    @objc func buttonPickerDonePressed(_ sender: UIButton){
         selectedIndex = self.pickerView.selectedRow(inComponent: 0)
         if selectedIndex != -1{
             
@@ -124,7 +124,7 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
 
     }
     
-    func buttonPickerCancelPressed(_ sender: UIButton){
+    @objc func buttonPickerCancelPressed(_ sender: UIButton){
         globalTextfieldForOptions.resignFirstResponder()
         
     }
@@ -279,7 +279,7 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     }
     
     
-    func switchValueAltered(_ sender : UISwitch){
+    @objc func switchValueAltered(_ sender : UISwitch){
         let tag = sender.tag
         let valueToSet = sender.isOn
         if tag == 1000{
@@ -300,13 +300,13 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     }
     
     
-    func sliderDidChangedForFirst(_ sender: UISlider){
+    @objc func sliderDidChangedForFirst(_ sender: UISlider){
         let floathundred = sender.value * 100
         globalLabelValueForFirstSlider.text = String(describing:Int(floathundred))
         
     }
     
-    func sliderDidChangedForSecond(_ sender: UISlider){
+    @objc func sliderDidChangedForSecond(_ sender: UISlider){
         let floathundred = sender.value * 100
         globalLabelValueForSecondSlider.text = String(describing:Int(floathundred))
     
