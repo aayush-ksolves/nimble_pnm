@@ -15,6 +15,8 @@ class CMModemDetailVC: BaseVC {
     //Orientation Type == 1 //For Landscape
     var exposedMacAddress : String!
 
+    @IBOutlet weak var viewContainerLabelsTapChart: UIView!
+    @IBOutlet weak var viewContainerLabelsFreqChart: UIView!
     @IBOutlet weak var viewCombinedChart: CombinedChartView!
     @IBOutlet weak var viewChartICFR: LineChartView!
     @IBOutlet weak var constraintMDWidth: NSLayoutConstraint!
@@ -27,8 +29,6 @@ class CMModemDetailVC: BaseVC {
     @IBOutlet weak var viewDSInfo: UIView!
     
     @IBOutlet weak var scrollViewFrequency: UIScrollView!
-
-    var arrayThirdSection : [String] = []
     
     var screenSize: CGSize!
     
@@ -51,11 +51,12 @@ class CMModemDetailVC: BaseVC {
     var totalDScoloumns : Int = 0
     
     var tableHeaderDS : TableHeaderDS!
-    var bundleDataDSTable : [DownstreamDS] = []
+    var bundleDataDSTable : [DownstreamDetailDS] = []
     var bundleDataMDTable : [ModemDetailsDS] = []
     var arrayFrequency: [Double] = []
     var bundleICFRData: [LineChartDataSet] = []
-    var bundleTapFreqChartData: [CombinedChartData] = []
+    var bundleTapFreqChartData: [BarChartData] = []
+    var tapChartThresholdData = LineChartData()
     let arrayColor = [COLOR_DARK_YELLOW, UIColor.blue, UIColor.green, UIColor.purple]
     
     let colorBackgroundSelected = COLOR_BLUE_IONIC_V1
@@ -80,15 +81,65 @@ class CMModemDetailVC: BaseVC {
         self.viewChartICFR.noDataText = "No Data Available!"
         self.viewChartICFR.chartDescription?.text = ""
         self.viewChartICFR.noDataFont = UIFont.systemFont(ofSize: 17)
+        self.viewChartICFR.leftAxis.axisMinimum = -3
+        self.viewChartICFR.leftAxis.axisMaximum = 3
         self.viewChartICFR.noDataTextColor = colorBackgroundSelected
         self.viewChartICFR.backgroundColor = UIColor.white
+        self.viewChartICFR.rightAxis.drawLabelsEnabled = false
         
         self.viewCombinedChart.xAxis.labelPosition = .bottom
         self.viewCombinedChart.noDataText = "No Data Available!"
         self.viewCombinedChart.chartDescription?.text = ""
         self.viewCombinedChart.noDataFont = UIFont.systemFont(ofSize: 17)
+        self.viewCombinedChart.xAxis.axisMinimum = 0
+        self.viewCombinedChart.xAxis.axisMaximum = 25
         self.viewCombinedChart.noDataTextColor = colorBackgroundSelected
         self.viewCombinedChart.backgroundColor = UIColor.white
+        self.viewCombinedChart.rightAxis.drawLabelsEnabled = false
+        
+        let icfrChartFrame = self.viewChartICFR.frame
+        let icfrOrigin = icfrChartFrame.origin
+        let icfrAxisYLabelFrame = CGRect(x: 0, y: icfrOrigin.y, width: icfrOrigin.x, height: icfrChartFrame.height)
+        let icfrAxisYLabel = UtilityHelper.getRotatedLabelForAxisY(frame: icfrAxisYLabelFrame)
+        icfrAxisYLabel.text = "DB"
+        self.viewContainerLabelsFreqChart.addSubview(icfrAxisYLabel)
+        
+        let tapChartFrame = self.viewCombinedChart.frame
+        let tapOrigin = tapChartFrame.origin
+        let tapAxisYLabelFrame = CGRect(x: 0, y: tapOrigin.y, width: tapOrigin.x, height: tapChartFrame.height)
+        let tapAxisYLabel = UtilityHelper.getRotatedLabelForAxisY(frame: tapAxisYLabelFrame)
+        tapAxisYLabel.text = "Amplitude"
+        self.viewContainerLabelsTapChart.addSubview(tapAxisYLabel)
+        
+        setTapChartThresholdGraphData()
+    }
+    
+    func setTapChartThresholdGraphData() {
+        
+        var lineChartEntry : [ChartDataEntry] = []
+        let arrValueY = [-15,-30,-30,-30,-30,-30,-35,-35,-35,-35,-35,-35,-35,-35,-35,-35]
+        let arrValueX = getArrayFor(first: 9, last: 24, digitGap: 0.01)
+        
+        for valueX in arrValueX {
+            lineChartEntry.append(ChartDataEntry(x: valueX ,y: Double(arrValueY[Int(valueX-9)])))
+        }
+        
+        let lineDataSet = LineChartDataSet(values: lineChartEntry, label: "Threshold")
+        lineDataSet.circleRadius = 0.0
+        lineDataSet.colors = [UIColor.red]
+        tapChartThresholdData.addDataSet(lineDataSet)
+    }
+    
+    func getArrayFor(first: Double, last: Double, digitGap: Double) -> [Double] {
+        var returnArr: [Double] = []
+        var digit = first
+        
+        for _ in 0...Int((last - first)/digitGap) {
+            returnArr.append(digit)
+            digit += digitGap
+        }
+        
+        return returnArr
     }
     
     //Handling Screen Orienatations and Table Plotting
@@ -106,11 +157,6 @@ class CMModemDetailVC: BaseVC {
             
         }, completion: {
             context in
-
-            self.plotModemStatusTable()
-            self.plotDownstreamTable()
-
-
 
         })
         
@@ -157,12 +203,12 @@ class CMModemDetailVC: BaseVC {
                 positionX += (finalWidthOfButton+horizontalGapping)
             }else {
                 buttonFreq.setAttributedTitle(NSAttributedString(string: "\(arrayFrequency[index])MHz", attributes: attribute), for: .normal)
+                
                 if bundleICFRData[index].entryCount > 0 {
                     scrollViewFrequency.addSubview(buttonFreq)
                     positionX += (finalWidthOfButton+horizontalGapping)
                 }
             }
-            
         }
         
         scrollViewFrequency.contentSize = CGSize(width: positionX, height: heightOfButton)
@@ -170,11 +216,11 @@ class CMModemDetailVC: BaseVC {
     }
     
     @objc func buttonFreqInScrollPressed(_ sender: UIButton){
-        print("Button Freq Pressed: \(sender.tag)")
         
         setAllButtonBackgroundDefault()
         sender.backgroundColor = colorBackgroundSelected
         self.drawICFRFrequencyChart(forSection: sender.tag)
+        self.drawTapFrequencyChart(forSection: sender.tag)
     }
     
     func setAllButtonBackgroundDefault() {
@@ -207,6 +253,37 @@ class CMModemDetailVC: BaseVC {
         self.viewChartICFR.animate(yAxisDuration: 0.5)
     }
 
+    func drawTapFrequencyChart(forSection section: Int) {
+        
+        let combinedChartData = CombinedChartData()
+        
+        combinedChartData.addDataSet(tapChartThresholdData.getDataSetByIndex(0))
+        combinedChartData.lineData = tapChartThresholdData
+        
+        if section == -1 {
+            let allBarData = BarChartData()
+            for barChartSet in bundleTapFreqChartData{
+                combinedChartData.addDataSet(barChartSet.getDataSetByIndex(0))
+                allBarData.addDataSet(barChartSet.getDataSetByIndex(0))
+            }
+            
+            allBarData.barWidth = 0.50
+            combinedChartData.barData = allBarData
+            
+        }else {
+            combinedChartData.addDataSet(bundleTapFreqChartData[section].getDataSetByIndex(0))
+            combinedChartData.barData = bundleTapFreqChartData[section]
+        }
+        
+        self.viewCombinedChart.data = combinedChartData
+        self.viewCombinedChart.notifyDataSetChanged()
+        self.viewCombinedChart.legend.resetCustom()
+        self.viewCombinedChart.pinchZoomEnabled = false
+        self.viewCombinedChart.doubleTapToZoomEnabled = false
+        self.viewCombinedChart.animate(xAxisDuration: 0.5)
+        self.viewCombinedChart.animate(yAxisDuration: 0.5)
+    }
+    
   
     func plotModemStatusTable(){
 
@@ -217,7 +294,7 @@ class CMModemDetailVC: BaseVC {
         }
 
         let paddingHorizontal = 1.0
-        var gappingHorizontal = 1.0
+        let gappingHorizontal = 1.0
         let paddingVertical = 1.0
         let gappingVertical = 1.0
 
@@ -226,14 +303,13 @@ class CMModemDetailVC: BaseVC {
         
         let widthHeadingCell = 120.0
 
-        let minimumWidthOfCell = 150.0
-        let computedWidthOfCell = (Double(screenSize.width - 16) - (2 * paddingHorizontal) - (Double(totalMDcoloumns - 1) * Double(gappingHorizontal)))/Double(totalMDcoloumns)
+        let minimumWidthOfCell = 80.0
+        let computedWidthOfCell = (Double(screenSize.width - 16) - widthHeadingCell - (2 * paddingHorizontal) - (Double(totalMDcoloumns - 2) * Double(gappingHorizontal)))/Double(totalMDcoloumns - 1)
 
         var finalWidthOfCell : Double!
 
         if computedWidthOfCell >= minimumWidthOfCell{
             finalWidthOfCell = computedWidthOfCell
-            gappingHorizontal = 2
         }else{
             finalWidthOfCell = minimumWidthOfCell
         }
@@ -246,30 +322,49 @@ class CMModemDetailVC: BaseVC {
 
             for j in 0 ..< totalMDcoloumns{
 
-                var labelForCell : UILabel!
-                //DataSource Usage Governance
-                
-                //Using Modem DS as datasource
-
-                if j == 0{
-                    labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: widthHeadingCell, height: heightOfCell))
-                    labelForCell.text = "\(bundleDataMDTable[i].recordName)"
-                    labelForCell.textAlignment = .left
-                    labelForCell.font = UIFont.boldSystemFont(ofSize: SIZE_FONT_MEDIUM)
-                    labelForCell.backgroundColor = colorHeadings
-                    labelForCell.textColor = UIColor.white
-                    variableX += widthHeadingCell + gappingHorizontal
-
-                }else{
-                    labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
-                    labelForCell.text = bundleDataMDTable[i].arrayValues[j-1]
-                    labelForCell.textAlignment = .center
-                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
-                    labelForCell.backgroundColor = UIColor.white
-                    labelForCell.textColor = UIColor.black
+                if i == 0 && j != 0 {
+                    
+                    let view = UIView(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
+                    view.backgroundColor = UIColor.white
+                    
+                    let imageView = UIImageView(frame: CGRect(x: 2, y: 2, width: finalWidthOfCell - 4, height: heightOfCell - 4))
+                    imageView.contentMode = .scaleAspectFit
+                    imageView.backgroundColor = UIColor.white
+                    imageView.image = UtilityHelper.getImageServerityFor(forType: bundleDataMDTable[i].arrayValues[j-1])
+                    view.addSubview(imageView)
+                    
                     variableX += finalWidthOfCell + gappingHorizontal
+
+                    self.viewMDInfo.addSubview(view)
+                    
+                }else {
+                    var labelForCell : UILabel!
+                    //DataSource Usage Governance
+                    
+                    //Using Modem DS as datasource
+                    
+                    if j == 0{
+                        labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: widthHeadingCell, height: heightOfCell))
+                        labelForCell.text = " \(bundleDataMDTable[i].recordName)"
+                        labelForCell.textAlignment = .left
+                        labelForCell.font = UIFont.boldSystemFont(ofSize: SIZE_FONT_MEDIUM)
+                        labelForCell.backgroundColor = colorHeadings
+                        labelForCell.textColor = UIColor.white
+                        variableX += widthHeadingCell + gappingHorizontal
+                        
+                    }else{
+                        labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
+                        
+                        labelForCell.text = bundleDataMDTable[i].arrayValues[j-1].checkNullString()
+                        labelForCell.textAlignment = .center
+                        labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                        labelForCell.backgroundColor = UIColor.white
+                        labelForCell.textColor = UIColor.black
+                        variableX += finalWidthOfCell + gappingHorizontal
+                    }
+                    
+                    self.viewMDInfo.addSubview(labelForCell)
                 }
-                self.viewMDInfo.addSubview(labelForCell)
 
                 //Incrementing X
                 scrollContentWidthDeterminer = variableX
@@ -313,19 +408,16 @@ class CMModemDetailVC: BaseVC {
                               REQ_PARAM_MAC_ADDRESS : [modemMac]
         ] as [String : Any];
         
-        
         self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_CM_ANALYZER_GET_MODEM_DATA, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_CM_ANALYZER_GET_MODEM_DATA, sucessCompletionHadler: {
             responseDict in
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
             
-            
             if statusCode == 200{
                 
-                self.loadDSData(forModem: self.exposedMacAddress)
-                let dataArray = (responseDict.value(forKey: "data") as! NSArray)
-                
+                let tempDataArray = (responseDict.value(forKey: RESPONSE_PARAM_DATA) as! NSArray)
+                let dataArray = self.sortArrayForChartData(array: tempDataArray)
                 self.bundleDataMDTable.removeAll()
                 
                 self.totalMDrows = 9
@@ -338,68 +430,84 @@ class CMModemDetailVC: BaseVC {
                         tempRecord.recordName = "Severity"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_SEVERITY)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!))
+                            }else {
+                                self.totalMDcoloumns -= 1
+                            }
                         }
                         
                     }else if i == 1{
                         tempRecord.recordName = "ICFR(db)"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_ICFR)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_ICFR)!))
+                            }
                         }
                         
                     }else if i == 2{
                         tempRecord.recordName = "MTC(dBc)"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_MTC)!))
+                            if !(String(describing: (dataArray[j]).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j]).value(forKey: RESPONSE_PARAM_MTC)!))
+                            }
                         }
                         
                     }else if i == 3{
                         tempRecord.recordName = "Delay(ns/MHz)"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_DELAY)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(format: "%.2f" ,(dataArray[j] ).value(forKey: RESPONSE_PARAM_DELAY)! as! Double))
+                            }
                         }
                         
                     }else if i == 4{
                         tempRecord.recordName = "TDR(Feet)"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_TDR)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_TDR)!))
+                            }
                         }
                         
                     }else if i == 5{
                         tempRecord.recordName = "vTDR(Feet)"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_VTDR)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_VTDR)!))
+                            }
                         }
                         
                     }else if i == 6{
                         tempRecord.recordName = "Corr"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_CORR)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_CORR)!))
+                            }
                         }
                         
                     }else if i == 7{
-                        self.arrayThirdSection.removeAll()
-                        self.arrayThirdSection.append("ALL")
+
                         tempRecord.recordName = "Freq(MHz)"
-                        self.arrayFrequency.removeAll()
-                        
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
-                            self.arrayThirdSection.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)) {
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_FREQ)!))
+                            }
                         }
                         
                     }else if i == 8{
                         tempRecord.recordName = "BW(MHz)"
                         
                         for j in 0..<dataArray.count{
-                            tempRecord.arrayValues.append(String(describing: (dataArray[j] as! NSDictionary).value(forKey: RESPONSE_PARAM_BW)!))
+                            if !(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_SEVERITY)!) == (NULL_STRING)){
+                                tempRecord.arrayValues.append(String(describing: (dataArray[j] ).value(forKey: RESPONSE_PARAM_BW)!))
+                            }
                         }
                         
                     }
@@ -409,36 +517,77 @@ class CMModemDetailVC: BaseVC {
                 
                 self.plotModemStatusTable()
                 
-                // Fetch Data fot ICFR Chart
+                // Fetch Data for Charts
+                self.arrayFrequency.removeAll()
                 self.bundleICFRData.removeAll()
+                self.bundleTapFreqChartData.removeAll()
                 
                 var tempVar = 0
                 
                 for eachData in dataArray {
-                    let bandwidth = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_BW)!))!
-                    let freq = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQ)!))!
+                    
+                    // Fetch Data for ICFR Chart
+                    let bandwidth = Double(String(describing: (eachData ).value(forKey: RESPONSE_PARAM_BW)!))!
+                    let freq = Double(String(describing: (eachData ).value(forKey: RESPONSE_PARAM_FREQ)!))!
                     var valueX = freq - bandwidth/2
-                    let chartDataString = String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_PRE_EQ_FREQ_RSP_CHART_DATA)!)
+                    let chartDataString = String(describing: (eachData ).value(forKey: RESPONSE_PARAM_PRE_EQ_FREQ_RSP_CHART_DATA)!)
                     
-                    var arrayValueY = [String]()
-                    if let tempDic = self.convertToDictionary(text: chartDataString){
-                        arrayValueY = (tempDic.value(forKey: "y") as! NSArray) as! [String]
+                    if let tempDic = UtilityHelper.convertToDictionary(text: chartDataString){
+                        let arrayValueY = (tempDic.value(forKey: "y") as! NSArray) as! [String]
+                        
+                        let gap = bandwidth/Double(arrayValueY.count-1)
+                        var tempFreqChartBundle: [ChartDataEntry] = []
+                        
+                        for value in arrayValueY {
+                            let valueData = ChartDataEntry(x: Double(valueX),y: Double(value)!)
+                            tempFreqChartBundle.append(valueData)
+                            valueX += gap
+                        }
+                        
+                        let lineData = LineChartDataSet(values: tempFreqChartBundle, label: "\(freq) MHz")
+                        lineData.circleRadius = 0.0
+                        lineData.colors = [self.arrayColor[tempVar]]
+                        lineData.drawValuesEnabled = false
+                        self.bundleICFRData.append(lineData)
+                        self.arrayFrequency.append(freq)
                     }
                     
-                    let gap = bandwidth/Double(arrayValueY.count-1)
-                    var tempFreqChartBundle: [ChartDataEntry] = []
+                    // Fetch Data for Tap Chart
+                    let tapChartDataString = String(describing: (eachData ).value(forKey: RESPONSE_PARAM_PRE_EQ_TAP_CHART_DATA)!)
                     
-                    for value in arrayValueY {
-                        let valueData = ChartDataEntry(x: Double(valueX),y: Double(value)!)
-                        tempFreqChartBundle.append(valueData)
-                        valueX += gap
+                    
+                    if let tempDic = UtilityHelper.convertToDictionary(text: tapChartDataString){
+                        
+                        let arrayTapChartValueY = ((tempDic.value(forKey: "y") as! NSArray) as! [String]).map { Double($0)!}
+                        
+                         var minY:Double = 0
+                        
+                        if arrayTapChartValueY.count > 0{
+                            minY = arrayTapChartValueY.min()!.rounded(.down)
+                        }
+                        
+                        var tempBundleBarDataEntry: [BarChartDataEntry] = []
+                        tempBundleBarDataEntry.append(BarChartDataEntry(x: 0,yValues: [0,0]))
+                        var tapValuex = 1
+                        
+                        for valueY in arrayTapChartValueY {
+                            let barChartEntry = BarChartDataEntry(x: Double(tapValuex),yValues: [minY-valueY, valueY])
+                            tempBundleBarDataEntry.append(barChartEntry)
+                            tapValuex += 1
+                        }
+                        
+                        let barData = BarChartDataSet(values: tempBundleBarDataEntry, label: "")
+                        barData.stackLabels = ["\(freq)MHz",""]
+                        barData.colors = [self.arrayColor[tempVar],COLOR_NONE]
+                        
+                        let barChartData = BarChartData()
+                        barChartData.addDataSet(barData)
+                        barChartData.barWidth = 0.50
+                        barChartData.setDrawValues(false)
+                        barChartData.highlightEnabled = false
+                        
+                        self.bundleTapFreqChartData.append(barChartData)
                     }
-                    
-                    let lineData = LineChartDataSet(values: tempFreqChartBundle, label: "\(freq) MHz")
-                    lineData.circleRadius = 0.0
-                    lineData.colors = [self.arrayColor[tempVar]]
-                    self.bundleICFRData.append(lineData)
-                    self.arrayFrequency.append(freq)
                     
                     tempVar += 1
                     
@@ -455,25 +604,36 @@ class CMModemDetailVC: BaseVC {
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
             
-            
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
         })
         
-        
     }
     
-    func convertToDictionary(text: String) -> NSDictionary? {
-        if let data = text.data(using: .utf8) {
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary
-            } catch {
-                print(error.localizedDescription)
+    
+    func sortArrayForChartData(array: NSArray) -> [NSDictionary] {
+        
+        var returnArray: [NSDictionary] = []
+        
+        for record in array {
+            returnArray.append(record as! NSDictionary)
+        }
+        
+        for _ in 1...returnArray.count {
+            for j in 1...returnArray.count - 1 {
+                let freq1 = Double(String(describing: ((returnArray[j-1]).value(forKey: RESPONSE_PARAM_FREQ)!)))!
+                let freq2 = Double(String(describing: ((returnArray[j]).value(forKey: RESPONSE_PARAM_FREQ)!)))!
+                
+                if freq1 > freq2 {
+                    returnArray.swapAt(j, j-1)
+                }
             }
         }
-        return nil
+        
+        return returnArray
     }
+    
     
     func performRescan(forModem modemMac : String){
         let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
@@ -485,8 +645,7 @@ class CMModemDetailVC: BaseVC {
             ] as [String : Any];
         
         
-        
-        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_CM_ANALYZER_RE_SCAN_MODEM, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_CM_ANALYZER_RESCAN_MODEM, sucessCompletionHadler: {
+        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_RE_SCAN_MODEM, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_RESCAN_MODEM, sucessCompletionHadler: {
             responseDict in
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
@@ -501,14 +660,10 @@ class CMModemDetailVC: BaseVC {
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
             
-            
-            
-            
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
         })
-        
         
     }
     
@@ -534,7 +689,7 @@ class CMModemDetailVC: BaseVC {
                 self.totalDScoloumns = 6
                 
                 //Creating First Record for the table
-                var tempTableHeaderDS = TableHeaderDS()
+                let tempTableHeaderDS = TableHeaderDS()
                 
                 tempTableHeaderDS.values.add("Downstream")
                 tempTableHeaderDS.values.add("Freq(MHz)")
@@ -543,13 +698,12 @@ class CMModemDetailVC: BaseVC {
                 tempTableHeaderDS.values.add("CM Corr Cw(%)")
                 tempTableHeaderDS.values.add("CM Un Corr Cw(%)")
                 
-                
                 //Global Variable Assignment
                 self.tableHeaderDS = tempTableHeaderDS
                 
                 for eachRecord in modemDSArray{
                     let castedRecord = (eachRecord as! NSDictionary)
-                    var tempRecord = DownstreamDS()
+                    var tempRecord = DownstreamDetailDS()
                     
                     let frequency = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_FREQ)!)
                     let power = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_POWER)!)
@@ -569,7 +723,6 @@ class CMModemDetailVC: BaseVC {
                     
                 }
                 
-                
                 self.plotDownstreamTable()
                 self.populateFrequencySection()
                 
@@ -584,7 +737,6 @@ class CMModemDetailVC: BaseVC {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
         })
-        
         
     }
     
@@ -651,23 +803,23 @@ class CMModemDetailVC: BaseVC {
                         labelForCell.textAlignment = .center
                         
                     }else if j == 1{
-                        labelForCell.text = bundleDataDSTable[i-1].frequency
+                        labelForCell.text = bundleDataDSTable[i-1].frequency.checkNullString()
                         labelForCell.textAlignment = .center
                         
                     }else if j == 2{
-                        labelForCell.text = bundleDataDSTable[i-1].power
+                        labelForCell.text = bundleDataDSTable[i-1].power.checkNullString()
                         labelForCell.textAlignment = .center
                         
                     }else if j == 3{
-                        labelForCell.text = bundleDataDSTable[i-1].mer
+                        labelForCell.text = bundleDataDSTable[i-1].mer.checkNullString()
                         labelForCell.textAlignment = .center
                         
                     }else if j == 4{
-                        labelForCell.text = bundleDataDSTable[i-1].cmCorrCw
+                        labelForCell.text = bundleDataDSTable[i-1].cmCorrCw.checkNullString()
                         labelForCell.textAlignment = .center
                         
                     }else if j == 5{
-                        labelForCell.text = bundleDataDSTable[i-1].cmUnCorrCw
+                        labelForCell.text = bundleDataDSTable[i-1].cmUnCorrCw.checkNullString()
                         labelForCell.textAlignment = .center
                         
                     }
@@ -708,7 +860,6 @@ class CMModemDetailVC: BaseVC {
     }
     
     
-    
     @IBAction func btnActionRescan(_ sender: Any) {
         self.performRescan(forModem: exposedMacAddress)
     }
@@ -722,7 +873,7 @@ struct ModemDetailsDS{
 }
 
 
-struct DownstreamDetailDS{
+ struct DownstreamDetailDS{
     var frequency = String()
     var power = String()
     var mer = String()

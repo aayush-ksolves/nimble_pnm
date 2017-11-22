@@ -10,10 +10,18 @@ import UIKit
 
 class ProfileVC: BaseVC, UICollectionViewDelegateFlowLayout,UICollectionViewDelegate, UICollectionViewDataSource {
 
+    @IBOutlet weak var constraintScrollViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var constraintCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var btnOutletLogout: UIButton!
     @IBOutlet weak var collectionViewProfile: UICollectionView!
     @IBOutlet weak var labelHeadingProfile: UILabel!
     
+    @IBOutlet weak var labelSigninName: UILabel!
+    @IBOutlet weak var labelSigninEmail: UILabel!
+    @IBOutlet weak var labelVersion: UILabel!
+    @IBOutlet weak var labelConfigUrl: UILabel!
+    
+    var sizeGoverner :CGFloat!
     
     let Mod_Password_Change = "passwordchange"
     let Mod_Setting = "setting"
@@ -26,7 +34,7 @@ class ProfileVC: BaseVC, UICollectionViewDelegateFlowLayout,UICollectionViewDele
     
     
     let TXT_Mod_Password_Change : String = "Password Change"
-    let TXT_Mod_Setting : String = "Setting"
+    let TXT_Mod_Setting : String = "Resync"
     
 
     let settingsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SyncMobileVC") as! SyncMobileVC
@@ -44,10 +52,39 @@ class ProfileVC: BaseVC, UICollectionViewDelegateFlowLayout,UICollectionViewDele
     }
     
     func configureUIComponents(){
+        
+        let firstName = USER_DEFAULTS.value(forKey: DEFAULTS_FIRST_NAME) as! String
+        let LastName = USER_DEFAULTS.value(forKey: DEFAULTS_LAST_NAME) as! String
+        let signInEmail = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String
+        let versionName = USER_DEFAULTS.value(forKey: DEFAULTS_VERSION_NAME) as! String
+        
         self.labelHeadingProfile.text = TXT_LBL_PROFILE_HEAD
+        self.labelSigninName.text = "\(firstName) \(LastName)"
+        self.labelSigninEmail.text = signInEmail
+        self.labelConfigUrl.text = BASE_URL
+        self.labelVersion.text = "Version \(versionName)"
         
         let cellNib = UINib(nibName: "HomeViewCollectionCell", bundle: nil)
         self.collectionViewProfile.register(cellNib, forCellWithReuseIdentifier: "customcell")
+        
+        resizeView(forSize: self.view.frame.size)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        
+    }
+    
+    func resizeView(forSize size: CGSize){
+        if size.width < size.height{
+            sizeGoverner = size.width
+        }else{
+            sizeGoverner = size.height
+        }
+        
+        constraintCollectionViewHeight.constant = (sizeGoverner)/2
+        constraintScrollViewHeight.constant = 280 + (sizeGoverner)/2
     }
     
     func addModule(module : String){
@@ -125,14 +162,6 @@ class ProfileVC: BaseVC, UICollectionViewDelegateFlowLayout,UICollectionViewDele
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        var sizeGoverner :CGFloat;
-        
-        if SCREEN_SIZE.width < SCREEN_SIZE.height{
-            sizeGoverner = SCREEN_SIZE.width
-        }else{
-            sizeGoverner = SCREEN_SIZE.height
-        }
         
         let cellWidth = ((sizeGoverner-16) / 2);
         let cellHeight = cellWidth

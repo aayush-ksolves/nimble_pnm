@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,7 +16,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cW6-gM-lNv" id="Rwp-9M-1Oo">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="149.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kNu-wf-J32">
@@ -28,8 +29,18 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y97-98-lGg">
+                        <rect key="frame" x="270" y="5" width="40" height="40"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="DY4-mL-8lK"/>
+                            <constraint firstAttribute="height" constant="40" id="WiM-YY-2c1"/>
+                        </constraints>
+                        <inset key="imageEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
+                        <state key="normal" image="add_pics"/>
+                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Attachments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYe-Pj-yJ7">
-                        <rect key="frame" x="10" y="5" width="300" height="40"/>
+                        <rect key="frame" x="10" y="5" width="260" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="9f1-lP-oZD"/>
                         </constraints>
@@ -60,27 +71,44 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Attachments" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGB-q5-4MV">
+                        <rect key="frame" x="10" y="50" width="300" height="90"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="wYe-Pj-yJ7" firstAttribute="leading" secondItem="Rwp-9M-1Oo" secondAttribute="leading" constant="10" id="560-XU-biz"/>
+                    <constraint firstItem="MGB-q5-4MV" firstAttribute="top" secondItem="a4W-jO-zL6" secondAttribute="top" id="5xA-BY-yjV"/>
+                    <constraint firstItem="MGB-q5-4MV" firstAttribute="trailing" secondItem="a4W-jO-zL6" secondAttribute="trailing" id="ELu-vu-htT"/>
+                    <constraint firstItem="MGB-q5-4MV" firstAttribute="bottom" secondItem="a4W-jO-zL6" secondAttribute="bottom" id="GxK-xx-wCl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="a4W-jO-zL6" secondAttribute="trailing" constant="2" id="Ha6-a0-P8J"/>
                     <constraint firstItem="wYe-Pj-yJ7" firstAttribute="top" secondItem="kNu-wf-J32" secondAttribute="bottom" id="LP0-JE-HkW"/>
                     <constraint firstItem="a4W-jO-zL6" firstAttribute="leading" secondItem="Rwp-9M-1Oo" secondAttribute="leadingMargin" constant="2" id="N9m-0D-YKM"/>
+                    <constraint firstItem="Y97-98-lGg" firstAttribute="top" secondItem="kNu-wf-J32" secondAttribute="bottom" id="NPo-pp-II3"/>
                     <constraint firstAttribute="bottomMargin" secondItem="a4W-jO-zL6" secondAttribute="bottom" constant="1.5" id="PgB-Pc-LFr"/>
                     <constraint firstItem="a4W-jO-zL6" firstAttribute="top" secondItem="wYe-Pj-yJ7" secondAttribute="bottom" constant="5" id="Z2F-TP-jD1"/>
-                    <constraint firstAttribute="trailing" secondItem="wYe-Pj-yJ7" secondAttribute="trailing" constant="10" id="bXM-k3-CI9"/>
+                    <constraint firstItem="MGB-q5-4MV" firstAttribute="leading" secondItem="a4W-jO-zL6" secondAttribute="leading" id="ZVy-m9-90v"/>
+                    <constraint firstAttribute="trailing" secondItem="wYe-Pj-yJ7" secondAttribute="trailing" constant="50" id="bXM-k3-CI9"/>
                     <constraint firstItem="b9I-MB-Lxm" firstAttribute="leading" secondItem="Rwp-9M-1Oo" secondAttribute="leading" id="eR1-QO-JHh"/>
                     <constraint firstAttribute="trailing" secondItem="kNu-wf-J32" secondAttribute="trailing" id="eRg-ch-N6R"/>
                     <constraint firstItem="kNu-wf-J32" firstAttribute="leading" secondItem="Rwp-9M-1Oo" secondAttribute="leading" id="eSv-d2-gAq"/>
                     <constraint firstItem="kNu-wf-J32" firstAttribute="top" secondItem="Rwp-9M-1Oo" secondAttribute="top" id="p3x-kl-Phj"/>
                     <constraint firstAttribute="trailing" secondItem="b9I-MB-Lxm" secondAttribute="trailing" id="sRM-Ba-DDZ"/>
                     <constraint firstItem="b9I-MB-Lxm" firstAttribute="top" secondItem="wYe-Pj-yJ7" secondAttribute="bottom" id="tp1-5M-tK1"/>
+                    <constraint firstAttribute="trailing" secondItem="Y97-98-lGg" secondAttribute="trailing" constant="10" id="xlo-U3-Bg0"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="buttonAddImage" destination="Y97-98-lGg" id="3D5-pc-8yH"/>
                 <outlet property="collectionView" destination="a4W-jO-zL6" id="weT-Rw-djy"/>
+                <outlet property="labelNoAttachments" destination="MGB-q5-4MV" id="3Zf-fN-bAb"/>
             </connections>
             <point key="canvasLocation" x="-212" y="107"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="add_pics" width="16" height="16"/>
+    </resources>
 </document>

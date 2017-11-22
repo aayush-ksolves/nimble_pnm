@@ -112,6 +112,81 @@ class UtilityHelper : NSObject{
         
     }
     
+    static func convertToDictionary(text: String) -> NSDictionary? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
     
+    static func getImageServerityFor(forType : String) -> UIImage{
+        if forType == "highMonitoringFrequency" {
+            return imageServerityHighMonitorFreq
+        }else {
+            return imageServerityImmediateAction
+        }
+    }
+    
+    static func getRotatedLabelForAxisY(frame: CGRect) -> UILabel {
+        
+        let width = frame.width
+        let height = frame.height
+        let y = frame.origin.y
+        
+        let preFrame = CGRect(x: -height/2 + width/2, y: height/2 - width/2 + y, width: height, height: width)
+        
+        let rotatedLabel = UILabel(frame: preFrame)
+        rotatedLabel.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 2)
+        rotatedLabel.textAlignment = .center
+        rotatedLabel.font = UIFont.systemFont(ofSize: 13)
+        rotatedLabel.textColor = UIColor.black
+        rotatedLabel.backgroundColor = COLOR_NONE
+        
+        return rotatedLabel
+    }
+    
+    
+    static func getUpImage(inputImage: UIImage) -> UIImage{
+        
+        UIGraphicsBeginImageContextWithOptions(inputImage.size, false, inputImage.scale)
+        inputImage.draw(in: CGRect(x:0, y:0, width:inputImage.size.width, height:inputImage.size.height))
+        let normalizedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return normalizedImage
+    }
+    
+        
+    static func makeActionSheetWithThreeActions(withTitle title:String, withMessage message:String, withAction1Name action1Name:String, withAction1Handler action1Handler: @escaping () -> Void, withAction2Name action2Name:String, withAction2Handler action2Handler: @escaping () -> Void,
+                                                withAction3Name action3Name:String, withAction3Handler action3Handler: @escaping () -> Void) -> UIAlertController{
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let firstAction = UIAlertAction(title: action1Name, style: .default, handler: {
+            action in
+            action1Handler()
+        })
+        
+        let secondAction = UIAlertAction(title: action2Name, style: .default, handler: {
+            action in
+            action2Handler()
+        })
+        
+        let thirdAction = UIAlertAction(title: action3Name, style: .cancel, handler: {
+            action in
+            action3Handler()
+        })
+        alert.addAction(firstAction)
+        alert.addAction(secondAction)
+        alert.addAction(thirdAction)
+        
+        //Confguring UI Of Action Sheet
+        //alert.view.tintColor = UIColor.black
+        
+        
+        return alert
+    }
     
 }

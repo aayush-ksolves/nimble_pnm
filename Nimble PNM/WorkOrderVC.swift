@@ -21,10 +21,10 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
     let STATUS_PROGRESS = "IN PROGRESS"
     let STATUS_CLOSED = "CLOSED"
     
-    let COLOR_FIXED = UIColor.green
-    let COLOR_OPEN = UIColor.red
-    let COLOR_IN_PROGRESS = UIColor.yellow
-    let COLOR_CLOSED = UIColor.blue
+    let COLOR_FIXED = UIColor(red: 177/255, green: 255/255, blue: 188/255, alpha: 1)
+    let COLOR_OPEN = UIColor(red: 255/255, green: 178/255, blue: 178/255, alpha: 1)
+    let COLOR_IN_PROGRESS = UIColor(red: 255/255, green: 255/255, blue: 153/255, alpha: 1)
+    let COLOR_CLOSED = UIColor(red: 221/255, green: 221/255, blue: 221/255, alpha: 1)
     
     var currentCoordinate = CLLocationCoordinate2D()
     
@@ -76,6 +76,10 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
         tableViewWO.register(UINib(nibName: "WOQueuedSectionCell", bundle: nil), forCellReuseIdentifier: "WOQueuedSectionCell")
         tableViewWO.register(UINib(nibName: "WO5LineCell", bundle: nil) , forCellReuseIdentifier: "customcell_5")
         
+        switchOutletOpen.onTintColor = COLOR_OPEN
+        switchOutletFixed.onTintColor = COLOR_FIXED
+        switchOutletProgress.onTintColor = COLOR_IN_PROGRESS
+        switchOutletClosed.onTintColor = COLOR_CLOSED
     }
     
     func getCurrentLocation() {
@@ -101,6 +105,7 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
         
         let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
         let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+        let usertype = USER_DEFAULTS.value(forKey: DEFAULTS_USER_TYPE) as! String;
         
         let dictParameters = [REQ_PARAM_USERNAME: username,
                                REQ_PARAM_AUTH_KEY: authKey
@@ -119,48 +124,43 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
                 for eachRecord in dataArray{
                     var tempWORecord = WorkOrderDS()
                     
-                    if String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!) != "node" {
+                    tempWORecord.status = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_STATUS)!).uppercased()
+                    
+                    tempWORecord.type = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
+                    tempWORecord.orderNo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!)
+                    tempWORecord.assignedTo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_TO)!).checkNullString()
+                    tempWORecord.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!).checkNullString()
+                    tempWORecord.macAddress = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_MAC_ADDRESS)!).checkNullString()
+                    tempWORecord.assignedBy = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_BY)!).checkNullString()
+                    tempWORecord.assignedToId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_TO_ID)!).checkNullString()
+                    tempWORecord.technicianFeedback = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray
+                    tempWORecord.photos = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
+                    
+                    if tempWORecord.type == TYPE_MODEM {
+                        tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!).checkNullString()
+                    }
+                    
+                    if tempWORecord.status == self.STATUS_OPEN{
+                        tempWORecord.sideBarColor = self.COLOR_OPEN
                         
-                        tempWORecord.status = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_STATUS)!).uppercased()
+                    }else if tempWORecord.status == self.STATUS_PROGRESS{
+                        tempWORecord.sideBarColor = self.COLOR_IN_PROGRESS
                         
-                        tempWORecord.type = "Modem"
-                        tempWORecord.orderNo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!)
-                        tempWORecord.assignedTo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_TO)!)
-                        tempWORecord.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
-                        tempWORecord.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                        tempWORecord.macAddress = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_MAC_ADDRESS)!)
-                        tempWORecord.assignedBy = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_BY)!)
-                        tempWORecord.customerName = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CUST_NAME)!)
-                        tempWORecord.contact = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHONE_NUMBER)!)
-                        tempWORecord.cmtsId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_WO_CMTS_ID)!)
-                        tempWORecord.technicianFeedback = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray
-                        tempWORecord.photos = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
+                    }else if tempWORecord.status == self.STATUS_CLOSED{
+                        tempWORecord.sideBarColor = self.COLOR_CLOSED
                         
-                        if tempWORecord.status == self.STATUS_OPEN{
-                            tempWORecord.sideBarColor = self.COLOR_OPEN
-                            tempWORecord.numberOfSections = 1
-                            
-                        }else if tempWORecord.status == self.STATUS_PROGRESS{
-                            tempWORecord.sideBarColor = self.COLOR_IN_PROGRESS
-                            tempWORecord.numberOfSections = 2
-                            
-                        }else if tempWORecord.status == self.STATUS_CLOSED{
-                            tempWORecord.sideBarColor = self.COLOR_CLOSED
-                            tempWORecord.numberOfSections = 1
-                            
-                        }else if tempWORecord.status == self.STATUS_FIXED{
-                            tempWORecord.sideBarColor = self.COLOR_FIXED
-                            tempWORecord.numberOfSections = 2
-                            
-                        }else{
-                            print("This shouldn't have happened")
-                        }
+                    }else if tempWORecord.status == self.STATUS_FIXED{
+                        tempWORecord.sideBarColor = self.COLOR_FIXED
                         
-                        
+                    }else{
+                        print("This shouldn't have happened")
+                    }
+                    
+                    if (usertype != "1") || (usertype == "1" && tempWORecord.assignedToId != STRING_QUEUE){
                         self.bundleRecord.append(tempWORecord)
                     }
                     
-                }
+                    }
                 
             self.tempBundleRecord = self.bundleRecord
             self.tableViewWO.reloadData()
@@ -188,7 +188,7 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
         let dictParameters = [REQ_PARAM_USERNAME: username,
                               REQ_PARAM_AUTH_KEY: authKey,
                               REQ_PARAM_FILTER : [
-                                REQ_PARAM_ASSIGNED_TO_ID: "queue",
+                                REQ_PARAM_ASSIGNED_TO_ID: STRING_QUEUE,
                                 REQ_PARAM_LATITUDE: currentCoordinate.latitude,
                                 REQ_PARAM_LONGITUDE: currentCoordinate.longitude
                             ]
@@ -206,12 +206,19 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
             if statusCode == 200{
                 for eachRecord in dataArray{
                     var tempWORecord = QueuedWorkOrderDS()
-                    tempWORecord.orderId = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!)
-                    tempWORecord.type = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
-                    tempWORecord.interface = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_INTERFACE_NAME)!)
-                    tempWORecord.createdDate = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                    tempWORecord.distance = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_DISTANCE)!)
-//                    tempWORecord.location = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_DATA)!)
+                    tempWORecord.orderId = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!).checkNullString()
+                    tempWORecord.type = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!).checkNullString()
+                    
+                    if tempWORecord.type == TYPE_MODEM{
+                        tempWORecord.macAddress = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_MAC_ADDRESS)!).checkNullString()
+                        tempWORecord.address = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!).checkNullString()
+                    }else {
+                        tempWORecord.interface = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_INTERFACE_NAME)!).checkNullString()
+                        //                    tempWORecord.location = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_DATA)!)
+                    }
+                    
+                    tempWORecord.createdDate = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!).checkNullString()
+                    tempWORecord.distance = String(describing: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_DISTANCE)!).checkNullString()
                     
                     self.bundleQueuedWO.append(tempWORecord)
                 }
@@ -284,8 +291,13 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "customcell_5") as! WO5LineCell
             let cellData = tempBundleRecord[cellNo]
             
+            if cellData.type == TYPE_MODEM {
+                cell.labelType.text = "Modem"
+            }else{
+                cell.labelType.text = "Node"
+            }
+            
             cell.labelOrderId.text = cellData.orderNo
-            cell.labelType.text = cellData.type
             cell.labelAddress.text = cellData.address
             cell.labelAssignedDate.text = cellData.assignedDate
             cell.labelAssignedTo.text = cellData.assignedTo
@@ -297,11 +309,22 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
             let cellData = bundleQueuedWO[cellNo]
             
             cell.labelOrderId.text = cellData.orderId
-            cell.labelType.text = cellData.type
-            cell.labelInterface.text = cellData.interface
             cell.labelCreatedDate.text = cellData.createdDate
             cell.labelDistance.text = "\(cellData.distance) KM"
-            cell.labelLocation.text = cellData.location
+            
+            if cellData.type == TYPE_MODEM {
+                cell.labelType.text = "Modem"
+                cell.labelAddressHead.text = "Address"
+                cell.labelInterfaceHead.text = "MAC"
+                cell.labelLocation.text = cellData.address
+                cell.labelInterface.text = cellData.macAddress
+            }else{
+                cell.labelType.text = "Node"
+                cell.labelAddressHead.text = "Lat/Lng"
+                cell.labelInterfaceHead.text = "Interface"
+                cell.labelLocation.text = cellData.location
+                cell.labelInterface.text = cellData.interface
+            }
             
             cell.buttonAssignToMe.tag = cellNo
             cell.buttonAssignToMe.addTarget(self, action: #selector(buttonAssignToMePressed(_:)), for: .touchUpInside)
@@ -327,7 +350,6 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
             let destinationController = segue.destination as! WorkOrderModemDetails
             
             destinationController.exposedOrderID = selectedIndexData.orderNo
-            
         }
     }
     
@@ -366,7 +388,6 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
-            
             
             if statusCode == 200{
                 self.getCurrentLocation()
@@ -521,31 +542,33 @@ class WorkOrderVC: BaseVC, UITableViewDataSource, UITableViewDelegate {
 }
 
 fileprivate struct WorkOrderDS{
-    var orderNo : String = ""
-    var type : String = ""
-    var status : String = ""
-    var assignedDate : String = ""
-    var address : String = ""
-    var assignedTo : String = ""
-    var assignedBy : String = ""
-    var customerName : String = ""
-    var contact : String = ""
-    var macAddress : String = ""
-    var cmtsId : String = ""
-    var numberOfSections = 1
+    var orderNo : String = "-"
+    var type : String = "-"
+    var status : String = "-"
+    var assignedDate : String = "-"
+    var address : String = "-"
+    var assignedTo : String = "-"
+    var assignedBy : String = "-"
+    var customerName : String = "-"
+    var contact : String = "-"
+    var macAddress : String = "-"
+    var cmtsId : String = "-"
+    var assignedToId : String = "-"
     var technicianFeedback : NSArray!
     var photos: NSArray!
     var sideBarColor : UIColor = UIColor.white
 }
 
 fileprivate struct QueuedWorkOrderDS{
-    var orderId : String = ""
-    var type : String = ""
-    var interface : String = ""
-    var createdDate : String = ""
-    var distance : String = ""
-    var location : String = ""
-    var reassignedBy: String = ""
+    var orderId : String = "-"
+    var type : String = "-"
+    var macAddress : String = "-"
+    var interface : String = "-"
+    var createdDate : String = "-"
+    var distance : String = "-"
+    var location : String = "-"
+    var reassignedBy: String = "-"
+    var address: String = "-"
 }
 
 

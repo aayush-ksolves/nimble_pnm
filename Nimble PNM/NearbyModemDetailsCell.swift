@@ -43,6 +43,7 @@ class NearbyModemDetailsCell: UITableViewCell {
         // Initialization code
     
         imageViewSeverity.contentMode = .scaleAspectFit
+        
     }
     
     

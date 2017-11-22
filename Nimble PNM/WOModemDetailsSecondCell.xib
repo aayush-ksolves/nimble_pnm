@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,11 +16,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gw5-JL-hfR" id="HaI-Gm-Jff">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comments" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fhR-ps-m9w">
-                        <rect key="frame" x="10" y="10" width="300" height="40"/>
+                        <rect key="frame" x="10" y="10" width="260" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="8Cv-pp-IOi"/>
                         </constraints>
@@ -30,9 +31,18 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pwe-Xe-97t">
                         <rect key="frame" x="10" y="55" width="300" height="35"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dnc-jb-Qxt">
+                        <rect key="frame" x="270" y="10" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="W93-ax-M6m"/>
+                            <constraint firstAttribute="width" constant="40" id="sHm-rJ-KQh"/>
+                        </constraints>
+                        <inset key="imageEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
+                        <state key="normal" image="comment"/>
+                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cR-mx-Y0W">
                         <rect key="frame" x="0.0" y="50" width="320" height="2"/>
                         <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
@@ -45,22 +55,28 @@
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="dnc-jb-Qxt" firstAttribute="top" secondItem="HaI-Gm-Jff" secondAttribute="topMargin" constant="2" id="16s-ip-txZ"/>
                     <constraint firstItem="fhR-ps-m9w" firstAttribute="leading" secondItem="HaI-Gm-Jff" secondAttribute="leadingMargin" constant="2" id="8cE-18-iG7"/>
                     <constraint firstItem="Pwe-Xe-97t" firstAttribute="top" secondItem="fhR-ps-m9w" secondAttribute="bottom" constant="5" id="CfY-lJ-EvP"/>
                     <constraint firstItem="Pwe-Xe-97t" firstAttribute="leading" secondItem="HaI-Gm-Jff" secondAttribute="leadingMargin" constant="2" id="DoX-p1-dSZ"/>
                     <constraint firstItem="9cR-mx-Y0W" firstAttribute="leading" secondItem="HaI-Gm-Jff" secondAttribute="leading" id="LrN-vn-cqT"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Pwe-Xe-97t" secondAttribute="trailing" constant="2" id="Rtl-cl-kU6"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="dnc-jb-Qxt" secondAttribute="trailing" constant="2" id="UGL-tx-WcX"/>
                     <constraint firstItem="fhR-ps-m9w" firstAttribute="top" secondItem="HaI-Gm-Jff" secondAttribute="topMargin" constant="2" id="YLt-W0-gok"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="fhR-ps-m9w" secondAttribute="trailing" constant="2" id="aRL-Kn-rY8"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="fhR-ps-m9w" secondAttribute="trailing" constant="42" id="aRL-Kn-rY8"/>
                     <constraint firstAttribute="trailing" secondItem="9cR-mx-Y0W" secondAttribute="trailing" id="f33-ax-LUp"/>
                     <constraint firstItem="9cR-mx-Y0W" firstAttribute="top" secondItem="fhR-ps-m9w" secondAttribute="bottom" id="ubb-cb-OlI"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Pwe-Xe-97t" secondAttribute="bottom" constant="1.5" id="xCN-0B-WfN"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="buttonComment" destination="dnc-jb-Qxt" id="Dma-MQ-ngu"/>
                 <outlet property="labelComments" destination="Pwe-Xe-97t" id="lDd-kq-tvI"/>
             </connections>
             <point key="canvasLocation" x="-4.5" y="42"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="comment" width="16" height="16"/>
+    </resources>
 </document>

@@ -88,12 +88,14 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
                     tempModemData.timestamp = String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_TIMESTAMP)!)
                     tempModemData.upstream = String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_UPSTREAM)!)
                     tempModemData.impairment = String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_NS_IMPAIRMANTS)!)
-                    tempModemData.serverityVal = (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_SERVITY_VAL)! as! Int
+                    tempModemData.serverity = (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_Severity)! as! String
                     
-                    if tempModemData.serverityVal == 0 {
+                    if tempModemData.serverity == "green.png" {
+                        tempModemData.leftStripColor = UIColor.green
+                    }else if tempModemData.serverity == "red.png" {
                         tempModemData.leftStripColor = UIColor.green
                     }else {
-                        tempModemData.leftStripColor = UIColor.red
+                        tempModemData.leftStripColor = UIColor(red: 221/255, green: 221/255, blue: 221/255, alpha: 1)
                     }
                     
                     if tempModemData.impairment == "" {
@@ -169,7 +171,6 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
     }
     
     @objc func buttonStatisticsPressed(_ sender: UIButton) {
-        
         selectedModem = sender.tag
         self.performSegue(withIdentifier: "segue-to-spectra-analysis", sender: self)
     }
@@ -221,7 +222,7 @@ fileprivate struct CMTSModemDataDS {
     var upstream = ""
     var timestamp = ""
     var impairment = ""
-    var serverityVal = 0
+    var serverity = ""
     var leftStripColor = UIColor.green
 }
 

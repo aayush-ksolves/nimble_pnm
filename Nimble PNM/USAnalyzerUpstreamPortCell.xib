@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="46" id="tVB-Fj-FNc" customClass="USAnalyzerUpstreamPortCell" customModule="Nimble_PNM" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tVB-Fj-FNc" id="Oio-ao-f4l">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="45.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c4x-tp-O2d">
+                        <rect key="frame" x="18" y="13" width="209" height="19.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OMH-QB-rGs">
+                        <rect key="frame" x="237" y="13" width="120" height="19.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="120" id="3ad-bt-KIB"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="OMH-QB-rGs" secondAttribute="trailing" constant="10" id="1ad-3y-06a"/>
+                    <constraint firstItem="c4x-tp-O2d" firstAttribute="leading" secondItem="Oio-ao-f4l" secondAttribute="leadingMargin" constant="10" id="3FX-Ko-Vof"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="c4x-tp-O2d" secondAttribute="bottom" constant="5" id="CSv-Hn-1CI"/>
+                    <constraint firstItem="c4x-tp-O2d" firstAttribute="top" secondItem="Oio-ao-f4l" secondAttribute="topMargin" constant="5" id="a7g-R2-V8K"/>
+                    <constraint firstItem="OMH-QB-rGs" firstAttribute="top" secondItem="Oio-ao-f4l" secondAttribute="topMargin" constant="5" id="l05-Kr-lpA"/>
+                    <constraint firstItem="OMH-QB-rGs" firstAttribute="leading" secondItem="c4x-tp-O2d" secondAttribute="trailing" constant="10" id="q9t-Hv-Kch"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="OMH-QB-rGs" secondAttribute="bottom" constant="5" id="wch-UL-sjq"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="labelAlias" destination="c4x-tp-O2d" id="FpN-0L-ues"/>
+                <outlet property="labelFrequency" destination="OMH-QB-rGs" id="Ljg-Tm-YC5"/>
+            </connections>
+            <point key="canvasLocation" x="-126.5" y="59"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -9,19 +9,25 @@
 import UIKit
 
 
-class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITableViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextViewDelegate {
     
     @IBOutlet weak var tableViewWODetails: UITableView!
     
+    @IBOutlet weak var buttonAddComments: UIButton!
+    @IBOutlet weak var textViewAddComments: UITextView!
+    @IBOutlet weak var viewAddComments: UIView!
     var exposedOrderID = ""
-    
+    let imagePicker = UIImagePickerController()
     var bundleWorkOrderDetails = WorkOrderDetailsDS()
     let footerView = UIView()
-    var numberOfSections = 1
+    var numberOfSections = 2
     var isLocked = false
+    var shouldReloadView = true
     
     let imageLocked: UIImage = #imageLiteral(resourceName: "lock")
     let imageUnlocked: UIImage = #imageLiteral(resourceName: "unlock")
+    
+    let usertype = USER_DEFAULTS.value(forKey: DEFAULTS_USER_TYPE) as! String
     
     var tableFooterViewButton : UIButton!
     
@@ -37,8 +43,10 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         stringTechnicianFeedback.append("\n")
         
         for stringFB in feedBackArray {
-            stringTechnicianFeedback.append(String(describing: stringFB))
-            stringTechnicianFeedback.append("\n")
+            if String(describing: stringFB) != ""{
+                stringTechnicianFeedback.append(String(describing: stringFB))
+                stringTechnicianFeedback.append("\n")
+            }
         }
         
         return stringTechnicianFeedback
@@ -57,6 +65,22 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         tableViewWODetails.register(UINib(nibName: "WOModemDetailsFirstCell", bundle: nil), forCellReuseIdentifier: "WOModemDetailsFirstCell")
         tableViewWODetails.register(UINib(nibName: "WOModemDetailsSecondCell", bundle: nil), forCellReuseIdentifier: "WOModemDetailsSecondCell")
         tableViewWODetails.register(UINib(nibName: "WODetailsAttachmentCell", bundle: nil), forCellReuseIdentifier: "WODetailsAttachmentCell")
+        
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.numberOfTapsRequired = 1
+        tapGesture.addTarget(self, action: #selector(viewCommentsTapped))
+        viewAddComments.addGestureRecognizer(tapGesture)
+        
+        self.buttonAddComments.addTarget(self, action: #selector(buttonSendCommentsPressed), for: .touchUpInside)
+        
+        imagePicker.delegate = self
+        textViewAddComments.delegate = self
+        textViewAddComments.addBorder(withColor: UIColor.darkGray, withWidth: 1)
+        showViewAddComment(shouldShow: false)
+    }
+    
+    @objc func viewCommentsTapped(){
+        showViewAddComment(shouldShow: false)
     }
     
     func setTableFooterButton() {
@@ -72,7 +96,12 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         
-        loadWorkOrderDetails()
+        if shouldReloadView {
+            loadWorkOrderDetails()
+        }else{
+            shouldReloadView = true
+        }
+        
     }
     
     @objc func markAsFixedPressed() {
@@ -100,7 +129,7 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
                               REQ_PARAM_STATUS: "fixed"
         ];
         
-        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_WO_MARK_FIXED, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_WO_MARKING_FIXED, sucessCompletionHadler: {
+        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_WO_UPDATE, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_WO_UPDATE, sucessCompletionHadler: {
             responseDict in
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
@@ -189,15 +218,23 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         if sectionNo == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "WOModemDetailsFirstCell") as! WOModemDetailsFirstCell
             
-            cell.labelType.text = bundleWorkOrderDetails.type
-            cell.labelMACAddress.text = bundleWorkOrderDetails.macAddress
+            if bundleWorkOrderDetails.type == TYPE_MODEM {
+                cell.labelType.text = "Modem"
+                cell.labelMacAddressHead.text = "MAC Address"
+                cell.labelMACAddress.text = bundleWorkOrderDetails.macAddress
+            }else{
+                cell.labelType.text = "Node"
+                cell.labelMacAddressHead.text = "Interface"
+                cell.labelMACAddress.text = bundleWorkOrderDetails.interface
+            }
+            
             cell.labelAssisgnedBy.text = bundleWorkOrderDetails.assignedBy
             cell.labelAssignedTo.text = bundleWorkOrderDetails.assignedTo
             cell.labelAssignedDate.text = bundleWorkOrderDetails.assignedDate
             cell.labelCustomerName.text = bundleWorkOrderDetails.customerName
             cell.labelAddress.text = bundleWorkOrderDetails.address
             cell.labelContact.text = bundleWorkOrderDetails.contact
-            cell.labelStatus.text = bundleWorkOrderDetails.status
+            cell.labelStatus.text = bundleWorkOrderDetails.status.uppercased()
             
             return cell;
         }else if sectionNo == 1 {
@@ -206,7 +243,23 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "WOModemDetailsSecondCell") as! WOModemDetailsSecondCell
                 
-                cell.labelComments.text = self.bundleWorkOrderDetails.feedback
+                if self.bundleWorkOrderDetails.feedback.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                    cell.labelComments.text = "\nNo Comments \n"
+                    cell.labelComments.textColor = UIColor.lightGray
+                    cell.labelComments.textAlignment = .center
+                }else{
+                    cell.labelComments.text = self.bundleWorkOrderDetails.feedback
+                    cell.labelComments.textColor = UIColor.darkGray
+                    cell.labelComments.textAlignment = .left
+                }
+                
+                if usertype == "1" {
+                    cell.buttonComment.isHidden = true
+                }else{
+                    cell.buttonComment.isHidden = false
+                }
+                
+                cell.buttonComment.addTarget(self, action: #selector(buttonAddCommentPressed), for: .touchUpInside)
                 
                 return cell
                 
@@ -214,10 +267,21 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "WODetailsAttachmentCell") as! WODetailsAttachmentCell
                 
+                cell.labelNoAttachments.isHidden = (bundleWorkOrderDetails.arrayAttachment.count > 0)
+                
                 cell.collectionView.register(UINib(nibName: "WODetailsImageCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "WODetailsImageCollectionViewCell")
+                
                 cell.collectionView.delegate = self
                 cell.collectionView.dataSource = self
                 cell.collectionView.reloadData()
+                
+                if usertype == "1" {
+                    cell.buttonAddImage.isHidden = true
+                }else{
+                    cell.buttonAddImage.isHidden = false
+                }
+                
+                cell.buttonAddImage.addTarget(self, action: #selector(buttonAddImagePressed), for: .touchUpInside)
                 
                 return cell
             }
@@ -254,18 +318,243 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WODetailsImageCollectionViewCell", for: indexPath)  as! WODetailsImageCollectionViewCell
         
         cell.imageViewPhoto.af_setImage(withURL: URL(string: self.bundleWorkOrderDetails.arrayAttachment.object(at: cellNo) as! String)!)
+        cell.buttonCross.tag = cellNo
+        cell.buttonCross.addTarget(self, action: #selector(buttonCrossPressed(_:)), for: .touchUpInside)
+        
+        if bundleWorkOrderDetails.status == TYPE_FIXED || bundleWorkOrderDetails.status == TYPE_CLOSED{
+            cell.buttonCross.isHidden = true
+        }else{
+            cell.buttonCross.isHidden = false
+        }
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        self.shouldReloadView = false
         let cellNo = indexPath.row
         let presentationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ImageViewerVC") as! ImageViewerVC
         presentationController.exposedImageURL = self.bundleWorkOrderDetails.arrayAttachment.object(at: cellNo) as! String
         self.navigationController?.pushViewController(presentationController, animated: true)
         
     }
+    
+    @objc func buttonCrossPressed(_ sender: UIButton){
+        
+        let tag = sender.tag
+        
+        let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_CONFIRM, message: ALERT_MSG_WO_DELETE_IMAGE, buttonTitle1: ALERT_BUTTON_NO, buttonTitle2: ALERT_BUTTON_YES, buttonStyle1: .destructive, buttonStyle2: .default, completionHandler1: {
+            action in
+            //Do Nothing
+        }, completionHandler2: {
+            action in
+            
+            self.deleteWOImage(forSection: tag)
+        })
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func buttonAddCommentPressed(){
+        showViewAddComment(shouldShow: true)
+    }
+    
+    func showViewAddComment(shouldShow: Bool){
+        if shouldShow {
+            self.viewAddComments.isHidden = false
+            self.textViewAddComments.text = ""
+            self.textViewAddComments.becomeFirstResponder()
+        }else{
+            self.textViewAddComments.resignFirstResponder()
+            self.viewAddComments.isHidden = true
+        }
+    }
+    
+    @objc func buttonSendCommentsPressed(){
+        
+        self.textViewAddComments.resignFirstResponder()
+        let textComment = self.textViewAddComments.text!
+        
+        if textComment == "" {
+            
+            let alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_APP_NAME, message: ALERT_MSG_WO_ENTER_COMMENT, buttonTitle: ALERT_BUTTON_OK, completionHandler: {
+                action in
+                self.textViewAddComments.becomeFirstResponder()
+            })
+            self.present(alert, animated: true, completion: nil)
+            
+        }else{
+            self.sendCommentOnServer(textComment: textComment)
+        }
+    }
+    
+    func sendCommentOnServer(textComment: String) {
+        
+        let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
+        let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+        
+        let dictParameters = [REQ_PARAM_USERNAME: username,
+                              REQ_PARAM_AUTH_KEY: authKey,
+                              REQ_PARAM_STATUS: bundleWorkOrderDetails.status,
+                              REQ_PARAM_ORDER_ID: bundleWorkOrderDetails.orderId,
+                              RESPONSE_PARAM_FEEDBACK: textComment
+                     ]
+        
+        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_WO_UPDATE, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_WO_UPDATE, sucessCompletionHadler: {
+            responseDict in
+            
+            let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
+            let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
+            
+            if statusCode == 200{
+                self.showViewAddComment(shouldShow: false)
+                self.loadWorkOrderDetails()
+                
+            }else if statusCode == 401{
+                self.performLogoutAsSessionExpiredDetected()
+                
+            }else{
+                self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
+            }
+            
+        },failureCompletionHandler: {
+            (errorTitle,errorMessage) in
+            self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
+        })
+        
+    }
+    
+    @objc func buttonAddImagePressed(){
+        if bundleWorkOrderDetails.arrayAttachment.count < 5 {
+            showSelectImageOption()
+        }else{
+            self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: ALERT_MSG_WO_ADD_ATTACHMENTS, withButtonTitle: ALERT_BUTTON_OK)
+        }
+    }
+    
+    func showSelectImageOption(){
+        let actionSheet = UtilityHelper.makeActionSheetWithThreeActions(withTitle: AS_PHOTO_TITLE, withMessage: AS_PHOTO_MSG, withAction1Name: AS_PHOTO_OPTION1, withAction1Handler: {
+            
+            self.shouldReloadView = false
+            self.setImagePickerToChooseFromLibrary()
+            self.present(self.imagePicker, animated: true, completion: nil)
+            
+        }, withAction2Name: AS_PHOTO_OPTION2, withAction2Handler: {
+            
+            self.shouldReloadView = false
+            self.setImagePickerToChooseFromCamera()
+            self.present(self.imagePicker, animated: true, completion: nil)
+            
+        }, withAction3Name: AS_PHOTO_CANCEL, withAction3Handler: {
+            self.shouldReloadView = true
+            
+        })
+        self.present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func setImagePickerToChooseFromLibrary(){
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .photoLibrary
+    }
+    
+    func setImagePickerToChooseFromCamera(){
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .camera
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        self.dismiss(animated: false, completion: nil)
+        
+        if (info[UIImagePickerControllerOriginalImage] as? UIImage) != nil {
+            let chosenImage = (info[UIImagePickerControllerOriginalImage] as! UIImage)
+            let normalizedImage = UtilityHelper.getUpImage(inputImage: chosenImage)
+            self.uploadAttachmentOnServer(image: normalizedImage)
+            
+        }else{
+            print("Something went wrong")
+        }
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: false, completion: nil)
+    }
+    
+    
+    func uploadAttachmentOnServer(image: UIImage){
+        
+        let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
+        let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+        
+        let dictParameters = [REQ_PARAM_USERNAME: username,
+                              REQ_PARAM_AUTH_KEY: authKey,
+                              REQ_PARAM_ORDER_ID: bundleWorkOrderDetails.orderId,
+        ];
+        
+        let imageArray = NSMutableArray()
+        let tempDic : NSDictionary = [PARAM_NAME: "image", PARAM_IMAGE: image]
+        imageArray.add(tempDic)
+        
+        self.networkManager.uploadImageWithData(url: SERVICE_URL_WO_UPLOAD_ATTACHMENT, withParameters: dictParameters, bundleImagesArray: imageArray, withLoaderMessage: LOADER_MSG_WO_UPDATE, sucessCompletionHadler: {
+            responseDict in
+            
+            let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
+            let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
+            
+            if statusCode == 200{
+                
+                self.loadWorkOrderDetails()
+                
+            }else if statusCode == 401{
+                self.performLogoutAsSessionExpiredDetected()
+                
+            }else{
+                self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
+            }
+            
+        }, failureCompletionHandler:{
+            (errorTitle,errorMessage) in
+            self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
+        })
+        
+    }
+    
+    func deleteWOImage(forSection: Int){
+        
+        let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
+        let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+        let imageUrl = self.bundleWorkOrderDetails.arrayAttachment.object(at: forSection) as! String
+        
+        let dictParameters = [REQ_PARAM_USERNAME: username,
+                              REQ_PARAM_AUTH_KEY: authKey,
+                              REQ_PARAM_IMAGE_URL: imageUrl,
+                              REQ_PARAM_ORDER_ID: bundleWorkOrderDetails.orderId,
+        ]
+        
+        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_WO_DELETE_ATTACHMENT, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_WO_UPDATE, sucessCompletionHadler: {
+            responseDict in
+            
+            let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
+            let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
+            
+            if statusCode == 200 {
+                self.loadWorkOrderDetails()
+                
+            }else if statusCode == 401{
+                self.performLogoutAsSessionExpiredDetected()
+                
+            }else{
+                self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
+            }
+            
+        },failureCompletionHandler: {
+            (errorTitle,errorMessage) in
+            self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
+        })
+        
+    }
+    
     
     @objc func buttonReassignPressed(){
         
@@ -370,34 +659,47 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
             if statusCode == 200{
                 for eachRecord in dataArray{
                     
-                    if String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!) != "node" {
-                        
-                        self.bundleWorkOrderDetails.status = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_STATUS)!).uppercased()
-                        
-                        self.bundleWorkOrderDetails.type = "Modem"
-                        self.bundleWorkOrderDetails.orderId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!)
-                        self.bundleWorkOrderDetails.assignedTo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_TO)!)
-                        self.bundleWorkOrderDetails.address = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS)!)
-                        self.bundleWorkOrderDetails.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!)
-                        self.bundleWorkOrderDetails.macAddress = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_MAC_ADDRESS)!)
-                        self.bundleWorkOrderDetails.assignedBy = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_BY)!)
-                        self.bundleWorkOrderDetails.customerName = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CUST_NAME)!)
-                        self.bundleWorkOrderDetails.contact = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHONE_NUMBER)!)
-                        self.bundleWorkOrderDetails.cmtsId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_WO_CMTS_ID)!)
-                        self.bundleWorkOrderDetails.isLocked = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_IS_LOCKED)!)
-                        self.bundleWorkOrderDetails.feedback = self.getTechnicianFeedbackText(feedBackArray: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray)
-                        self.bundleWorkOrderDetails.arrayAttachment = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
-                        
-                        if self.bundleWorkOrderDetails.isLocked == "1" {
-                            self.isLocked = true
-                        } else {
-                            self.isLocked = false
-                        }
-                        
-                        if self.bundleWorkOrderDetails.status == "IN PROGRESS" {
-                            self.setTableFooterButton()
-                        }
-                   }
+                    self.bundleWorkOrderDetails.status = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_STATUS)!)
+                    self.bundleWorkOrderDetails.type = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TYPE)!)
+                    self.bundleWorkOrderDetails.orderId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ID)!).checkNullString()
+                    self.bundleWorkOrderDetails.assignedTo = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_TO)!).checkNullString()
+                    
+                    if let address = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ADDRESS){
+                        self.bundleWorkOrderDetails.address = String(describing: address).checkNullString()
+                    }
+                    
+                    if let contact = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHONE_NUMBER){
+                        self.bundleWorkOrderDetails.contact = String(describing: contact).checkNullString()
+                    }
+                    
+                    if let custName = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CUST_NAME){
+                        self.bundleWorkOrderDetails.customerName = String(describing: custName).checkNullString()
+                    }
+                    
+                    if let macAddress = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_MAC_ADDRESS){
+                        self.bundleWorkOrderDetails.macAddress = String(describing: macAddress).checkNullString()
+                    }
+                    
+                    if let interface = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_INTERFACE_NAME){
+                        self.bundleWorkOrderDetails.interface = String(describing: interface).checkNullString()
+                    }
+                    
+                    self.bundleWorkOrderDetails.assignedDate = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_CREATION_DATE)!).checkNullString()
+                    self.bundleWorkOrderDetails.assignedBy = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_ASSIGNED_BY)!).checkNullString()
+                    self.bundleWorkOrderDetails.cmtsId = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_WO_CMTS_ID)!).checkNullString()
+                    self.bundleWorkOrderDetails.isLocked = String(describing:(eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_IS_LOCKED)!)
+                    self.bundleWorkOrderDetails.feedback = self.getTechnicianFeedbackText(feedBackArray: (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_TECHNICIAN_FEEDBACK)! as! NSArray)
+                    self.bundleWorkOrderDetails.arrayAttachment = (eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_PHOTOS)! as! NSArray
+                    
+                    if self.bundleWorkOrderDetails.isLocked == "1" {
+                        self.isLocked = true
+                    } else {
+                        self.isLocked = false
+                    }
+                    
+                    if self.bundleWorkOrderDetails.status == TYPE_IN_PROGRESS || self.bundleWorkOrderDetails.status == TYPE_IN_PROGRESS.uppercased() {
+                        self.setTableFooterButton()
+                    }
                 }
                 
                 self.tableViewWODetails.reloadData()
@@ -416,6 +718,13 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
         
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
     
     @IBAction func btnActionLogout(_ sender: Any) {
         self.performLogout()
@@ -425,20 +734,21 @@ class WorkOrderModemDetails : BaseVC, UITableViewDataSource, UITableViewDelegate
 
 
 struct WorkOrderDetailsDS{
-    var orderId : String = ""
-    var type : String = ""
-    var macAddress : String = ""
-    var assignedBy : String = ""
-    var assignedTo : String = ""
-    var assignedDate : String = ""
-    var customerName : String = ""
-    var address : String = ""
-    var contact : String = ""
-    var status : String = ""
-    var cmtsId : String = ""
-    var feedback: String = ""
+    var orderId : String = "-"
+    var type : String = "-"
+    var macAddress : String = "-"
+    var assignedBy : String = "-"
+    var assignedTo : String = "-"
+    var assignedDate : String = "-"
+    var customerName : String = "-"
+    var address : String = "-"
+    var contact : String = "-"
+    var status : String = "-"
+    var cmtsId : String = "-"
+    var feedback: String = "-"
     var arrayAttachment = NSArray()
     var isLocked = "0"
+    var interface = "-"
 }
 
 

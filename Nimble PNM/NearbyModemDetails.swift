@@ -168,23 +168,22 @@ class NearbyModemDetails : BaseVC, AGSGeoViewTouchDelegate, UITableViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NearbyModemDetailsCell") as! NearbyModemDetailsCell
         
-        cell.labelMacAddress.text = selectedNearbyModemDetails.macAddress
-        cell.labelBW.text = "\(selectedNearbyModemDetails.bandwidth)"
-        cell.labelChannels.text = selectedNearbyModemDetails.channels
-        cell.labelMTC.text = "\(selectedNearbyModemDetails.MTC)"
-        cell.labelMRLevel.text = "\(selectedNearbyModemDetails.MRLevel)"
-        cell.labelDelay.text = "\(selectedNearbyModemDetails.delay)"
-        cell.labelTDR.text = "\(selectedNearbyModemDetails.TDR)"
-        cell.labelVTDR.text = "\(selectedNearbyModemDetails.vTDR)"
-        cell.labelSignature.text = selectedNearbyModemDetails.signature
-        cell.labelAddress.text = selectedNearbyModemDetails.address
-        cell.labelLatitude.text = "\(selectedNearbyModemDetails.latitude)"
-        cell.labelLongitude.text = "\(selectedNearbyModemDetails.longitude)"
-        cell.imageViewSeverity.image = #imageLiteral(resourceName: "settings")
+        cell.labelMacAddress.text = selectedNearbyModemDetails.macAddress.checkNullString()
+        cell.labelBW.text = "\(selectedNearbyModemDetails.bandwidth)".checkNullString()
+        cell.labelChannels.text = selectedNearbyModemDetails.channels.checkNullString()
+        cell.labelMTC.text = "\(selectedNearbyModemDetails.MTC)".checkNullString()
+        cell.labelMRLevel.text = "\(selectedNearbyModemDetails.MRLevel)".checkNullString()
+        cell.labelDelay.text = "\(selectedNearbyModemDetails.delay)".checkNullString()
+        cell.labelTDR.text = "\(selectedNearbyModemDetails.TDR)".checkNullString()
+        cell.labelVTDR.text = "\(selectedNearbyModemDetails.vTDR)".checkNullString()
+        cell.labelSignature.text = selectedNearbyModemDetails.signature.checkNullString()
+        cell.labelAddress.text = selectedNearbyModemDetails.address.checkNullString()
+        cell.labelLatitude.text = "\(selectedNearbyModemDetails.latitude)".checkNullString()
+        cell.labelLongitude.text = "\(selectedNearbyModemDetails.longitude)".checkNullString()
+        cell.imageViewSeverity.image = UtilityHelper.getImageServerityFor(forType: selectedNearbyModemDetails.severity)
         
         return cell
     }
-    
     
     func addPersonMarkerSymbol(markerPoint: AGSPoint) {
         

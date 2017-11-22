@@ -93,11 +93,8 @@ class CMAnalyzerVC: BaseVC,BarCodeScannerDelegate {
         if segue.identifier == "segue-to-modem-detail"{
             let destination = segue.destination as! CMModemDetailVC
             destination.exposedMacAddress = self.textfieldMacAddress.text!
-//            destination.exposedMacAddress = "1cabc0b9992c"
         }
     }
     
-    
-
 
 }

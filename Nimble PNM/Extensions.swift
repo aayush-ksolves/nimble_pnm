@@ -9,6 +9,31 @@
 import Foundation
 import UIKit
 
+
+extension String {
+    func checkNullString() -> String {
+        if self == NULL_STRING || self == "" {
+            return "-"
+        }else {
+            return self
+        }        
+    }
+    
+    func removeHTMLTags() -> String{
+        return self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+    }
+    
+    func detectURL() -> URL {
+        
+        let types: NSTextCheckingResult.CheckingType = .link
+        let detector = try? NSDataDetector(types: types.rawValue)
+        let matches = detector!.matches(in: self, options: .reportCompletion, range: NSMakeRange(0, self.characters.count))
+        
+        return matches[0].url!
+    }
+}
+
+
 extension UITextField{
     func setPlaceHolder(withText text:String,withColor color:UIColor, withfontName fontName:String, withSize size:CGFloat, shouldPlaceInsetIllusion shouldPlace:Bool){
         let attributes = [
@@ -38,9 +63,7 @@ extension UIView{
     func addBorder(withColor: UIColor, withWidth: CGFloat){
         
         self.layer.borderWidth = withWidth;
-        self.layer.borderColor = withColor.cgColor
-        
-        
+        self.layer.borderColor = withColor.cgColor        
     }
     
     
@@ -165,9 +188,6 @@ extension UIView{
     func addCornerRadius(radius : CGFloat){
         self.layer.cornerRadius = radius
     }
-    
-    
-    
     
     
 }

@@ -19,12 +19,20 @@ let USER_DEFAULTS = UserDefaults.standard
 let DEVICE = UIDevice.current
 let SCREEN_SIZE = UIScreen.main.bounds.size
 let SEPARATOR:String = "=SEPARATOR="
-
+let NULL_STRING = "<null>"
+let TYPE_MODEM = "mac_address"
+let TYPE_CLOSED = "closed"
+let TYPE_FIXED = "fixed"
+let TYPE_IN_PROGRESS = "In Progress"
+let TYPE_OPEN = "open"
+let STRING_QUEUE = "queue"
 
 
 let CORNER_RADIUS_STANDARD: CGFloat = 8.0;
 
-
+// Upload Image Dictionary
+let PARAM_NAME = "name"
+let PARAM_IMAGE = "image"
 
 //COLOR DEFINITIONS
 let COLOR_BLUE_IONIC_V2 = UIColor(red: 72/255, green: 138/255, blue: 255/255, alpha: 1.0)
@@ -60,6 +68,7 @@ let DEFAULTS_FIRST_NAME = "DEFAULTS_FIRST_NAME"
 let DEFAULTS_LAST_NAME = "DEFAULTS_LAST_NAME"
 let DEFAULTS_EMAIL_ID = "DEFAULTS_EMAIL_ID"
 let DEFAULTS_USER_TYPE = "DEFAULTS_USER_TYPE"
+let DEFAULTS_VERSION_NAME = "DEFAULTS_VERSION_NAME"
 
 let DEFAULTS_AUTO_LOGIN_USERNAME = "DEFAULTS_AUTO_LOGIN_USERNAME"
 let DEFAULTS_AUTO_LOGIN_PASSWORD = "DEFAULTS_AUTO_LOGIN_PASSWORD"
@@ -93,12 +102,12 @@ let SERVICE_URL_INSTALL_CABLE_MODEM = "/pnmservice/installCableModem"
 let SERVICE_URL_INSTALL_GET_DS_DATA = "/pnmservice/getModemDownStream"
 let SERVICE_URL_GEOCODE_SAVE = "/pnmservice/saveGeocode"
 
-let SERVICE_URL_WO_MARK_FIXED = "/workorderservice/updateWorkOrder"
+let SERVICE_URL_WO_UPDATE = "/workorderservice/updateWorkOrder"
 let SERVICE_URL_US_ANALYZER_CMTS_LIST = "/pnmservice/listCmts"
 let SERVICE_URL_US_ANALYZER_CMTS_PORT = "/pnmservice/getCmtsPort"
 
 let SERVICE_URL_CM_ANALYZER_GET_MODEM_DATA = "/pnmservice/getModemData"
-let SERVICE_URL_CM_ANALYZER_RE_SCAN_MODEM = "/pnmservice/reScanModem"
+let SERVICE_URL_RE_SCAN_MODEM = "/pnmservice/reScanModem"
 let SERVICE_URL_CM_ANALYZER_GET_DS_DATA = "/pnmservice/getModemDownStream"
 let SERVICE_URL_NIMBLE_SPECTRA_GET_CMTS_LIST = "/nimbleSpectra/nimbleSpectraService/getCmtsListWithImpairmentCount"
 let SERVICE_URL_NIMBLE_SPECTRA_GET_CMTS_MODEM_LIST = "/nimbleSpectra/nimbleSpectraService/getModemListByImpairment"
@@ -106,7 +115,12 @@ let SERVICE_URL_NIMBLE_SPECTRA_GET_CHART_DATA = "/nimbleSpectra/nimbleSpectraSer
 
 
 let SERVICE_URL_NIMBLE_SPECTRA_IMPAIR_COUNT = "/nimbleSpectra/nimbleSpectraService/getCmtsListWithImpairmentCount";
-
+let SERVICE_URL_DISABLE_US_ANALYZER_PORT = "/pnmservice/disableUsAnalyzerPort"
+let SERVICE_URL_GET_US_ANALYZER_DATA = "/pnmservice/getUsAnalyzerData"
+let SERVICE_URL_SET_US_ANALYZER_DATA = "/pnmservice/setUsAnalyzer"
+let SERVICE_URL_GET_MACS_BY_US_PORT = "/pnmservice/getMacsByUpstreamPort"
+let SERVICE_URL_WO_UPLOAD_ATTACHMENT = "/workorderservice/uploadAttachment"
+let SERVICE_URL_WO_DELETE_ATTACHMENT = "/workorderservice/deleteAttachment"
 
 //Tab Index Governers
 let TAB_INDEX_HOME:Int = 0
@@ -145,10 +159,11 @@ let LOADER_MSG_REASSIGN_WO = "Re-assigning Work Order ..."
 let LOADER_MSG_LOCKING_WO = "Locking Work Order ..."
 let LOADER_MSG_US_CMTS_LIST = "Loading CMTS List ..."
 let LOADER_MSG_US_PORT_LIST = "Loading Upstream Ports ..."
-
+let LOADER_MSG_DISABLE_PORT =  "Disabling Upstream Port ..."
+let LOADER_MSG_ENABLE_PORT =  "Enabling Upstream Port ..."
 
 let LOADER_MSG_CM_ANALYZER_GET_MODEM_DATA = "Getting Modem Data ..."
-let LOADER_MSG_CM_ANALYZER_RESCAN_MODEM = "Rescanning Modem ..."
+let LOADER_MSG_RESCAN_MODEM = "Rescanning Modem ..."
 let LOADER_MSG_CM_ANALYZER_LOAD_DS_DATA = "Loading Downstream Data ..."
 
 
@@ -158,7 +173,8 @@ let LOADER_MSG_NS_IMPAIR_COUNT = "Loading Impairment Data ..."
 let LOADER_MSG_UPDATE_MODEM_LOCATION = "Updating Modem Location ..."
 
 let LOADER_MSG_WO_MARKING_FIXED = "Marking As Fixed ..."
-
+let LOADER_MSG_US_ANALYZER_LOADING_DATA = "Loading Data ..."
+let LOADER_MSG_WO_UPDATE = "Updating Work Order ..."
 //MARK: Alert Definitions
 //Alert Titles
 let ALERT_TITLE_APP_NAME = APP_NAME
@@ -198,11 +214,11 @@ let ALERT_MSG_CM_ANALYZER_VALID_MAC = "Please enter a valid mac address."
 // Alert Work Order Screen
 
 let ALERT_TITLE_CONFIRM = "Confirm"
-let ALERT_MSG_WO_REASSIGN = "Are you sure you want to re-assign this work order?"
-let ALERT_MSG_WO_LOCK = "Are you sure you want to lock this work order?"
-let ALERT_MSG_WO_UNLOCK = "Are you sure you want to unlock this work order?"
-
-
+let ALERT_MSG_WO_REASSIGN = "Are you sure you want to re-assign this work order ?"
+let ALERT_MSG_WO_LOCK = "Are you sure you want to lock this work order ?"
+let ALERT_MSG_WO_UNLOCK = "Are you sure you want to unlock this work order ?"
+let ALERT_MSG_WO_ENTER_COMMENT = "Please enter your comment"
+let ALERT_MSG_WO_DELETE_IMAGE = "Are you sure to delete this image ?"
 
 //Alerts Change Password Screen
 let ALERT_MSG_CP_BLANK_CURRENT_PASSWORD = "Current Password can not be blank."
@@ -221,7 +237,7 @@ let ALERT_MSG_COMPLETE_SUCCESS = "Modem unable to be successfully installed, so 
 let ALERT_MSG_COMPLETE_SUCCESS_BUT_FAILED = "Modem installed but some test cases are failed."
 
 let ALERT_MSG_WO_MARK_FIXED = "Are you sure to mark this work order as fixed ?"
-
+let ALERT_MSG_WO_ADD_ATTACHMENTS = "Maximum 5 attachments are allowed for a work order"
 //For Geocode Screen
 let ALERT_MSG_GEOCODE_ENTER_VALID_MAC = "Please enter a valid mac address"
 
@@ -322,6 +338,18 @@ let REQ_PARAM_RE_ASSIGNED_FROM = "re_assigned_from"
 let REQ_PARAM_STATUS = "status"
 let REQ_PARAM_CMTS_ID = "cmts_id"
 let REQ_PARAM_IMPAIRMENT_TYPE = "impairment_type"
+let REQ_SPEC_ANALYZER_ENABLED = "specAnalyzerEnabled"
+let REQ_PARAM_UPSTREAMPORT = "upstreamPort"
+let REQ_PARAM_START = "start"
+let REQ_PARAM_STOP = "stop"
+let REQ_PARAM_IS_SID = "is_sid"
+let REQ_PARAM_SID = "sid"
+let REQ_PARAM_RES = "res"
+let REQ_PARAM_LIKE = "like"
+let REQ_PARAM_INTERFACE_NAME = "interface_name"
+let REQ_PARAM_PAGE = "page"
+let REQ_PARAM_TYPE = "type"
+let REQ_PARAM_IMAGE_URL = "image_url"
 
 //SERVICE RESPONSE PARAMETERS
 let RESPONSE_PARAM_STATUS_CODE = "status_code"
@@ -332,7 +360,11 @@ let RESPONSE_PARAM_UPSTREAMS = "upstreams"
 let RESPONSE_PARAM_UPSTREAM = "upstream"
 let RESPONSE_PARAM_RESPONSE_DATA = "response_data"
 let RESPONSE_PARAM_INTERFACE_NAME = "interface_name"
+let RESPONSE_PARAM_INTERFACE_ID = "interface_id"
 let RESPONSE_PARAM_DISTANCE = "distance"
+let RESPONSE_PARAM_ALIAS = "alias"
+let RESPONSE_PARAM_VERSION_NAME = "version_name"
+
 
 let RESPONSE_PARAM_COMMON = "common"
 let RESPONSE_PARAM_USER_ID = "user_id"
@@ -343,11 +375,15 @@ let RESPONSE_PARAM_LOGOUT_URL = "logout_URL"
 let RESPONSE_PARAM_FREQUENCIES = "frequencies"
 let RESPONSE_PARAM_FREQ = "freq"
 let RESPONSE_PARAM_PRE_EQ_FREQ_RSP_CHART_DATA = "preEqFreqRspChartData"
+let RESPONSE_PARAM_PRE_EQ_TAP_CHART_DATA = "preEqTapsChartData"
 let RESPONSE_PARAM_MTC = "MTC"
 let RESPONSE_PARAM_MR_LVL = "MRLevel"
 let RESPONSE_PARAM_DELAY = "Delay"
 let RESPONSE_PARAM_TDR = "TDR"
 let RESPONSE_PARAM_FAR_TDR = "FarTDR"
+
+let RESPONSE_PARAM_START_FREQ = "start_freq"
+let RESPONSE_PARAM_END_FREQ = "end_freq"
 
 let RESPONSE_PARAM_AUTH_KEY = "auth_key"
 let RESPONSE_PARAM_EMAIL_ID = "email_id"
@@ -368,6 +404,8 @@ let RESPONSE_PARAM_USER_TYPE = "usertype"
 let RESPONSE_PARAM_ALLOWED_CMTS = "allowed_cmts"
 
 let RESPONSE_PARAM_IS_LOCKED = "is_locked"
+let RESPONSE_PARAM_IS_ENABLED = "is_published"
+let RESPONSE_PARAM_USA_ENABLED = "usa_enabled"
 
 let RESPONSE_PARAM_ADDRESS = "address"
 let RESPONSE_PARAM_STATUS = "status"
@@ -379,12 +417,13 @@ let RESPONSE_PARAM_CLOSED_DATE = "closed_date"
 
 
 let RESPONSE_PARAM_ASSIGNED_TO = "assigned_to"
+let RESPONSE_PARAM_ASSIGNED_TO_ID = "assigned_to_id"
 let RESPONSE_PARAM_ASSIGNED_BY = "assigned_by"
 let RESPONSE_PARAM_CUST_NAME = "custName"
 let RESPONSE_PARAM_PHONE_NUMBER = "phone_number"
 let RESPONSE_PARAM_TECHNICIAN_FEEDBACK = "technicians_feedback"
 let RESPONSE_PARAM_PHOTOS = "photos"
-
+let RESPONSE_PARAM_FEEDBACK = "feedback"
 
 let RESPONSE_PARAM_INTSALL_CM  = "installCm"
 let RESPONSE_PARAM_UPSTREAM_MONITOR = "upstreamAnalyzerMonitor"
@@ -398,7 +437,7 @@ let RESPONSE_PARAM_CMTS_ID = "cmtsID"
 let RESPONSE_PARAM_MAC_ADDRESS = "mac_address"
 let RESPONSE_PARAM_AGE = "age"
 let RESPONSE_PARAM_TIMESTAMP = "timestamp"
-let RESPONSE_PARAM_SERVITY_VAL = "severity_val"
+let RESPONSE_PARAM_SEVERITY_VAL = "severity_val"
 
 let RESPONSE_PARAM_TIME_STAMP = "time_stamp"
 
@@ -409,6 +448,7 @@ let RESPONSE_PARAM_TOTAL_POWER = "total_power"
 
 let RESPONSE_PARAM_MODEM_MAC = "modemMAC"
 let RESPONSE_PARAM_SEVERITY = "Severity"
+let RESPONSE_PARAM_Severity = "severity"
 
 let RESPONSE_PARAM_FINAL_STATUS = "final_status"
 let RESPONSE_PARAM_REASON = "reason"
@@ -455,6 +495,22 @@ let RESPONSE_PARAM_LOW_FREQ = "low_frequency"
 let RESPONSE_PARAM_VTDR = "FarTDR"
 let RESPONSE_PARAM_CORR = "Corr"
 
+let RESPONSE_PARAM_CM_FILTER_ON = "cm_filter_on"
+let RESPONSE_PARAM_CM_FILTER_OFF = "cm_filter_off"
+let RESPONSE_PARAM_LIST = "list"
+
+
+// Images For Serverity
+
+let imageServerityImmediateAction = #imageLiteral(resourceName: "immediate-action")
+let imageServerityHighMonitorFreq = #imageLiteral(resourceName: "high-monitoring-freq")
+
+//PHOTO ACTION SHEET
+let AS_PHOTO_TITLE = "Choose Photo"
+let AS_PHOTO_MSG = "How would you like to select a picture ?"
+let AS_PHOTO_OPTION1 = "Photo Library"
+let AS_PHOTO_OPTION2 = "Camera"
+let AS_PHOTO_CANCEL = "Cancel"
 
 
 

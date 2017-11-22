@@ -150,8 +150,6 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
                     alert = UtilityHelper.composeAlertWith(title: ALERT_TITLE_APP_NAME, message: ALERT_MSG_COMPLETE_SUCCESS_BUT_FAILED, buttonTitle1: ALERT_BUTTON_SHOW_DETAIL, buttonTitle2: ALERT_BUTTON_GEOCODE, buttonTitle3: ALERT_BUTTON_OK, buttonStyle1: UIAlertActionStyle.default, buttonStyle2: UIAlertActionStyle.default, buttonStyle3: UIAlertActionStyle.default, completionHandler1: {
                         action in
                         
-                        
-                        
                         self.performAfterInstallationShowDetailsProcedure(forWidgetCode: widgetCode,forDataBundle: dataReceived)
                         
                     }, completionHandler2: {
@@ -171,20 +169,13 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
                     })
                 }
                 
-                
-                
-                
                 self.present(alert, animated: true, completion: nil)
-                
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
-            
-            
             
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
@@ -194,9 +185,6 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
         
     }
     
-    func getModemInstallStatus(){
-        
-    }
     
     func performAfterInstallationOKProcedure(forWidgetCode widgetCode:Int){
         if widgetCode == 0{
@@ -230,8 +218,6 @@ class InstallCMVC: BaseVC,BarCodeScannerDelegate,UITextFieldDelegate,UIPickerVie
             destinationController.exposedMacAddress = sender as! String
             
         }
-        
-        
         
     }
     

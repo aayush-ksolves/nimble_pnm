@@ -24,7 +24,6 @@ class ImageViewerVC: UIViewController, UIScrollViewDelegate {
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        print("Zooming")
         return imageView
     }
     

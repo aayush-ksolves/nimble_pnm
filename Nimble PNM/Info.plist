@@ -24,6 +24,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access required to scan Barcode/QR code</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Photo Library access required to upload image</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

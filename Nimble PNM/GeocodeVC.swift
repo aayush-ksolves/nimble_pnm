@@ -249,7 +249,7 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             
             //Setting Value
             if bundleLocation.latitude != 0  && bundleLocation.longitude != 0{
-                cell.labelLatLong.text = "\(bundleLocation.latitude),\(bundleLocation.longitude)"
+                cell.labelLatLong.text = "\(String(format: "%.3f", bundleLocation.latitude)),\(String(format: "%.3f", bundleLocation.longitude))"
             }else{
                 cell.labelLatLong.text = ""
                 getCurrentLocation()

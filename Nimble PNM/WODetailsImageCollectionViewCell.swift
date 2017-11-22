@@ -10,5 +10,13 @@ import UIKit
 
 class WODetailsImageCollectionViewCell : UICollectionViewCell {
     
+    @IBOutlet weak var buttonCross: UIButton!
     @IBOutlet weak var imageViewPhoto: UIImageView!
+    
+    override func awakeFromNib() {
+        buttonCross.addCornerRadius(radius: 10)
+        buttonCross.addBorder(withColor: UIColor.black, withWidth: 1)
+        
+    }
+    
 }

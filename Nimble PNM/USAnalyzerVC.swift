@@ -8,9 +8,11 @@
 
 import UIKit
 
-class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate {
+class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 
     
+    @IBOutlet weak var tableViewPorts: UITableView!
+    @IBOutlet weak var viewTapper: UIView!
     @IBOutlet weak var buttonOutletScan: UIButton!
     @IBOutlet weak var textfieldSelectUpstreamPort: UITextField!
     @IBOutlet weak var textfieldSelectCMTS: UITextField!
@@ -22,7 +24,6 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
     var pickerHolder : CustomPickerView!
     var activeTextfield : UITextField!
     let pickerLabelCMTS = "Select CMTS"
-    let pickerLabelUpstreamPort = "Select Upstream Port"
     
     var selectedCMTS = CMTSLISTDS()
     var selectedUpstream = UpstreamPortListDS()
@@ -34,12 +35,22 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         self.configureUIComponents()
         self.loadCMTSList()
         
-        
     }
     
     func configureUIComponents(){
-        self.configurePicker()
         
+        shouldHideTableView(shouldHide: true)
+        
+        let tapRec = UITapGestureRecognizer.init(target: self, action: #selector(tappedOnTapperView))
+        tapRec.numberOfTapsRequired = 1
+        viewTapper.addGestureRecognizer(tapRec)
+        
+        tableViewPorts.estimatedRowHeight = 30
+        self.tableViewPorts.rowHeight = UITableViewAutomaticDimension
+        
+        tableViewPorts.register(UINib(nibName: "USAnalyzerUpstreamPortCell", bundle: nil), forCellReuseIdentifier: "USAnalyzerUpstreamPortCell")
+        
+        self.configurePicker()
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,7 +77,10 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         pickerView.dataSource = self
         
         self.textfieldSelectCMTS.inputView = pickerHolder
-        self.textfieldSelectUpstreamPort.inputView = pickerHolder
+    }
+    
+    @objc func tappedOnTapperView() {
+        shouldHideTableView(shouldHide: true)
     }
 
     @objc func buttonPickerDonePressed(_ sender: UIButton){
@@ -83,19 +97,9 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
             }
             self.textfieldSelectCMTS.resignFirstResponder()
             
-        }else if activeTextfield == textfieldSelectUpstreamPort{
-            if selectedIndex != -1 && bundleUpstreamPortList.count > 0{
-                let relevantRecord = self.bundleUpstreamPortList[selectedIndex]
-                selectedUpstream = relevantRecord
-                
-                self.textfieldSelectUpstreamPort.text = relevantRecord.interfaceName
-            }
-            self.textfieldSelectUpstreamPort.resignFirstResponder()
-            
         }else{
             // Do Nothing
         }
-        
         
     }
     
@@ -103,16 +107,10 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         if activeTextfield == textfieldSelectCMTS{
             self.textfieldSelectCMTS.resignFirstResponder()
             
-        }else if activeTextfield == textfieldSelectUpstreamPort{
-            self.textfieldSelectUpstreamPort.resignFirstResponder()
-            
         }else{
             //Do Nothing
         }
-        
-        
     }
-    
     
     
     func loadCMTSList(){
@@ -136,20 +134,25 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
                 self.bundleCMTSList.removeAll()
                 for eachRecord in dataArray{
                     let castedRecord = eachRecord as! NSDictionary
-                    var tempRecord = CMTSLISTDS()
+                    let isEnabled = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_IS_ENABLED)!)
+                    let isUSAEnabled = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_USA_ENABLED)!)
                     
-                    tempRecord.id = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_US_CMTS_ID)!)
-                    tempRecord.name = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_US_CMTS_NAME)!)
+                    if isEnabled == "1" && isUSAEnabled == "1" {
+                        var tempRecord = CMTSLISTDS()
+                        
+                        tempRecord.id = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_US_CMTS_ID)!)
+                        tempRecord.name = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_US_CMTS_NAME)!)
+                        
+                        tempRecord.type = String(describing:castedRecord.value(forKey: RESPONSE_PARAM_TYPE)!)
+                            
+                        if tempRecord.type == "ArrisC4" {
+                            tempRecord.res = "2048"
+                        }
+                        
+                        self.bundleCMTSList.append(tempRecord)
+                    }
                     
-                    self.bundleCMTSList.append(tempRecord)
                 }
-                
-                if self.bundleCMTSList.count > 0{
-                    //Setting value for Text field
-                    self.loadPortList(forCMTS: self.bundleCMTSList[0].id)
-                }
-                
-                
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
@@ -158,13 +161,10 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
             }
             
             
-            
-            
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
         })
-        
         
     }
     
@@ -173,8 +173,10 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
         
         let dictParameters = [REQ_PARAM_AUTH_KEY : authKey,
-                              REQ_PARAM_USERNAME : username
-        ];
+                              REQ_PARAM_USERNAME : username,
+                              REQ_SPEC_ANALYZER_ENABLED : "1",
+            
+            ] as [String : Any];
         
         self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_US_ANALYZER_CMTS_PORT, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_US_PORT_LIST, sucessCompletionHadler: {
             responseDict in
@@ -183,18 +185,33 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
             
             if statusCode == 200{
-                let relevantDataArray = (((responseDict.value(forKey: RESPONSE_PARAM_DATA) as! NSArray)[0] as! NSDictionary).value(forKey: RESPONSE_PARAM_DATA) as! NSArray)
                 
+                let dataArray = responseDict.value(forKey: RESPONSE_PARAM_DATA) as! NSArray
+                var relevantDataArray : NSArray!
+                
+                for eachDic in dataArray {
+                    let castedDic = eachDic as! NSDictionary
+                    let responseCMTSId = castedDic.value(forKey: RESPONSE_PARAM_CMTS_ID) as! String
+                    
+                    if responseCMTSId == cmtsID {
+                        relevantDataArray = castedDic.value(forKey: RESPONSE_PARAM_DATA) as! NSArray
+                    }
+                    
+                }
                 
                 self.bundleUpstreamPortList.removeAll()
                 for eachRecord in relevantDataArray{
+                    
                     var tempRecord = UpstreamPortListDS()
                     let castedRecord = (((eachRecord as! NSDictionary).value(forKey: RESPONSE_PARAM_UPSTREAMS) as! NSArray)[0]) as! NSDictionary
                     tempRecord.id = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_ID)!)
                     tempRecord.interfaceName = castedRecord.value(forKey: RESPONSE_PARAM_INTERFACE_NAME) as! String
+                    tempRecord.alias = castedRecord.value(forKey: RESPONSE_PARAM_ALIAS) as! String
+                    tempRecord.frequency = castedRecord.value(forKey: RESPONSE_PARAM_FREQ) as! String
+                    tempRecord.startFreq = castedRecord.value(forKey: RESPONSE_PARAM_START_FREQ) as! String
+                    tempRecord.endFreq = castedRecord.value(forKey: RESPONSE_PARAM_END_FREQ) as! String
                     
                     self.bundleUpstreamPortList.append(tempRecord)
-                    
                 }
                 
             }else if statusCode == 401{
@@ -203,15 +220,45 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
             
-            
-            
-            
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
         })
         
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return bundleUpstreamPortList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row = indexPath.row
+        let cell = tableView.dequeueReusableCell(withIdentifier: "USAnalyzerUpstreamPortCell") as! USAnalyzerUpstreamPortCell
+        let cellData = bundleUpstreamPortList[row]
         
+        cell.labelAlias.text = cellData.alias
+        cell.labelFrequency.text = cellData.frequency
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedRow = indexPath.row
+        
+        let relevantRecord = self.bundleUpstreamPortList[selectedRow]
+        selectedUpstream = relevantRecord
+        self.textfieldSelectUpstreamPort.text = relevantRecord.alias
+        shouldHideTableView(shouldHide: true)
+    }
+    
+    func shouldHideTableView(shouldHide: Bool){
+        tableViewPorts.isHidden = shouldHide
+        viewTapper.isHidden = shouldHide
+        textfieldSelectUpstreamPort.resignFirstResponder()
     }
     
     //MARK: UITextfield Delegates and Datasource
@@ -222,9 +269,19 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
             self.pickerView.reloadAllComponents()
             
         }else if textField == textfieldSelectUpstreamPort{
-            activeTextfield = textField
-            pickerHolder.labelPickerHeading.text = pickerLabelUpstreamPort
-            self.pickerView.reloadAllComponents()
+            
+            if self.textfieldSelectCMTS.text == "" {
+                
+                self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: "Please select CMTS", withButtonTitle: ALERT_BUTTON_OK)
+                
+            }else {
+                
+                activeTextfield = textField
+                tableViewPorts.reloadData()
+                shouldHideTableView(shouldHide: false)
+            }
+            
+            return false
             
         }else{
             // Do Nothing
@@ -251,21 +308,14 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
         if activeTextfield == textfieldSelectCMTS{
             return self.bundleCMTSList[row].name
             
-        }else if activeTextfield == textfieldSelectUpstreamPort{
-            return self.bundleUpstreamPortList[row].interfaceName
-            
         }else{
             return ""
-            
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if activeTextfield == textfieldSelectCMTS{
             return self.bundleCMTSList.count
-            
-        }else if activeTextfield == textfieldSelectUpstreamPort{
-            return self.bundleUpstreamPortList.count
             
         }else{
             return 0
@@ -282,7 +332,6 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
             message = ALERT_MSG_US_ANALYZER_BLANK_UPSTREAM
             
         }else{
-            message = ""
             
         }
         
@@ -317,12 +366,18 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
 struct CMTSLISTDS{
     var id = ""
     var name = ""
+    var res = "180"
+    var type = ""
 }
 
 
 struct UpstreamPortListDS{
     var id = ""
     var interfaceName = ""
+    var alias = ""
+    var frequency = ""
+    var startFreq = ""
+    var endFreq = ""
 }
 
 

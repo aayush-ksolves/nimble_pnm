@@ -70,6 +70,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         currentLocation = (manager.location?.coordinate)!
+        stopUpdating()
         print(currentLocation)
     }
     

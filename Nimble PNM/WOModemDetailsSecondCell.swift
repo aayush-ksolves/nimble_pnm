@@ -10,5 +10,6 @@ import UIKit
 
 class WOModemDetailsSecondCell: UITableViewCell {
     
+    @IBOutlet weak var buttonComment: UIButton!
     @IBOutlet weak var labelComments: UILabel!
 }

@@ -10,6 +10,7 @@ import UIKit
 
 class WOModemDetailsFirstCell : UITableViewCell {
 
+    @IBOutlet weak var labelMacAddressHead: UILabel!
     @IBOutlet weak var labelStatus: UILabel!
     @IBOutlet weak var labelContact: UILabel!
     @IBOutlet weak var labelAddress: UILabel!

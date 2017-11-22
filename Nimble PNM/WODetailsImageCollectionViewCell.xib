@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,19 +21,35 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mqR-8z-Xey">
                         <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zVK-x1-0Eq">
+                        <rect key="frame" x="50" y="0.0" width="20" height="20"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="1yb-Mq-nJa"/>
+                            <constraint firstAttribute="height" constant="20" id="yHT-c7-O5f"/>
+                        </constraints>
+                        <inset key="imageEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
+                        <state key="normal" image="deleteButton"/>
+                    </button>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="mqR-8z-Xey" firstAttribute="top" secondItem="1mU-Zq-CSK" secondAttribute="top" id="9cN-Zt-A6B"/>
                 <constraint firstItem="mqR-8z-Xey" firstAttribute="leading" secondItem="1mU-Zq-CSK" secondAttribute="leading" id="HAA-e8-6JX"/>
+                <constraint firstItem="zVK-x1-0Eq" firstAttribute="top" secondItem="1mU-Zq-CSK" secondAttribute="top" id="dId-Ot-1XK"/>
                 <constraint firstAttribute="trailing" secondItem="mqR-8z-Xey" secondAttribute="trailing" id="tTd-pE-kML"/>
+                <constraint firstAttribute="trailing" secondItem="zVK-x1-0Eq" secondAttribute="trailing" id="uxn-Rd-45T"/>
                 <constraint firstAttribute="bottom" secondItem="mqR-8z-Xey" secondAttribute="bottom" id="wX2-qd-0As"/>
             </constraints>
             <size key="customSize" width="121" height="112"/>
             <connections>
+                <outlet property="buttonCross" destination="zVK-x1-0Eq" id="Cnv-WA-m3u"/>
                 <outlet property="imageViewPhoto" destination="mqR-8z-Xey" id="4O6-Wx-Naf"/>
             </connections>
             <point key="canvasLocation" x="80.5" y="139"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="deleteButton" width="16" height="16"/>
+    </resources>
 </document>

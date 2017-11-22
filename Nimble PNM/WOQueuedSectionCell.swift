@@ -16,6 +16,8 @@ class WOQueuedSectionCell : UITableViewCell {
     @IBOutlet weak var labelInterface: UILabel!
     
     
+    @IBOutlet weak var labelAddressHead: UILabel!
+    @IBOutlet weak var labelInterfaceHead: UILabel!
     @IBOutlet weak var labelType: UILabel!
     @IBOutlet weak var labelOrderId: UILabel!
     

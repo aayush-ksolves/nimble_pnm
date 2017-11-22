@@ -19,8 +19,7 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
     @IBOutlet weak var buttonUseLocation: UIButton!
     var GeocodeVC: GeocodeVC!
     
-    var markerPerson = AGSPictureMarkerSymbol(image: #imageLiteral(resourceName: "spinner-0"))
-    var markerModem = AGSPictureMarkerSymbol(image: #imageLiteral(resourceName: "home-blue"))
+    var markerPerson = AGSPictureMarkerSymbol(image: #imageLiteral(resourceName: "location-modem"))
     let graphicsOverlay = AGSGraphicsOverlay()
     var lastGraphics = AGSGraphic()
     
@@ -34,37 +33,20 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
     var initialZoomLevel = 16
     var markerWidth: CGFloat = 30
     
-    var bundleModemLocation: [AGSPoint] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.intializeMap()
     }
     
-    func initializeBundleModemLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        
-        let tempPoint = AGSPoint(clLocationCoordinate2D: CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
-        bundleModemLocation.append(tempPoint)
-    }
 
     func intializeMap(){
         //initialize map with `imagery with labels` basemap and an initial location
-        
-        currentSelectedlatitude = 22.77
-        currrentSelectedLongitude = 77.88
-        
-        for points in bundleModemLocation {
-            addModemMarkerSymbol(markerPoint: points, markerImage: markerModem)
-        }
         
         map = AGSMap(basemapType: .streets, latitude: currentSelectedlatitude, longitude: currrentSelectedLongitude, levelOfDetail: initialZoomLevel)
         
         markerPerson.height = markerWidth
         markerPerson.width = markerWidth
-        
-        markerModem.height = markerWidth / 2
-        markerModem.width = markerWidth / 2
         
         self.mapView.graphicsOverlays.add(graphicsOverlay)
         
@@ -103,8 +85,8 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
     @objc func buttonUseLocationPressed() {
         print("Button use location pressed")
         
-        let currentLatitude = String(format: "%.3f", currentMarkerPoint.toCLLocationCoordinate2D().latitude)
-        let currentLongitude = String(format: "%.3f", currentMarkerPoint.toCLLocationCoordinate2D().longitude)
+        let currentLatitude = String(describing: currentMarkerPoint.toCLLocationCoordinate2D().latitude)
+        let currentLongitude = String(describing: currentMarkerPoint.toCLLocationCoordinate2D().longitude)
         
         GeocodeVC.bundleLocation.latitude = Double(currentLatitude)!
         GeocodeVC.bundleLocation.longitude = Double(currentLongitude)!

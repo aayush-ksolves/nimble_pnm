@@ -7,30 +7,44 @@
 //
 
 import UIKit
+import Foundation
 
-class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIPickerViewDelegate,UIPickerViewDataSource {
+class USAnalyzerSettingVC: BaseVC,UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIPickerViewDelegate,UIPickerViewDataSource {
 
     @IBOutlet weak var bottomConstraintTableView: NSLayoutConstraint!
     var pickerHolder : CustomPickerView!
     var pickerView : UIPickerView!
     @IBOutlet weak var tableViewAnalyzerSetting: UITableView!
     
-    let bundlePicker : [String] = ["IP Address","Mac Address","Name"]
-    let bundleFirstSectionEntities = ["Live","Max","Min","Ingress"]
-    let bundleSecondSectionEntities = ["Start","Stop"]
+    let bundlePicker : [String] = ["IP Address","Mac Address","Customer Name"]
+    let bundleType = ["ipAddress","mac_address","customer_name"]
+    let bundleFirstSectionEntities = ["Show Live","Show Max","Show Min","Show Ingress"]
+    let bundleSecondSectionEntities = ["Start","Stop","Polling"]
     
-    var selectedIndex : Int!
+    var selectedIndex = 1
+    var selectedType: String!
     var globalTextfieldForOptions : UITextField!
     var globalTextfieldForFilterText : UITextField!
     
-    var globalLabelValueForFirstSlider = UILabel()
-    var globalLabelValueForSecondSlider = UILabel()
+    var globalLabelValueStartFreq = UILabel()
+    var globalLabelValueStopFreq = UILabel()
+    var globalLabelValuePolling = UILabel()
     
+    var valueStartFreq = "5"
+    var valueStopFreq = "42"
+    var valuePolling = 1
     
-    var globalValueForSwitch1 = false
-    var globalValueForSwitch2 = false
-    var globalValueForSwitch3 = false
-    var globalValueForSwitch4 = false
+    var exposedMacAddress = ""
+    var stringForMacAddress = ""
+    
+    var globalValueForSwitchLive = false
+    var globalValueForSwitchMax = false
+    var globalValueForSwitchMin = false
+    var globalValueForSwitchIngress = false
+    
+    var USAnalyzerGraphVC : USAnalyzerGraphVC!
+    var selectedUSPort : UpstreamPortListDS!
+    var scrollViewList = UIScrollView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,18 +53,19 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     }
     
     func configureUIComponents(){
+        
         tableViewAnalyzerSetting.register(UINib(nibName: "SwitchCell", bundle: nil) , forCellReuseIdentifier: "customswitch")
         tableViewAnalyzerSetting.register(UINib(nibName: "SliderCell", bundle: nil) , forCellReuseIdentifier: "customslider")
         tableViewAnalyzerSetting.register(UINib(nibName: "TextfieldCell", bundle: nil) , forCellReuseIdentifier: "textfieldcell")
         
+        globalLabelValueStartFreq.text = valueStartFreq
+        globalLabelValueStopFreq.text = valueStopFreq
+        stringForMacAddress = exposedMacAddress
+        selectedType = bundleType[selectedIndex]
+        
         self.navigationItem.hidesBackButton = true
         self.addKeyboardObservers()
         self.configurePicker()
-        
-        
-        
-        
-        
         
     }
 
@@ -65,9 +80,6 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
         pickerView.dataSource = self
         
         pickerHolder.labelPickerHeading.text = "Filter by"
-        
-        globalLabelValueForFirstSlider.text = "0"
-        globalLabelValueForSecondSlider.text = "0"
         
     }
     
@@ -97,7 +109,6 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     //Function handling keyboard dissappearance
     @objc func keyboardWillHide(_ notification : NSNotification){
         
-        
         bottomConstraintTableView.constant = 0
         UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()
@@ -116,8 +127,9 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
                 
                 (isfinished) in
                 self.globalTextfieldForOptions.resignFirstResponder()
-                let cell = self.tableViewAnalyzerSetting.cellForRow(at: IndexPath(row: 0, section: 2)) as! TextfieldCell
+                let cell = self.tableViewAnalyzerSetting.cellForRow(at: IndexPath(row: 0, section: 0)) as! TextfieldCell
                 cell.textfieldMain.text = self.bundlePicker[self.selectedIndex]
+                self.selectedType = self.bundleType[self.selectedIndex]
                 
             })
         }
@@ -126,7 +138,6 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     @objc func buttonPickerCancelPressed(_ sender: UIButton){
         globalTextfieldForOptions.resignFirstResponder()
-        
     }
 
 
@@ -136,11 +147,11 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0{
+        if section == 1{
             return 4
-        }else if section == 1{
-            return 2
         }else if section == 2{
+            return 3
+        }else if section == 0{
             return 1
         }else{
             return 0
@@ -150,8 +161,8 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let section = indexPath.section
-        if section == 2{
-            return 96.0
+        if section == 0{
+            return 120.0
         }else{
             return UITableViewAutomaticDimension
         }
@@ -163,13 +174,13 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
         
         let headerView:HeaderViewAnalyzerSettings = Bundle.main.loadNibNamed("HeaderViewAnalyzerSettings", owner: self, options: nil)![0] as! HeaderViewAnalyzerSettings
         if section == 0{
-            headerView.labelHeading.text = "Hold Line"
+            headerView.labelHeading.text = "Search Filter"
             
         }else if section == 1{
-            headerView.labelHeading.text = "Frequency (MHz)"
+            headerView.labelHeading.text = "Hold Line"
             
         }else if section == 2{
-            headerView.labelHeading.text = "Search Filter"
+            headerView.labelHeading.text = "Frequency (MHz)"
             
         }else{
             
@@ -187,33 +198,30 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     }
     
     
-    
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //let cellNo = indexPath.row
         let sectionNo = indexPath.section
         
-        
-        if sectionNo == 0{
+        if sectionNo == 1{
             let cellNo = indexPath.row
             let cell = tableView.dequeueReusableCell(withIdentifier: "customswitch") as! SwitchCell
             cell.labelValue.text = bundleFirstSectionEntities[cellNo]
             
             if cellNo == 0{
                 cell.switchOutlet.tag = 1000
-                cell.switchOutlet.setOn(globalValueForSwitch1, animated: true)
+                cell.switchOutlet.setOn(globalValueForSwitchLive, animated: true)
                 
             }else if cellNo == 1{
                 cell.switchOutlet.tag = 1001
-                cell.switchOutlet.setOn(globalValueForSwitch2, animated: true)
+                cell.switchOutlet.setOn(globalValueForSwitchMax, animated: true)
                 
             }else if cellNo == 2{
                 cell.switchOutlet.tag = 1002
-                cell.switchOutlet.setOn(globalValueForSwitch3, animated: true)
+                cell.switchOutlet.setOn(globalValueForSwitchMin, animated: true)
                 
             }else{
                 cell.switchOutlet.tag = 1003
-                cell.switchOutlet.setOn(globalValueForSwitch4, animated: true)
+                cell.switchOutlet.setOn(globalValueForSwitchIngress, animated: true)
                 
             }
             
@@ -221,20 +229,24 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
             
             return cell
             
-        }else if sectionNo == 1{
+        }else if sectionNo == 2{
             let cellNo = indexPath.row
             
             
             if cellNo == 0{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "customslider") as! SliderCell
                 cell.labelSliderTitle.text = bundleSecondSectionEntities[cellNo]
-                cell.sliderOutlet.removeTarget(self, action: nil, for: .allEvents)
-                cell.sliderOutlet.addTarget(self, action: #selector(sliderDidChangedForFirst(_:)), for: .valueChanged)
+                cell.sliderOutlet.removeTarget(self, action: nil, for: .valueChanged)
+                
+                cell.sliderOutlet.minimumValue = 5
+                cell.sliderOutlet.maximumValue = 85
     
-                cell.sliderOutlet.setValue((Float(globalLabelValueForFirstSlider.text!)! / 100), animated: true)
+                cell.sliderOutlet.setValue((Float(valueStartFreq)!), animated: false)
+
+                cell.labelSliderCurrentValue.text = valueStartFreq
+                globalLabelValueStartFreq = cell.labelSliderCurrentValue
                 
-                globalLabelValueForFirstSlider = cell.labelSliderCurrentValue
-                
+                cell.sliderOutlet.addTarget(self, action: #selector(sliderDidChangedForFirst(_:)), for: .valueChanged)
                 
                 return cell
                 
@@ -242,11 +254,31 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
                 let cell = tableView.dequeueReusableCell(withIdentifier: "customslider") as! SliderCell
                 cell.labelSliderTitle.text = bundleSecondSectionEntities[cellNo]
                 cell.sliderOutlet.removeTarget(self, action: nil, for: .valueChanged)
+                cell.sliderOutlet.minimumValue = 5
+                cell.sliderOutlet.maximumValue = 85
+                
+                cell.sliderOutlet.setValue((Float(valueStopFreq)!), animated: false)
+                
+                cell.labelSliderCurrentValue.text = valueStopFreq
+                globalLabelValueStopFreq = cell.labelSliderCurrentValue
+                
                 cell.sliderOutlet.addTarget(self, action: #selector(sliderDidChangedForSecond(_:)), for: .valueChanged)
                 
-                cell.sliderOutlet.setValue((Float(globalLabelValueForSecondSlider.text!)! / 100), animated: true)
+                return cell
                 
-                globalLabelValueForSecondSlider = cell.labelSliderCurrentValue
+            }else if cellNo == 2{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "customslider") as! SliderCell
+                cell.labelSliderTitle.text = bundleSecondSectionEntities[cellNo]
+                cell.sliderOutlet.removeTarget(self, action: nil, for: .valueChanged)
+                cell.sliderOutlet.minimumValue = 1
+                cell.sliderOutlet.maximumValue = 3
+                
+                cell.sliderOutlet.setValue((Float(valuePolling)), animated: false)
+                
+                cell.labelSliderCurrentValue.text = "\(valuePolling)"
+                globalLabelValuePolling = cell.labelSliderCurrentValue
+                
+                cell.sliderOutlet.addTarget(self, action: #selector(sliderDidChangedForThird(_:)), for: .valueChanged)
                 
                 return cell
                 
@@ -255,26 +287,28 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
             }
             
             
-        }else if sectionNo == 2{
-            let cellNo = indexPath.row
+        }else if sectionNo == 0{
+
             let cell = tableView.dequeueReusableCell(withIdentifier: "textfieldcell") as! TextfieldCell
             cell.textfieldMain.placeholder = "Filter By"
             cell.textfieldMain.delegate = self
             cell.textfieldMain.inputView = self.pickerHolder
-            self.globalTextfieldForOptions = cell.textfieldMain
             cell.textfieldMain.textAlignment = .center
+            cell.textfieldMain.text = bundlePicker[selectedIndex]
+            self.globalTextfieldForOptions = cell.textfieldMain
             
-            
-            self.globalTextfieldForFilterText = cell.textfieldContent
             cell.textfieldContent.delegate = self
             cell.textfieldContent.textAlignment = .center
+            cell.textfieldContent.text = stringForMacAddress
+            cell.textfieldContent.addTarget(self, action: #selector(changeValueForSearchFilter(_:)), for: .editingChanged)
+            
+            self.globalTextfieldForFilterText = cell.textfieldContent
             
             return cell
             
         }else{
             return UITableViewCell()
         }
-        
         
     }
     
@@ -283,16 +317,16 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
         let tag = sender.tag
         let valueToSet = sender.isOn
         if tag == 1000{
-            globalValueForSwitch1 = valueToSet
+            globalValueForSwitchLive = valueToSet
             
         }else if tag == 1001{
-            globalValueForSwitch2 = valueToSet
+            globalValueForSwitchMax = valueToSet
             
         }else if tag == 1002{
-            globalValueForSwitch3 = valueToSet
+            globalValueForSwitchMin = valueToSet
             
         }else if tag == 1003{
-            globalValueForSwitch4 = valueToSet
+            globalValueForSwitchIngress = valueToSet
             
         }else{
             
@@ -301,15 +335,20 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     
     @objc func sliderDidChangedForFirst(_ sender: UISlider){
-        let floathundred = sender.value * 100
-        globalLabelValueForFirstSlider.text = String(describing:Int(floathundred))
+        valueStartFreq = "\(Int(sender.value))"
+        globalLabelValueStartFreq.text = valueStartFreq
         
     }
     
     @objc func sliderDidChangedForSecond(_ sender: UISlider){
-        let floathundred = sender.value * 100
-        globalLabelValueForSecondSlider.text = String(describing:Int(floathundred))
+        valueStopFreq = "\(Int(sender.value))"
+        globalLabelValueStopFreq.text = valueStopFreq
+    }
     
+    @objc func sliderDidChangedForThird(_ sender: UISlider){
+        valuePolling = Int(roundf(sender.value))
+        sender.setValue(Float(valuePolling), animated: true)
+        globalLabelValuePolling.text = "\(valuePolling)"
     }
     
     
@@ -337,16 +376,171 @@ class USAnalyzerSettingVC: UIViewController,UITableViewDelegate, UITableViewData
     
     //MARK: UITextfieldDelegates 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.globalTextfieldForFilterText.resignFirstResponder()
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == globalTextfieldForFilterText {
+            removeSuggestionList()
+        }
+    }
+    
+
+    @IBAction func btnActionCloseSetting(_ sender: Any) {
+        closeSettingViewController()
+    }
+    
+    
+    @IBAction func buttonActionApplySettings(_ sender: UIButton) {
+        
+        if globalTextfieldForFilterText.text != "" {
+            let tempArray = (globalTextfieldForFilterText.text!).components(separatedBy: "-")
+            if tempArray.count > 0 {
+                let macAddress = tempArray.last!.trimmingCharacters(in: .whitespaces)
+                
+                if UtilityHelper.isValidMacAddress(testStr: macAddress) {
+                    USAnalyzerGraphVC.macAddressActive = macAddress
+                    USAnalyzerGraphVC.isFirstTime = true
+                }else {
+                    self.displayAlertForValidMac()
+                    return
+                }
+                
+            }else {
+                self.displayAlertForValidMac()
+                return
+            }
+        }else {
+            if exposedMacAddress != "" {
+                USAnalyzerGraphVC.macAddressActive = ""
+                USAnalyzerGraphVC.isFirstTime = true
+            }
+        }
+        
+        USAnalyzerGraphVC.valueStartParam = valueStartFreq
+        USAnalyzerGraphVC.valueParamStop = valueStopFreq
+        USAnalyzerGraphVC.valuePolling = valuePolling
+        USAnalyzerGraphVC.shouldShowLiveData = globalValueForSwitchLive
+        USAnalyzerGraphVC.shouldShowMaxData = globalValueForSwitchMax
+        USAnalyzerGraphVC.shouldShowMinData = globalValueForSwitchMin
+        USAnalyzerGraphVC.shouldShowIngressData = globalValueForSwitchIngress
+        USAnalyzerGraphVC.shouldRefreshGraph = true
+        
+        closeSettingViewController()
+    }
+    
+    func displayAlertForValidMac(){
+        self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: "Please enter valid entry", withButtonTitle: ALERT_BUTTON_OK)
+    }
+    
+    func closeSettingViewController(){
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == self.globalTextfieldForFilterText {
+            if globalTextfieldForOptions.text == "" {
+                self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: "Please select filter by option", withButtonTitle: ALERT_BUTTON_OK)
+                
+                return false
+            }else {
+                return true
+            }
+        }
+        
         return true
     }
     
     
-
-    @IBAction func btnActionCloseSetting(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+    @objc func changeValueForSearchFilter(_ textField: UITextField) {
+        
+        stringForMacAddress = textField.text!
+        removeSuggestionList()
+        
+        if textField.text != "" {
+            getSuggestionList(forString: textField.text!)
+        }
     }
     
-   
-
+    func showSuggestionList(forData: NSArray) {
+        
+        let scrollViewWidth = Int(self.view.frame.size.width - 20)
+        let maxHeight = 100
+        let heightForOneSection = 30
+        let finalHeight = min(maxHeight, heightForOneSection*forData.count)
+        let xPosition = 10
+        let yPosition = 120 - finalHeight
+        var contentHeight = 0
+        
+        scrollViewList = UIScrollView(frame: CGRect(x: xPosition,y: yPosition,width: scrollViewWidth,height: finalHeight))
+        scrollViewList.backgroundColor = COLOR_WHITE_AS_GREY
+        
+        for eachData in forData {
+            let button = UIButton(frame: CGRect(x: 10,y: contentHeight,width:scrollViewWidth - 20,height: heightForOneSection))
+            let dataDic = eachData as! NSDictionary
+            
+            button.setTitle((dataDic.value(forKey: "text") as! String), for: .normal)
+            button.setTitleColor(UIColor.gray, for: .normal)
+            button.backgroundColor = COLOR_NONE
+            button.addTarget(self, action: #selector(buttonInSuggestionPressed(_:)), for: .touchUpInside)
+            
+            scrollViewList.addSubview(button)
+            contentHeight += heightForOneSection
+        }
+        
+        scrollViewList.contentSize = CGSize(width: scrollViewWidth, height: contentHeight)
+        self.view.addSubview(scrollViewList)
+    }
+    
+    @objc func buttonInSuggestionPressed(_ sender: UIButton) {
+        let buttonTitle = sender.currentTitle!
+        stringForMacAddress = buttonTitle
+        globalTextfieldForFilterText.text = stringForMacAddress
+        removeSuggestionList()
+    }
+    
+    func removeSuggestionList() {
+        scrollViewList.removeFromSuperview()
+    }
+    
+    func getSuggestionList(forString string: String) {
+        let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
+        let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+        
+        let dictParameters = [REQ_PARAM_AUTH_KEY : authKey,
+                              REQ_PARAM_USERNAME : username,
+                              REQ_PARAM_UPSTREAMPORT : selectedUSPort.id,
+                              REQ_PARAM_LIKE: string,
+                              REQ_PARAM_INTERFACE_NAME: selectedUSPort.interfaceName,
+                              REQ_PARAM_PAGE: "1",
+                              REQ_PARAM_TYPE : selectedType,
+            ] as [String : Any];
+        
+        self.networkManager.makePostRequestWithAuthorizationHeaderWithoutLoaderTo(url: SERVICE_URL_GET_MACS_BY_US_PORT, withParameters: dictParameters, sucessCompletionHadler: {
+            responseDict in
+            
+            let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
+            
+            if statusCode == 200{
+                let dataArray = responseDict.value(forKey: RESPONSE_PARAM_DATA)! as! NSArray
+                let dataListArray = (dataArray[0] as! NSDictionary).value(forKey: RESPONSE_PARAM_LIST)! as! NSArray
+                
+                if dataListArray.count > 1 {
+                    self.showSuggestionList(forData: dataListArray)
+                }
+                
+            }else if statusCode == 401{
+                self.performLogoutAsSessionExpiredDetected()
+            }else{
+                
+            }
+            
+        },failureCompletionHandler: {
+            (errorTitle,errorMessage) in
+            
+        })
+        
+    }
+    
 }

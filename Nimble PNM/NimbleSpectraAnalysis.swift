@@ -74,7 +74,12 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
         tableViewSpectraAnalysis.register(UINib(nibName: "SpectraAnalysisDetails", bundle: nil), forCellReuseIdentifier: "SpectraAnalysisDetails")
         
         designPickerView()
+        performInitialAction()
         
+        self.textFieldFilterByDate.text = exposedTimestamp.components(separatedBy: " ")[0]
+    }
+    
+    func performInitialAction() {
         arrayMacAddrerssPort = exposedMacAddress.components(separatedBy: ":")
         shouldShowPortButtons = (arrayMacAddrerssPort.count > 1)
         
@@ -85,8 +90,6 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
             hideViewButtonContainer()
             loadModemStatistics(portNo: "")
         }
-        
-        self.textFieldFilterByDate.text = exposedTimestamp.components(separatedBy: " ")[0]
     }
     
     func initialPortButtonAction(portNo: String){
@@ -208,28 +211,34 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                 
                 if let dataDic = responseDict.value(forKey: RESPONSE_PARAM_DATA)! as? NSDictionary {
                     
+                    self.isDataAvailable = false
                     // Initialising First cell Data
                     self.arrayLineChartData.removeAll()
                     
                     let dicResponseData = dataDic.value(forKey: RESPONSE_PARAM_RESPONSE_DATA)! as! NSDictionary
                     let arrayStatisticsData = dicResponseData.value(forKey: RESPONSE_PARAM_DATA)! as! NSArray
                     var lowestAmplitude: Double = 0
-                    
-                    for eachRecord in arrayStatisticsData {
-                        let valueX = String(describing: (eachRecord as! NSArray)[0])
-                        let valueY = String(describing: (eachRecord as! NSArray)[1])
-                        let valueData = ChartDataEntry(x: Double(valueX)!,y: Double(valueY)!)
-                        self.arrayLineChartData.append(valueData)
-                        
-                        if Double(valueY)! < lowestAmplitude {
-                            lowestAmplitude = Double(valueY)!
+
+                    if arrayStatisticsData.count > 2 {
+                        self.isDataAvailable = true
+                        for eachRecord in arrayStatisticsData {
+                            if let eachArray = eachRecord as? NSArray {
+                                let valueX = String(describing: eachArray[0])
+                                let valueY = String(describing: eachArray[1])
+                                let valueData = ChartDataEntry(x: Double(valueX)!,y: Double(valueY)!)
+                                self.arrayLineChartData.append(valueData)
+                                
+                                if Double(valueY)! < lowestAmplitude {
+                                    lowestAmplitude = Double(valueY)!
+                                }
+                            }
                         }
                     }
                     
                     self.arrayImpairmentFreq.removeAll()
                     self.arrayBarChartWidth.removeAll()
                     
-                    let dicImpairmentData = dataDic.value(forKey: RESPONSE_PARAM_IMPAIRMANT_DATA)! as! NSArray
+                    let dicImpairmentData = dataDic.value(forKey: RESPONSE_PARAM_IMPAIRMANT_DATA)! as? NSArray ?? []
                     
                     for eachData in dicImpairmentData {
                         
@@ -269,7 +278,7 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                     }
                     
                     self.pickerView.reloadAllComponents()
-                    self.isDataAvailable = true
+                    
                     
                 }else {
                     self.arrayLineChartData.removeAll()
@@ -352,8 +361,9 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                 barChartData.addDataSet(impairmentData)
                 if arrayBarChartWidth.count > 0{
                     barChartData.barWidth = arrayBarChartWidth.max()!
+                    barChartData.highlightEnabled = false
                 }
-
+                
                 combinedChartData.addDataSet(impairmentData)
                 combinedChartData.barData = barChartData
             }else {
@@ -372,6 +382,7 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                 cell.combinedChartView.data = nil
             }
             
+            cell.combinedChartView.rightAxis.drawLabelsEnabled = false
             cell.combinedChartView.chartDescription?.text = ""
             cell.combinedChartView.noDataText = "No Spectra data available!"
             cell.combinedChartView.noDataTextColor = colorPortButtonBackground
@@ -388,14 +399,14 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
             let cell = tableView.dequeueReusableCell(withIdentifier: "SpectraAnalysisDetails") as! SpectraAnalysisDetails
             let cellData = bundleSpectraDetails
             
-            cell.labelCMTS.text = cellData.CMTSName
-            cell.labelMAC.text = cellData.macAddress
-            cell.labelModem.text = cellData.model
-            cell.labelIP.text = cellData.IP
-            cell.labelVendor.text = cellData.vendor
-            cell.labelPower.text = cellData.power
-            cell.labelNode.text = cellData.node
-            cell.labelPollTime.text = cellData.pollTime
+            cell.labelCMTS.text = cellData.CMTSName.checkNullString()
+            cell.labelMAC.text = cellData.macAddress.checkNullString()
+            cell.labelModem.text = cellData.model.checkNullString()
+            cell.labelIP.text = cellData.IP.checkNullString()
+            cell.labelVendor.text = cellData.vendor.checkNullString()
+            cell.labelPower.text = cellData.power.checkNullString()
+            cell.labelNode.text = cellData.node.checkNullString()
+            cell.labelPollTime.text = cellData.pollTime.checkNullString()
             
             cell.buttonRescan.addTarget(self, action: #selector(buttonRescanPressed), for: .touchUpInside)
             
@@ -412,11 +423,39 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
     
     @objc func buttonShowHideImpairmentPressed(_ sender: UIButton) {
         shouldShowImpairments = !shouldShowImpairments
-        tableViewSpectraAnalysis.reloadData()
+        tableViewSpectraAnalysis.reloadSections(IndexSet(integer: 0), with: .none)
     }
     
     
     @objc func buttonRescanPressed() {
+        let username = USER_DEFAULTS.value(forKey: DEFAULTS_EMAIL_ID) as! String;
+        let authKey = USER_DEFAULTS.value(forKey: DEFAULTS_AUTH_KEY) as! String;
+        
+        let dictParameters = [REQ_PARAM_AUTH_KEY : authKey,
+                              REQ_PARAM_USERNAME : username,
+                              REQ_PARAM_MAC_ADDRESS : exposedMacAddress.components(separatedBy: ":")[0]
+            ] as [String : Any];
+        
+        
+        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_RE_SCAN_MODEM, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_RESCAN_MODEM, sucessCompletionHadler: {
+            responseDict in
+            
+            let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
+            let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
+            
+            if statusCode == 200{
+                self.performInitialAction()
+                
+            }else if statusCode == 401{
+                self.performLogoutAsSessionExpiredDetected()
+            }else{
+                self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
+            }
+            
+        },failureCompletionHandler: {
+            (errorTitle,errorMessage) in
+            self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
+        })
         
     }
     

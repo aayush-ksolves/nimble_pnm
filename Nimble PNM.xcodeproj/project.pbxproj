@@ -95,6 +95,8 @@
 		53750B321F8C880F008D28ED /* WOModemDetailsSecondCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53750B311F8C880F008D28ED /* WOModemDetailsSecondCell.xib */; };
 		53750B341F8C8990008D28ED /* WOModemDetailsHeaderTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53750B331F8C8990008D28ED /* WOModemDetailsHeaderTop.swift */; };
 		53750B361F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53750B351F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib */; };
+		5379B6DD1FB5C70C0085C880 /* USAnalyzerUpstreamPortCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5379B6DC1FB5C70C0085C880 /* USAnalyzerUpstreamPortCell.swift */; };
+		5379B6DF1FB5C75A0085C880 /* USAnalyzerUpstreamPortCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5379B6DE1FB5C75A0085C880 /* USAnalyzerUpstreamPortCell.xib */; };
 		53CCAC2F1F9DC43F00452247 /* NimbleSpectraDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CCAC2E1F9DC43E00452247 /* NimbleSpectraDetails.swift */; };
 		53CCAC311F9DE05800452247 /* CMTSDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CCAC301F9DE05800452247 /* CMTSDetails.swift */; };
 		53CCAC331F9DE07D00452247 /* CMTSDetails.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53CCAC321F9DE07D00452247 /* CMTSDetails.xib */; };
@@ -197,6 +199,8 @@
 		53750B311F8C880F008D28ED /* WOModemDetailsSecondCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOModemDetailsSecondCell.xib; sourceTree = "<group>"; };
 		53750B331F8C8990008D28ED /* WOModemDetailsHeaderTop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOModemDetailsHeaderTop.swift; sourceTree = "<group>"; };
 		53750B351F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WOModemDetailsHeaderTop.xib; sourceTree = "<group>"; };
+		5379B6DC1FB5C70C0085C880 /* USAnalyzerUpstreamPortCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USAnalyzerUpstreamPortCell.swift; sourceTree = "<group>"; };
+		5379B6DE1FB5C75A0085C880 /* USAnalyzerUpstreamPortCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = USAnalyzerUpstreamPortCell.xib; sourceTree = "<group>"; };
 		53CCAC2E1F9DC43E00452247 /* NimbleSpectraDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NimbleSpectraDetails.swift; sourceTree = "<group>"; };
 		53CCAC301F9DE05800452247 /* CMTSDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMTSDetails.swift; sourceTree = "<group>"; };
 		53CCAC321F9DE07D00452247 /* CMTSDetails.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMTSDetails.xib; sourceTree = "<group>"; };
@@ -254,17 +258,10 @@
 				2806E21D1F17665100E3CC4F /* Doubts.swift */,
 				28D991081F1CAC45006DADE4 /* TabBaseController.swift */,
 				28D9910A1F1CB679006DADE4 /* HomeVC.swift */,
-				28D9910C1F1CC311006DADE4 /* ProfileVC.swift */,
-				28D9910E1F1CC325006DADE4 /* USAnalyzerVC.swift */,
-				28D991101F1CC339006DADE4 /* InstallCMVC.swift */,
-				28F4D4401F266D1C00E57D0E /* USAnalyzerSettingVC.swift */,
-				28F4D4461F27168D00E57D0E /* ChangePasswordVC.swift */,
-				28FB67D51F4DAF6100E85070 /* ModemStatusVC.swift */,
-				287999D21F556CA300DFA992 /* CMStatusBirthSectionCell.swift */,
-				287999D31F556CA300DFA992 /* CMStatusBirthSectionCell.xib */,
-				2829272F1F66C5D1007D1583 /* GeocodeVC.swift */,
-				2854A5CA1F67F21500E9302D /* MappingInGeocodeVC.swift */,
-				2872845C1F876AE400DAA47C /* USAnalyzerGraphVC.swift */,
+				5398C4371FBC61EE0067275A /* Install CM */,
+				5398C4361FBC61B80067275A /* Profile */,
+				5398C4351FBC613E0067275A /* Geocode */,
+				536BAA8F1FB59C3700BDDFF4 /* USAnalyzer */,
 				534E3D541F8E289E00B899E7 /* NearbyModems */,
 				534E3D521F8E1D3700B899E7 /* WorkOrder */,
 				530C469C1F90D83D0070585B /* Nimble Spectra */,
@@ -322,6 +319,7 @@
 				530C469F1F90E0630070585B /* Nimble Spectra */,
 				5311C5CD1F8F3261004EB155 /* NearByModems */,
 				5311C5CC1F8F318B004EB155 /* WorkOrder */,
+				5379B6DB1FB5C6DD0085C880 /* US Analyzer */,
 				28F4D4341F26645200E57D0E /* CustomPickerView.swift */,
 				28F4D4361F26646D00E57D0E /* CustomPickerView.xib */,
 				28F4D4381F26694E00E57D0E /* SwitchCell.swift */,
@@ -338,6 +336,8 @@
 				282927261F668E5D007D1583 /* ContactGeocodeCell.xib */,
 				2829272B1F66C4ED007D1583 /* ViewHeaderViewTableGeocode.xib */,
 				2829272D1F66C542007D1583 /* HeaderViewTableGeocode.swift */,
+				287999D21F556CA300DFA992 /* CMStatusBirthSectionCell.swift */,
+				287999D31F556CA300DFA992 /* CMStatusBirthSectionCell.xib */,
 				2872845E1F87B08900DAA47C /* TexfieldCell.swift */,
 				2872845F1F87B08900DAA47C /* TextfieldCell.xib */,
 			);
@@ -433,6 +433,53 @@
 				5311C5D21F8F3ED6004EB155 /* NearbyModemDetails.swift */,
 			);
 			name = NearbyModems;
+			sourceTree = "<group>";
+		};
+		536BAA8F1FB59C3700BDDFF4 /* USAnalyzer */ = {
+			isa = PBXGroup;
+			children = (
+				28D9910E1F1CC325006DADE4 /* USAnalyzerVC.swift */,
+				2872845C1F876AE400DAA47C /* USAnalyzerGraphVC.swift */,
+				28F4D4401F266D1C00E57D0E /* USAnalyzerSettingVC.swift */,
+			);
+			name = USAnalyzer;
+			sourceTree = "<group>";
+		};
+		5379B6DB1FB5C6DD0085C880 /* US Analyzer */ = {
+			isa = PBXGroup;
+			children = (
+				5379B6DC1FB5C70C0085C880 /* USAnalyzerUpstreamPortCell.swift */,
+				5379B6DE1FB5C75A0085C880 /* USAnalyzerUpstreamPortCell.xib */,
+			);
+			name = "US Analyzer";
+			sourceTree = "<group>";
+		};
+		5398C4351FBC613E0067275A /* Geocode */ = {
+			isa = PBXGroup;
+			children = (
+				2829272F1F66C5D1007D1583 /* GeocodeVC.swift */,
+				2854A5CA1F67F21500E9302D /* MappingInGeocodeVC.swift */,
+			);
+			name = Geocode;
+			sourceTree = "<group>";
+		};
+		5398C4361FBC61B80067275A /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				28D9910C1F1CC311006DADE4 /* ProfileVC.swift */,
+				28F4D4461F27168D00E57D0E /* ChangePasswordVC.swift */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
+		5398C4371FBC61EE0067275A /* Install CM */ = {
+			isa = PBXGroup;
+			children = (
+				28D991101F1CC339006DADE4 /* InstallCMVC.swift */,
+				28FB67D51F4DAF6100E85070 /* ModemStatusVC.swift */,
+			);
+			name = "Install CM";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		6F2D946CE67FF401981E8636 /* Pods */ = {
@@ -534,6 +581,7 @@
 				28F4D4371F26646D00E57D0E /* CustomPickerView.xib in Resources */,
 				28F4D42A1F24FEDD00E57D0E /* WO4LineCell.xib in Resources */,
 				287284611F87B08900DAA47C /* TextfieldCell.xib in Resources */,
+				5379B6DF1FB5C75A0085C880 /* USAnalyzerUpstreamPortCell.xib in Resources */,
 				2829272A1F668E75007D1583 /* AddressGeocodeCell.xib in Resources */,
 				53750B361F8C89C5008D28ED /* WOModemDetailsHeaderTop.xib in Resources */,
 				28ACC3911F162F29007FAF18 /* Assets.xcassets in Resources */,
@@ -669,6 +717,7 @@
 				28F4D43E1F266AE100E57D0E /* SliderCell.swift in Sources */,
 				2854A5CB1F67F21500E9302D /* MappingInGeocodeVC.swift in Sources */,
 				282927271F668E5D007D1583 /* ContactGeocodeCell.swift in Sources */,
+				5379B6DD1FB5C70C0085C880 /* USAnalyzerUpstreamPortCell.swift in Sources */,
 				28F4D4351F26645200E57D0E /* CustomPickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -796,12 +845,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YR426RPW7K;
 				INFOPLIST_FILE = "Nimble PNM/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "ksolves.Nimble-PNM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nimble PNM/Nimble PNM-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -814,12 +866,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YR426RPW7K;
 				INFOPLIST_FILE = "Nimble PNM/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "ksolves.Nimble-PNM";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nimble PNM/Nimble PNM-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 			};

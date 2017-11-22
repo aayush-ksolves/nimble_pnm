@@ -10,6 +10,12 @@ import UIKit
 
 class WODetailsAttachmentCell: UITableViewCell {
     
+    @IBOutlet weak var labelNoAttachments: UILabel!
+    @IBOutlet weak var buttonAddImage: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    override func awakeFromNib() {
+        buttonAddImage.contentMode = .scaleAspectFit
+    }
     
 }

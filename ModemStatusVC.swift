@@ -37,12 +37,7 @@ class ModemStatusVC: BaseVC {
     var bundleDataMSTable : [ModemStatusDS] = []
     var tableHeaderDS : TableHeaderDS!
     
-    
-    override func viewDidLoad(){
-        super.viewDidLoad()
-        self.configureUIComponents()
-        self.fireDataFetchingService()
-    }
+    let colorBackgroundLabel = COLOR_BLUE_IONIC_V2
     
     var totalMSrows : Int = 0
     var totalMScoloumns : Int = 0
@@ -50,19 +45,19 @@ class ModemStatusVC: BaseVC {
     var totalDSrows : Int = 0
     var totalDScoloumns : Int = 0
     
-    
-    
-    
-    
     @IBOutlet weak var constraintBCHeight: NSLayoutConstraint!
 
     @IBOutlet weak var constraintDownstreamHeight: NSLayoutConstraint!
     @IBOutlet weak var constraintModemStatusHeight: NSLayoutConstraint!
     
+    override func viewDidLoad(){
+        super.viewDidLoad()
+        self.configureUIComponents()
+        self.fireDataFetchingService()
+    }
+    
     func configureUIComponents(){
         self.btnOutletLogout.imageView?.contentMode = .scaleAspectFit
-        
-        
         
     }
     
@@ -95,11 +90,11 @@ class ModemStatusVC: BaseVC {
             eachSubview.removeFromSuperview()
         }
         
-        let paddingHorizontal = 8.0
-        let paddingVertical = 4.0
-        let gappingVertical = 2.0
+        let paddingHorizontal = 5.0
+        let paddingVertical = 5.0
+        let gappingVertical = 5.0
         
-        let totalSpacing = 24.0
+        let totalSpacing = 15.0
         let firstElementWidth: Double = Double((Double(self.viewBCTableHolder.frame.size.width) - totalSpacing)/3)
         let secondElementWidth: Double = (Double(self.viewBCTableHolder.frame.size.width) - firstElementWidth - totalSpacing)
         
@@ -121,15 +116,14 @@ class ModemStatusVC: BaseVC {
             let labelValue = UILabel(frame: CGRect(x: constantX2, y: variableY, width: secondElementWidth, height: heightToSet))
             
             labelDefiner.text = eachRecord.definer
-            labelValue.text = eachRecord.value
+            labelValue.text = eachRecord.value.removeHTMLTags()
             
-            labelDefiner.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
-            labelValue.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+            labelDefiner.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL ,weight: .medium)
+            labelValue.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL ,weight: .medium)
             labelValue.numberOfLines = 0;
-            
+            labelValue.textColor = UIColor.darkGray
             labelValue.textAlignment = .left
-                
-                
+            
             variableY += heightToSet + gappingVertical
             
             self.viewBCTableHolder.addSubview(labelDefiner)
@@ -144,22 +138,21 @@ class ModemStatusVC: BaseVC {
         })
         
         self.setMainScrollViewContentHeight()
-        
-        
     }
     
     
     func plotModemStatusTable(){
         
+        self.viewMSTableHolder.backgroundColor = UIColor.black
+        
         for eachSubview in self.viewMSTableHolder.subviews{
             eachSubview.removeFromSuperview()
         }
         
-        let paddingHorizontal = 8.0
-        var gappingHorizontal = 2.0
-        let paddingVertical = 4.0
-        let gappingVertical = 2.0
-        
+        let paddingHorizontal = 1.0
+        let gappingHorizontal = 1.0
+        let paddingVertical = 1.0
+        let gappingVertical = 1.0
         
         var variableX = paddingHorizontal
         var variableY = paddingVertical
@@ -171,20 +164,15 @@ class ModemStatusVC: BaseVC {
         
         if computedWidthOfCell >= minimumWidthOfCell{
             finalWidthOfCell = computedWidthOfCell
-            gappingHorizontal = 0
         }else{
             finalWidthOfCell = minimumWidthOfCell
         }
         
-        let heightOfCell = 20.0
+        let heightOfCell = 30.0
         
         var scrollContentWidthDeterminer = Double()
         
-        
-        
         for i in 0..<totalMSrows{
-            
-            
             
             for j in 0 ..< totalMScoloumns{
                 
@@ -193,32 +181,41 @@ class ModemStatusVC: BaseVC {
                 if i == 0{
                     //Using Table Header DS as datasource
                     labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
+                    labelForCell.numberOfLines = 0
                     labelForCell.text = (tableHeaderModemStatus.values[j] as! String)
-                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL ,weight: .medium)
+                    labelForCell.textColor = UIColor.white
                     labelForCell.textAlignment = .center
-                    labelForCell.backgroundColor = UIColor.gray
+                    labelForCell.backgroundColor = colorBackgroundLabel
                     
                 }else{
                     //Using Modem DS as datasource
                     labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
-                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
-                    labelForCell.backgroundColor = UIColor.green
                     
                     if j == 0{
                         labelForCell.text = "\(bundleDataMSTable[i-1].recordName) (\(bundleDataMSTable[i-1].unit)) "
-                        labelForCell.textAlignment = .left
+                        labelForCell.textAlignment = .center
+                        labelForCell.backgroundColor = colorBackgroundLabel
+                        labelForCell.textColor = UIColor.white
+                        labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL ,weight: .medium)
+                        labelForCell.numberOfLines = 0
 
                     }else{
+                        let imageView = UIImageView(frame: CGRect(x: finalWidthOfCell - 20, y: 8, width: heightOfCell - 16, height: heightOfCell - 16))
+                        
+                        imageView.af_setImage(withURL: bundleDataMSTable[i-1].entireFrequencyRecord[j-1].status.detectURL())
+                        imageView.contentMode = .scaleAspectFit
+                        
+                        labelForCell.textColor = UIColor.darkGray
                         labelForCell.text = bundleDataMSTable[i-1].entireFrequencyRecord[j-1].value
                         labelForCell.textAlignment = .center
-
-                        
+                        labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                        labelForCell.backgroundColor = UIColor.white
+                        labelForCell.addSubview(imageView)
                     }
-                    
                 
                 }
                 self.viewMSTableHolder.addSubview(labelForCell)
-                
                 
                 //Incrementing X
                 variableX += finalWidthOfCell + gappingHorizontal
@@ -230,13 +227,10 @@ class ModemStatusVC: BaseVC {
             variableX = paddingHorizontal
             variableY += heightOfCell + gappingVertical
             
-            
         }
         
-        let totalHeight = variableY + paddingVertical
-        let totalWidth = scrollContentWidthDeterminer + paddingHorizontal
-        
-        
+        let totalHeight = variableY
+        let totalWidth = scrollContentWidthDeterminer
         
         self.constraintMSTableContentViewWidth.constant = CGFloat(totalWidth)
         self.constraintModemStatusHeight.constant = CGFloat(MinusHeadingForTable + totalHeight)
@@ -250,14 +244,17 @@ class ModemStatusVC: BaseVC {
     
     
     func plotDownstreamTable(){
+        
+        self.viewDSTableHolder.backgroundColor = UIColor.black
+        
         for eachSubview in self.viewDSTableHolder.subviews{
             eachSubview.removeFromSuperview()
         }
         
-        let paddingHorizontal = 8.0
-        var gappingHorizontal = 2.0
-        let paddingVertical = 4.0
-        let gappingVertical = 2.0
+        let paddingHorizontal = 1.0
+        var gappingHorizontal = 1.0
+        let paddingVertical = 1.0
+        let gappingVertical = 1.0
         
         
         var variableX = paddingHorizontal
@@ -275,11 +272,9 @@ class ModemStatusVC: BaseVC {
             finalWidthOfCell = minimumWidthOfCell
         }
         
-        let heightOfCell = 20.0
+        let heightOfCell = 30.0
         
         var scrollContentWidthDeterminer = Double()
-        
-        
         
         for i in 0..<totalDSrows{
             
@@ -290,65 +285,70 @@ class ModemStatusVC: BaseVC {
                 if i == 0{
                     //Using Table Header DS as datasource
                     labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
+                    labelForCell.numberOfLines = 0
                     labelForCell.text = (tableHeaderDS.values[j] as! String)
-                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
+                    labelForCell.textColor = UIColor.white
+                    labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL, weight : .medium)
                     labelForCell.textAlignment = .center
-                    labelForCell.backgroundColor = UIColor.gray
+                    labelForCell.backgroundColor = colorBackgroundLabel
                     
                 }else{
                     //Using Modem DS as datasource
                     labelForCell = UILabel(frame: CGRect(x: variableX, y: variableY, width: finalWidthOfCell, height: heightOfCell))
                     labelForCell.font = UIFont.systemFont(ofSize: SIZE_FONT_SMALL)
-                    labelForCell.backgroundColor = UIColor.green
+                    labelForCell.backgroundColor = UIColor.white
                     
                     if j == 0{
                         labelForCell.text = "\(i)";
                         labelForCell.textAlignment = .center
                         
                     }else if j == 1{
-                        labelForCell.text = bundleDataDSTable[j-1].frequency
+                        labelForCell.text = bundleDataDSTable[i-1].frequency
                         labelForCell.textAlignment = .center
                         
                     }else if j == 2{
-                        labelForCell.text = bundleDataDSTable[j-1].power
+                        let imageView = UIImageView(frame: CGRect(x: finalWidthOfCell - 20, y: 8, width: heightOfCell - 16, height: heightOfCell - 16))
+                        imageView.af_setImage(withURL: bundleDataDSTable[i-1].power.imageURL)
+                        imageView.contentMode = .scaleAspectFit
+                        labelForCell.addSubview(imageView)
+                        
+                        labelForCell.text = bundleDataDSTable[i-1].power.value
                         labelForCell.textAlignment = .center
                         
                     }else if j == 3{
-                        labelForCell.text = bundleDataDSTable[j-1].mer
+                        let imageView = UIImageView(frame: CGRect(x: finalWidthOfCell - 20, y: 8, width: heightOfCell - 16, height: heightOfCell - 16))
+                        imageView.af_setImage(withURL: bundleDataDSTable[i-1].mer.imageURL)
+                        imageView.contentMode = .scaleAspectFit
+                        labelForCell.addSubview(imageView)
+                        
+                        labelForCell.text = bundleDataDSTable[i-1].mer.value
                         labelForCell.textAlignment = .center
                         
                     }else if j == 4{
-                        labelForCell.text = bundleDataDSTable[j-1].cmCorrCw
+                        labelForCell.text = bundleDataDSTable[i-1].cmCorrCw
                         labelForCell.textAlignment = .center
                         
                     }else if j == 5{
-                        labelForCell.text = bundleDataDSTable[j-1].cmUnCorrCw
+                        labelForCell.text = bundleDataDSTable[i-1].cmUnCorrCw
                         labelForCell.textAlignment = .center
-                        
                     }
-                    
                     
                 }
                 self.viewDSTableHolder.addSubview(labelForCell)
                 
-                
                 //Incrementing X
                 variableX += finalWidthOfCell + gappingHorizontal
                 scrollContentWidthDeterminer = variableX
-                
             }
             
             //Incrementing Y and Adjusting X
             variableX = paddingHorizontal
             variableY += heightOfCell + gappingVertical
             
-            
         }
         
-        let totalHeight = variableY + paddingVertical
-        let totalWidth = scrollContentWidthDeterminer + paddingHorizontal
-        
-        
+        let totalHeight = variableY
+        let totalWidth = scrollContentWidthDeterminer
         
         self.constraintDSTableContentViewWidth.constant = CGFloat(totalWidth)
         self.constraintDownstreamHeight.constant = CGFloat(MinusHeadingForTable + totalHeight)
@@ -358,32 +358,20 @@ class ModemStatusVC: BaseVC {
 
         self.setMainScrollViewContentHeight()
         
-        
-    }
-    
-    func getOrientationCode() -> Int{
-        if SCREEN_SIZE.width > SCREEN_SIZE.height{
-            return 1
-        }else{
-            return 0
-        }
     }
     
     
     func fireDataFetchingService(){
         //Extracting Value for Mac Address and CMTS ID
-       // let cmtsID = dataBundle.value(forKey: RESPONSE_PARAM_CMTS_ID) as! String
-        //let modemMac = dataBundle.value(forKey: RESPONSE_PARAM_MODEM_MAC) as! String
-        
-        let cmtsID = "e4da3b7f-bbce-2345-d777-2b0674a318d5"
-        let modemMac = "002624829dc4"
+        let cmtsID = dataBundle.value(forKey: RESPONSE_PARAM_CMTS_ID) as! String
+        let modemMac = dataBundle.value(forKey: RESPONSE_PARAM_MODEM_MAC) as! String
         
         self.getModemStatus(withMacAddress: modemMac, withCTMSID: cmtsID)
         
         totalDSrows = 6
         totalDScoloumns = 6
         //Creating First Record for the table
-        var tempTableHeaderDS = TableHeaderDS()
+        let tempTableHeaderDS = TableHeaderDS()
         
         tempTableHeaderDS.values.add("Downstream")
         tempTableHeaderDS.values.add("Freq(MHz)")
@@ -392,26 +380,9 @@ class ModemStatusVC: BaseVC {
         tempTableHeaderDS.values.add("CM Corr Cw(%)")
         tempTableHeaderDS.values.add("CM Un Corr Cw(%)")
         
-        
         //Global Variable Assignment
         self.tableHeaderDS = tempTableHeaderDS
-
-        for i in 0...4{
-            var tempRecord = DownstreamDS()
-            
-            tempRecord.frequency = "\(i)"
-            tempRecord.power = "\(i)"
-            tempRecord.mer = "\(i)"
-            tempRecord.cmCorrCw = "\(i)"
-            tempRecord.cmUnCorrCw = "\(i)"
-            
-            self.bundleDataDSTable.append(tempRecord)
-            
-        }
-        
-        
         self.getDownstreamData(withMacAddress: modemMac)
-        
     }
     
     func getModemStatus(withMacAddress mac : String, withCTMSID cmtsID : String){
@@ -422,7 +393,6 @@ class ModemStatusVC: BaseVC {
                               REQ_PARAM_USERNAME : username,
                               REQ_PARAM_MAC_ADDRESS : mac,
                               REQ_PARAM_CMTSID : cmtsID
-            
         ];
         
         self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_INSTALL_GET_MODEM_STATUS, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_GETTING_MODEM_STATUS, sucessCompletionHadler: {
@@ -430,7 +400,6 @@ class ModemStatusVC: BaseVC {
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
-            
             
             if statusCode == 200{
                 
@@ -473,7 +442,6 @@ class ModemStatusVC: BaseVC {
                 self.bundleBirthCertificate.append(temp4)
                 self.bundleBirthCertificate.append(temp5)
                 
-                
 
                 //Loading Values which determines the Modem status Section values
                 let modemStatusArray = relevantDataBundle.value(forKey: RESPONSE_PARAM_DATA) as! NSArray
@@ -485,7 +453,7 @@ class ModemStatusVC: BaseVC {
                 }
                 
                 //Creating First Record for the table
-                var tempTableHeaderModemStatus = TableHeaderDS()
+                let tempTableHeaderModemStatus = TableHeaderDS()
                 let frequencyBundle = ((modemStatusArray[0] as! NSDictionary).value(forKey: RESPONSE_PARAM_FREQUENCIES) as! NSArray)
                 
                 tempTableHeaderModemStatus.values.add("Label")
@@ -495,7 +463,6 @@ class ModemStatusVC: BaseVC {
                 
                 //Global Variable Assignment
                 self.tableHeaderModemStatus = tempTableHeaderModemStatus
-                
                 
                 //Filling Values For further assignment
                 //Outer Iteration
@@ -529,23 +496,16 @@ class ModemStatusVC: BaseVC {
                     }
                     
                     self.bundleDataMSTable.append(tempRecord)
-                    
                 }
-                
                 
                 self.plotBirthCertificateTable()
                 self.plotModemStatusTable()
-                
-                
-                
                 
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
-            
             
             
         },failureCompletionHandler: {
@@ -581,7 +541,7 @@ class ModemStatusVC: BaseVC {
                 self.totalMScoloumns = 6
                 
                 //Creating First Record for the table
-                var tempTableHeaderDS = TableHeaderDS()
+                let tempTableHeaderDS = TableHeaderDS()
                 
                 tempTableHeaderDS.values.add("Downstream")
                 tempTableHeaderDS.values.add("Freq(MHz)")
@@ -589,7 +549,6 @@ class ModemStatusVC: BaseVC {
                 tempTableHeaderDS.values.add("MER(dB)")
                 tempTableHeaderDS.values.add("CM Corr Cw(%)")
                 tempTableHeaderDS.values.add("CM Un Corr Cw(%)")
-                
                 
                 //Global Variable Assignment
                 self.tableHeaderDS = tempTableHeaderDS
@@ -599,35 +558,32 @@ class ModemStatusVC: BaseVC {
                     var tempRecord = DownstreamDS()
                     
                     let frequency = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_FREQ)!)
-                    let power = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_POWER)!)
-                    let mer = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_MER)!)
+                    let powerArr = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_POWER)!).components(separatedBy: " <img")
+                    let merArr = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_MER)!).components(separatedBy: " <img")
                     let cmCorrCw = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_CM_CORR)!)
                     let cmUnCorrCw = String(describing: castedRecord.value(forKey: RESPONSE_PARAM_CM_UNCORR)!)
                     
                     tempRecord.frequency = frequency
-                    tempRecord.power = power
-                    tempRecord.mer = mer
+                    tempRecord.power.value = powerArr[0]
+                    tempRecord.power.imageURL = powerArr[1].detectURL()
+                    tempRecord.mer.value = merArr[0]
+                    tempRecord.mer.imageURL = merArr[1].detectURL()
                     tempRecord.cmCorrCw = cmCorrCw
                     tempRecord.cmUnCorrCw = cmUnCorrCw
                     
                     self.bundleDataDSTable.append(tempRecord)
-                    
                     //Prepare the Custom Table View
                     
                 }
 
                 self.plotDownstreamTable()
                 
-                
             }else if statusCode == 401{
                 self.performLogoutAsSessionExpiredDetected()
             }else{
                 self.displayAlert(withTitle: ALERT_TITLE_APP_NAME, withMessage: statusMessage, withButtonTitle: ALERT_BUTTON_OK)
             }
-            
-            
-            
-            
+
         },failureCompletionHandler: {
             (errorTitle,errorMessage) in
             self.displayAlert(withTitle: errorTitle, withMessage: errorMessage, withButtonTitle: ALERT_BUTTON_OK)
@@ -638,22 +594,34 @@ class ModemStatusVC: BaseVC {
     
     
     func setMainScrollViewContentHeight(){
-        self.constraintCententViewHeightForMainCV.constant = self.viewGovernerForHeight.frame.size.height + self.viewGovernerForHeight.frame.origin.y + 8
+        self.constraintCententViewHeightForMainCV.constant = self.viewGovernerForHeight.frame.size.height + self.viewGovernerForHeight.frame.origin.y + 58
         UIView.animate(withDuration: 1.0, animations: {
             self.view.layoutIfNeeded()
         })
         
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segue-to-geocode"{
+            let destinationController = segue.destination as! GeocodeVC
+            destinationController.exposedMacAddress = sender as! String
+            
+        }
+    }
     
     
+    func performGeocodeProcedure(macAddress:String){
+        
+        self.performSegue(withIdentifier: "segue-to-geocode", sender: macAddress)
+    }
     
-    
+    @IBAction func buttonGeocodePressed(_ sender: UIButton) {
+        performGeocodeProcedure(macAddress: dataBundle.value(forKey: RESPONSE_PARAM_MODEM_MAC) as! String)
+    }
     
     
     @IBAction func btnActionLogout(_ sender: Any) {
         self.performLogout()
-        
         
     }
 }
@@ -683,34 +651,13 @@ struct TableHeaderDS{
 
 struct DownstreamDS{
     var frequency = String()
-    var power = String()
-    var mer = String()
+    var power = DataPairDS()
+    var mer = DataPairDS()
     var cmCorrCw = String()
     var cmUnCorrCw = String()
 }
 
-/*
- //MARK: UItable View Deleagtes And Datasource
- func numberOfSections(in tableView: UITableView) -> Int {
- return 1;
- }
- 
- 
- func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
- if tableView == self.tableViewBirthCertificate{
- return 4
- }else if tableView == self.tableViewModemStatus{
- return 7
- }else if tableView == self.tableViewDSInformation{
- return 5
- }else{
- return 0
- }
- }
- 
- 
- func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
- return UITableViewCell()
- }
-
- */
+struct DataPairDS {
+    var value = ""
+    var imageURL : URL!
+}

@@ -64,6 +64,9 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
         self.loadModules()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.stopHandlingUpdates()
+    }
     
     func configureUIComponents(){
         let cellNib = UINib(nibName: "HomeViewCollectionCell", bundle: nil)
@@ -90,8 +93,8 @@ class HomeVC: BaseVC,UICollectionViewDataSource, UICollectionViewDelegate, UICol
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
             let statusMessage = String(describing: responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
-            
-            
+            let versionName = String(describing: responseDict.value(forKey: RESPONSE_PARAM_VERSION_NAME)!)
+            USER_DEFAULTS.set(versionName, forKey: DEFAULTS_VERSION_NAME)
             
             if statusCode == 200{
                 let dataDictionary = responseDict.value(forKey: RESPONSE_PARAM_DATA)! as! NSDictionary
