@@ -129,6 +129,7 @@ class USAnalyzerSettingVC: BaseVC,UITableViewDelegate, UITableViewDataSource, UI
                 self.globalTextfieldForOptions.resignFirstResponder()
                 let cell = self.tableViewAnalyzerSetting.cellForRow(at: IndexPath(row: 0, section: 0)) as! TextfieldCell
                 cell.textfieldMain.text = self.bundlePicker[self.selectedIndex]
+                cell.textfieldContent.text = ""
                 self.selectedType = self.bundleType[self.selectedIndex]
                 
             })

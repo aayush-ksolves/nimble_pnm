@@ -32,7 +32,7 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
     var bundleTimestamp: [String] = []
     var arrayLineChartData: [ChartDataEntry] = []
     fileprivate var arrayImpairmentFreq : [BarChartDataEntry] = []
-    var arrayBarChartWidth: [Double] = []
+    var barWidthForImpairment:Double = 0
     var arrayMacAddrerssPort: [String] = []
     
     var colorLineChart = UIColor(red: 0/255, green: 200/255, blue: 0/255, alpha: 1)
@@ -236,20 +236,13 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                     }
                     
                     self.arrayImpairmentFreq.removeAll()
-                    self.arrayBarChartWidth.removeAll()
                     
                     let dicImpairmentData = dataDic.value(forKey: RESPONSE_PARAM_IMPAIRMANT_DATA)! as? NSArray ?? []
                     
-                    for eachData in dicImpairmentData {
-                        
-                        let highFreq = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_HIGH_FREQ)!))!
-                        let lowFreq = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_LOW_FREQ)!))!
-                        let valueX = lowFreq + (highFreq-lowFreq)/2
-                        let impairmentRecord = BarChartDataEntry(x: valueX,y: lowestAmplitude)
-                        
-                        self.arrayBarChartWidth.append(highFreq-lowFreq)
-                        self.arrayImpairmentFreq.append(impairmentRecord)
-                    }
+                    let (barDataArray, commonBarWidth) = self.getRequiredDataForImpairment(impairmentArray: dicImpairmentData, amplitude: lowestAmplitude)
+                    
+                    self.arrayImpairmentFreq = barDataArray
+                    self.barWidthForImpairment = Double(commonBarWidth)
                     
                     self.shouldShowImpairments = true
                     // Initialising Second Cell Data
@@ -283,7 +276,6 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                 }else {
                     self.arrayLineChartData.removeAll()
                     self.arrayImpairmentFreq.removeAll()
-                    self.arrayBarChartWidth.removeAll()
                     self.isDataAvailable = false
                 }
                 
@@ -302,6 +294,56 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
         })
         
     }
+    
+    
+    func getRequiredDataForImpairment(impairmentArray: NSArray, amplitude: Double) -> ([BarChartDataEntry], Int) {
+        var arrayImpairmentWidth: [Int] = []
+        var arrayHighFreq: [Int] = []
+        var arrayLowFreq: [Int] = []
+        var arrayCustomImpairment: [BarChartDataEntry] = []
+        
+        for eachData in impairmentArray {
+            let highFreq = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_HIGH_FREQ)!))!
+            let lowFreq = Double(String(describing: (eachData as! NSDictionary).value(forKey: RESPONSE_PARAM_LOW_FREQ)!))!
+            arrayHighFreq.append(Int(highFreq))
+            arrayLowFreq.append(Int(lowFreq))
+            arrayImpairmentWidth.append(Int(highFreq - lowFreq))
+        }
+        
+        var commonWidth = arrayImpairmentWidth.first ?? 1
+        
+        for value in arrayImpairmentWidth {
+            commonWidth = getHCFOfNumber(first: commonWidth, second: value)
+        }
+        
+        print(arrayImpairmentWidth)
+        print(commonWidth)
+        
+        for index in 0..<arrayImpairmentWidth.count {
+            let numberOfBarsRequired = Int(arrayImpairmentWidth[index] / commonWidth)
+            var lowFreq = arrayLowFreq[index]
+            
+            for _ in 1...numberOfBarsRequired {
+                let valueX = lowFreq + commonWidth / 2
+                let impairmentRecord = BarChartDataEntry(x: Double(valueX),y: amplitude)
+                arrayCustomImpairment.append(impairmentRecord)
+                lowFreq += commonWidth
+            }
+        }
+        
+        return (arrayCustomImpairment, commonWidth)
+    }
+    
+    func getHCFOfNumber(first:Int, second: Int) -> Int {
+        let minValue = min(first, second)
+        for digit in stride(from: minValue, to: 1, by: 1) {
+            if (first % digit == 0) && (second % digit == 0) {
+                return digit
+            }
+        }
+        return 1
+    }
+    
     
     @objc func buttonPortPressed(_ sender: UIButton) {
         
@@ -359,10 +401,8 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
 
                 let barChartData = BarChartData()
                 barChartData.addDataSet(impairmentData)
-                if arrayBarChartWidth.count > 0{
-                    barChartData.barWidth = arrayBarChartWidth.max()!
-                    barChartData.highlightEnabled = false
-                }
+                barChartData.barWidth = barWidthForImpairment
+                barChartData.highlightEnabled = false
                 
                 combinedChartData.addDataSet(impairmentData)
                 combinedChartData.barData = barChartData
