@@ -57,7 +57,6 @@ class SyncMobileVC: UIViewController,BarCodeScannerDelegate {
     func saveToDefaultsAndMove(value:String){
         isCodeOverwritten = true;
         USER_DEFAULTS.set(value, forKey: DEFAULTS_SETTINGS_URL)
-    
     }
     
     

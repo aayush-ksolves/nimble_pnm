@@ -77,7 +77,7 @@ let DEFAULTS_AUTO_LOGIN_PASSWORD = "DEFAULTS_AUTO_LOGIN_PASSWORD"
 
 //WEB Service URLS
 //var BASE_URL :String = "http://10.0.0.22/testing/master2/index.php"
-var BASE_URL :String = "http://10.1.0.22/testing/master2/index.php"
+var BASE_URL :String = "https://pnm.stmc.nimblethis.com/pnm4/index.php/"
 
 
 let SERVICE_URL_LOGIN = "/pnmservice/login";
@@ -363,7 +363,7 @@ let RESPONSE_PARAM_INTERFACE_NAME = "interface_name"
 let RESPONSE_PARAM_INTERFACE_ID = "interface_id"
 let RESPONSE_PARAM_DISTANCE = "distance"
 let RESPONSE_PARAM_ALIAS = "alias"
-let RESPONSE_PARAM_VERSION_NAME = "version_name"
+let RESPONSE_PARAM_VERSION_CODE = "version_code"
 
 
 let RESPONSE_PARAM_COMMON = "common"

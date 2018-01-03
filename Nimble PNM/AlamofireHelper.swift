@@ -43,10 +43,7 @@ class AlamofireHelper: NSObject {
             
             let httpStatusCode = responseBundle.response?.statusCode
             let requestStatus = responseBundle.result
-            
-            print(httpStatusCode!)
-            print(requestStatus)
-            
+                        
             //Sliding Out Loader View Controller
             APP_DELEGATE.hideLoader()
             

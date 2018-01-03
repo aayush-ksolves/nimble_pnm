@@ -208,8 +208,8 @@ class USAnalyzerVC: BaseVC,UIPickerViewDelegate,UIPickerViewDataSource,UITextFie
                     tempRecord.interfaceName = castedRecord.value(forKey: RESPONSE_PARAM_INTERFACE_NAME) as! String
                     tempRecord.alias = castedRecord.value(forKey: RESPONSE_PARAM_ALIAS) as! String
                     tempRecord.frequency = castedRecord.value(forKey: RESPONSE_PARAM_FREQ) as! String
-                    tempRecord.startFreq = castedRecord.value(forKey: RESPONSE_PARAM_START_FREQ) as! String
-                    tempRecord.endFreq = castedRecord.value(forKey: RESPONSE_PARAM_END_FREQ) as! String
+//                    tempRecord.startFreq = castedRecord.value(forKey: RESPONSE_PARAM_START_FREQ) as! String
+//                    tempRecord.endFreq = castedRecord.value(forKey: RESPONSE_PARAM_END_FREQ) as! String
                     
                     self.bundleUpstreamPortList.append(tempRecord)
                 }
@@ -376,8 +376,8 @@ struct UpstreamPortListDS{
     var interfaceName = ""
     var alias = ""
     var frequency = ""
-    var startFreq = ""
-    var endFreq = ""
+//    var startFreq = ""
+//    var endFreq = ""
 }
 
 
