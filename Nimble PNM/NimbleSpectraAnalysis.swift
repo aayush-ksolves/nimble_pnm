@@ -16,6 +16,7 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
     var exposedCMTSId = ""
     var exposedCMTSName = ""
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tableViewSpectraAnalysis: UITableView!
     @IBOutlet weak var buttonPort4: UIButton!
     @IBOutlet weak var buttonPort3: UIButton!
@@ -77,6 +78,8 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
         performInitialAction()
         
         self.textFieldFilterByDate.text = exposedTimestamp.components(separatedBy: " ")[0]
+        
+        activityIndicator.stopAnimating()
     }
     
     func performInitialAction() {
@@ -201,8 +204,10 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                               REQ_PARAM_MAC_ADDRESS: tempMacAddress
         ];
         
-        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_NIMBLE_SPECTRA_GET_CHART_DATA, withParameters: dictParameters, withLoaderMessage: LOADER_MSG_FETCH_SPECTRA_DATA, sucessCompletionHadler: {
+        self.networkManager.makePostRequestWithAuthorizationHeaderTo(url: SERVICE_URL_NIMBLE_SPECTRA_GET_CHART_DATA, withParameters: dictParameters ,withLoaderMessage: LOADER_MSG_FETCH_SPECTRA_DATA, shouldExtendLoader: true ,sucessCompletionHadler: {
             responseDict in
+            
+            APP_DELEGATE.hideLoader()
             
             let statusCode = responseDict.value(forKey: RESPONSE_PARAM_STATUS_CODE) as! Int
             let statusMessage = String(describing:responseDict.value(forKey: RESPONSE_PARAM_STATUS_MSG)!)
@@ -215,11 +220,27 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                     // Initialising First cell Data
                     self.arrayLineChartData.removeAll()
                     
-                    let dicResponseData = dataDic.value(forKey: RESPONSE_PARAM_RESPONSE_DATA)! as! NSDictionary
-                    let arrayStatisticsData = dicResponseData.value(forKey: RESPONSE_PARAM_DATA)! as! NSArray
+                    var dicResponseData : NSDictionary!
+                    var arrayStatisticsData : NSArray!
+                    
+                    if let tempDic = dataDic.value(forKey: RESPONSE_PARAM_RESPONSE_DATA)! as? NSDictionary {
+                        dicResponseData = tempDic
+                        
+                        if let tempArray = dicResponseData.value(forKey: RESPONSE_PARAM_DATA)! as? NSArray {
+                            arrayStatisticsData = tempArray
+                        }else{
+                            arrayStatisticsData = NSArray()
+                        }
+                        
+                    }else{
+                        dicResponseData = NSDictionary()
+                        arrayStatisticsData = NSArray()
+                    }
+                    
                     var lowestAmplitude: Double = 0
-
+                    
                     if arrayStatisticsData.count > 2 {
+                        
                         self.isDataAvailable = true
                         for eachRecord in arrayStatisticsData {
                             if let eachArray = eachRecord as? NSArray {
@@ -272,7 +293,6 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
                     
                     self.pickerView.reloadAllComponents()
                     
-                    
                 }else {
                     self.arrayLineChartData.removeAll()
                     self.arrayImpairmentFreq.removeAll()
@@ -314,6 +334,7 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
         
         for value in arrayImpairmentWidth {
             commonWidth = getHCFOfNumber(first: commonWidth, second: value)
+            print(commonWidth)
         }
         
         print(arrayImpairmentWidth)
@@ -336,7 +357,7 @@ class NimbleSpectraAnalysis : BaseVC, UITextFieldDelegate, UITableViewDelegate, 
     
     func getHCFOfNumber(first:Int, second: Int) -> Int {
         let minValue = min(first, second)
-        for digit in stride(from: minValue, to: 1, by: 1) {
+        for digit in stride(from: minValue, to: 1, by: -1) {
             if (first % digit == 0) && (second % digit == 0) {
                 return digit
             }

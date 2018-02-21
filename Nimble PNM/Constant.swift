@@ -80,10 +80,10 @@ let DEFAULTS_AUTO_LOGIN_PASSWORD = "DEFAULTS_AUTO_LOGIN_PASSWORD"
 var BASE_URL :String = "https://pnm.stmc.nimblethis.com/pnm4/index.php/"
 
 
-let SERVICE_URL_LOGIN = "/pnmservice/login";
-let SERVICE_URL_LOGOUT = "/pnmservice/logout";
+let SERVICE_URL_LOGIN = "/pnmservice/login"
+let SERVICE_URL_LOGOUT = "/pnmservice/logout"
 
-let SERVICE_URL_HOME_CHECK_MODULES = "/pnmservice/checkModules";
+let SERVICE_URL_HOME_CHECK_MODULES = "/pnmservice/checkModules"
 let SERVICE_URL_PROFILE_CHANGE_PASSWORD = "/pnmservice/changePassword"
 
 let SERVICE_URL_WO_LIST = "/workorderservice/getWorkOrderList"
@@ -504,6 +504,7 @@ let RESPONSE_PARAM_LIST = "list"
 
 let imageServerityImmediateAction = #imageLiteral(resourceName: "immediate-action")
 let imageServerityHighMonitorFreq = #imageLiteral(resourceName: "high-monitoring-freq")
+let imageServerityNoAction = #imageLiteral(resourceName: "no-action-required")
 
 //PHOTO ACTION SHEET
 let AS_PHOTO_TITLE = "Choose Photo"

@@ -11,6 +11,8 @@ import UIKit
 
 class SyncMobileVC: UIViewController,BarCodeScannerDelegate {
 
+    @IBOutlet weak var viewTopTitleContainer: UIView!
+    @IBOutlet weak var constraintLabelTitleHeight: NSLayoutConstraint!
     @IBOutlet weak var btnOutletScanCode: UIButton!
     @IBOutlet weak var labelInstructionsTop: UILabel!
     @IBOutlet weak var labelScreenTitle: UILabel!
@@ -36,8 +38,6 @@ class SyncMobileVC: UIViewController,BarCodeScannerDelegate {
                 self.performSegue(withIdentifier: "seguetologin", sender: nil)
             }
         }
-        
-        
     }
     
     func configureUIComponents(){
@@ -48,10 +48,23 @@ class SyncMobileVC: UIViewController,BarCodeScannerDelegate {
         if isLoadedAsSettingVC{
             self.labelCurrentSettingsURL.text = "Current URL :  \(USER_DEFAULTS.value(forKey: DEFAULTS_SETTINGS_URL) as! String)"
             self.labelCurrentSettingsURL.isHidden = false
+            self.shouldHideTopTitleContainer(shouldHide: true)
+            
         }else{
             self.labelCurrentSettingsURL.isHidden = true
+            self.shouldHideTopTitleContainer(shouldHide: false)
         }
         
+    }
+    
+    func shouldHideTopTitleContainer(shouldHide: Bool){
+        if shouldHide {
+            self.viewTopTitleContainer.isHidden = true
+            self.constraintLabelTitleHeight.constant = 0
+        }else{
+            self.viewTopTitleContainer.isHidden = false
+            self.constraintLabelTitleHeight.constant = 64
+        }
     }
     
     func saveToDefaultsAndMove(value:String){
@@ -59,15 +72,11 @@ class SyncMobileVC: UIViewController,BarCodeScannerDelegate {
         USER_DEFAULTS.set(value, forKey: DEFAULTS_SETTINGS_URL)
     }
     
-    
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "seguetobarcodescanner"{
             let destinationController = segue.destination as! BarCodeScannerVC
             destinationController.delegate = self
-            
         }
-        
     }
     
     //MARK: Bar Code Scanner Delegates
@@ -88,13 +97,5 @@ class SyncMobileVC: UIViewController,BarCodeScannerDelegate {
         self.performSegue(withIdentifier: "seguetobarcodescanner", sender: nil)
     }
     
-    
-    
-    
-    
-    
-    
-    
-
 }
 

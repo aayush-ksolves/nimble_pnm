@@ -93,7 +93,7 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
                     if tempModemData.serverity == "green.png" {
                         tempModemData.leftStripColor = UIColor.green
                     }else if tempModemData.serverity == "red.png" {
-                        tempModemData.leftStripColor = UIColor.green
+                        tempModemData.leftStripColor = UIColor.red
                     }else {
                         tempModemData.leftStripColor = UIColor(red: 221/255, green: 221/255, blue: 221/255, alpha: 1)
                     }
@@ -160,7 +160,7 @@ class NimbleSpectraDetails : BaseVC, UITextFieldDelegate, UITableViewDelegate, U
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segue-to-spectra-analysis"{
             
-            let selectedIndexData = bundleCMTSModem[selectedModem]
+            let selectedIndexData = tempBundleCMTSModem[selectedModem]
             let destinationController = segue.destination as! NimbleSpectraAnalysis
             
             destinationController.exposedCMTSId = exposedSelectedCMTSId

@@ -126,6 +126,8 @@ class UtilityHelper : NSObject{
     static func getImageServerityFor(forType : String) -> UIImage{
         if forType == "highMonitoringFrequency" {
             return imageServerityHighMonitorFreq
+        }else if forType == "noActionRequired" {
+            return imageServerityNoAction
         }else {
             return imageServerityImmediateAction
         }

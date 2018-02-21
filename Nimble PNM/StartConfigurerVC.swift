@@ -24,8 +24,8 @@ class StartConfigurerVC: UIViewController {
    
     
     func checkAndProceedInNavigation(){
-        //Checking Defaults
-//    USER_DEFAULTS.set(BASE_URL, forKey: DEFAULTS_SETTINGS_URL)
+//        Checking Defaults
+//        USER_DEFAULTS.set(BASE_URL, forKey: DEFAULTS_SETTINGS_URL)
         
         if let settingsURL = USER_DEFAULTS.value(forKey: DEFAULTS_SETTINGS_URL){
             //WE CAN SET SETTINGS URL HERE

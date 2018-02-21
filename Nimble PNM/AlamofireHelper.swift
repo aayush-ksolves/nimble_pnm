@@ -21,7 +21,7 @@ class AlamofireHelper: NSObject {
     ///   - parameters: The parameters to be passed in body of request of type [String:Any]
     ///   - sucessCompletionHadler: The closure to be called if the request returns a http status of 200
     ///   - failureCompletionHandler: The closure to be called if http status was not 200 or there exist some JSON deserealising error
-    func makePostRequestWithAuthorizationHeaderTo(url urlString:String,withParameters parameters:[String:Any]!, withLoaderMessage : String = "Loading...", isStandAloneURL :Bool = false, sucessCompletionHadler:@escaping (NSDictionary)->Void, failureCompletionHandler:@escaping (String,String) -> Void) {
+    func makePostRequestWithAuthorizationHeaderTo(url urlString:String,withParameters parameters:[String:Any]!, withLoaderMessage : String = "Loading...", shouldExtendLoader: Bool! = false ,isStandAloneURL :Bool = false, sucessCompletionHadler:@escaping (NSDictionary)->Void, failureCompletionHandler:@escaping (String,String) -> Void) {
         
         var url : String;
         
@@ -49,6 +49,10 @@ class AlamofireHelper: NSObject {
             
             switch requestStatus{
             case .success:
+                
+                if shouldExtendLoader {
+                    APP_DELEGATE.presentLoader(withMessage: "Parsing Data...")
+                }
                 
                 //Getting Data As JSON Serialization Succeded
                 let responseDataBundle = responseBundle.result.value

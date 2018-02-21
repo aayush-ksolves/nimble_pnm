@@ -87,7 +87,15 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
             self.bundleCMTS.removeAll()
             if statusCode == 200{
                 
-                let dataDic = responseDict.value(forKey: RESPONSE_PARAM_DATA) as! NSDictionary
+                var dataDic : NSDictionary!
+                
+                if let tempDataDic = responseDict.value(forKey: RESPONSE_PARAM_DATA) as? NSDictionary {
+                    dataDic = tempDataDic
+                }else {
+                    print("<-------- Dictionary Not Received From Server -------->")
+                    dataDic = NSDictionary()
+                }
+                
                 let totalKeys = dataDic.allKeys as! [String]
                 
                 for key in totalKeys{
@@ -233,7 +241,7 @@ class NimbleSpectraVC: BaseVC , UIPickerViewDelegate, UIPickerViewDataSource, UI
     // Picker View Delegate & Data Source
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1;
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {

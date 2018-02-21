@@ -149,8 +149,8 @@ class ProfileVC: BaseVC, UICollectionViewDelegateFlowLayout,UICollectionViewDele
         let segueIdentifier = cellData["segueID"] as! String
         
         if segueIdentifier == SEGUEID_Mod_Setting{
-            settingsVC.isLoadedAsSettingVC = true;
-            self.present(settingsVC, animated: true, completion: nil)
+            settingsVC.isLoadedAsSettingVC = true
+            navigationController?.pushViewController(settingsVC, animated: true)
             
         }else if segueIdentifier == SEGUEID_Mod_Password_Change{
             self.performSegue(withIdentifier: segueIdentifier, sender: nil)

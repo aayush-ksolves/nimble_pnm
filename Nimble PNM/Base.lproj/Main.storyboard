@@ -27,21 +27,21 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CpM-tB-y76">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nimbe PNM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="es6-5t-wfb">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nimble PNM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="es6-5t-wfb">
                                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="RV4-dM-DeO"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.2196078431372549" green="0.49411764705882355" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="es6-5t-wfb" firstAttribute="leading" secondItem="CpM-tB-y76" secondAttribute="leading" id="4HM-pG-zjl"/>
                                     <constraint firstAttribute="bottom" secondItem="es6-5t-wfb" secondAttribute="bottom" id="5Go-Uz-Qkf"/>
-                                    <constraint firstItem="es6-5t-wfb" firstAttribute="leading" secondItem="CpM-tB-y76" secondAttribute="leading" id="GV8-CO-Z8q"/>
-                                    <constraint firstAttribute="trailing" secondItem="es6-5t-wfb" secondAttribute="trailing" id="WHB-S3-WI7"/>
+                                    <constraint firstAttribute="trailing" secondItem="es6-5t-wfb" secondAttribute="trailing" id="Cl0-EY-dxo"/>
                                     <constraint firstAttribute="height" constant="64" id="hkN-cm-Mch"/>
                                 </constraints>
                             </view>
@@ -112,16 +112,14 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sbd-cU-QOG" secondAttribute="bottom" id="fKO-6E-9NJ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Nimble PNM" id="K0J-on-giS">
-                        <barButtonItem key="backBarButtonItem" image="flash_golden" id="Geh-fe-TWf">
-                            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Nimble PNM" id="DlM-hX-YGz"/>
                     <connections>
                         <outlet property="btnOutletScanCode" destination="Aj9-cY-kCR" id="7wM-Ko-P8H"/>
+                        <outlet property="constraintLabelTitleHeight" destination="hkN-cm-Mch" id="EdE-wd-r1L"/>
                         <outlet property="labelCurrentSettingsURL" destination="60c-Jj-5ZI" id="liT-Sq-1pF"/>
                         <outlet property="labelInstructionsTop" destination="3FJ-qh-UgU" id="Pa5-qa-JrQ"/>
                         <outlet property="labelScreenTitle" destination="es6-5t-wfb" id="n7s-vc-wkf"/>
+                        <outlet property="viewTopTitleContainer" destination="CpM-tB-y76" id="u6N-hh-yoN"/>
                         <segue destination="oPO-cO-R1I" kind="show" identifier="seguetobarcodescanner" id="6Nc-kB-4sR"/>
                         <segue destination="Wza-jH-8P7" kind="show" identifier="seguetologin" id="RL2-kM-k1Y"/>
                     </connections>
@@ -3320,6 +3318,9 @@
                                     <outlet property="delegate" destination="Glo-Wv-2ix" id="J3n-15-m18"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9ZG-Oa-Rbw">
+                                <rect key="frame" x="150" y="198" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -3330,11 +3331,13 @@
                             <constraint firstItem="J0Q-A3-bxm" firstAttribute="leading" secondItem="l0d-Hb-rQc" secondAttribute="leading" constant="10" id="JFs-PL-iFl"/>
                             <constraint firstItem="J0Q-A3-bxm" firstAttribute="top" secondItem="PGm-cH-7rb" secondAttribute="bottom" constant="5" id="JKF-Gk-ZMi"/>
                             <constraint firstItem="PGm-cH-7rb" firstAttribute="top" secondItem="nlV-WC-Eyy" secondAttribute="bottom" id="Rf0-3L-xco"/>
+                            <constraint firstItem="9ZG-Oa-Rbw" firstAttribute="centerY" secondItem="l0d-Hb-rQc" secondAttribute="centerY" id="UOT-VN-czf"/>
                             <constraint firstItem="EPF-Te-Amk" firstAttribute="leading" secondItem="l0d-Hb-rQc" secondAttribute="leading" id="eMV-3I-MHz"/>
                             <constraint firstAttribute="trailing" secondItem="SVa-c2-EMi" secondAttribute="trailing" constant="10" id="eQu-WP-aYm"/>
                             <constraint firstAttribute="trailing" secondItem="EPF-Te-Amk" secondAttribute="trailing" id="gZr-BG-8sK"/>
                             <constraint firstItem="PGm-cH-7rb" firstAttribute="leading" secondItem="l0d-Hb-rQc" secondAttribute="leading" id="lNo-Sj-Ej4"/>
                             <constraint firstItem="EPF-Te-Amk" firstAttribute="top" secondItem="SVa-c2-EMi" secondAttribute="bottom" constant="5" id="nxK-kk-eWR"/>
+                            <constraint firstItem="9ZG-Oa-Rbw" firstAttribute="centerX" secondItem="l0d-Hb-rQc" secondAttribute="centerX" id="tSJ-wy-etP"/>
                             <constraint firstAttribute="trailing" secondItem="J0Q-A3-bxm" secondAttribute="trailing" constant="10" id="wJv-C7-tHa"/>
                         </constraints>
                     </view>
@@ -3354,6 +3357,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="9ZG-Oa-Rbw" id="e9F-66-FhV"/>
                         <outlet property="buttonPort1" destination="BGF-Jz-jU5" id="Foo-U7-Tzf"/>
                         <outlet property="buttonPort2" destination="sgL-0r-2Dy" id="OAK-sl-Q9s"/>
                         <outlet property="buttonPort3" destination="Qz0-Xa-IkY" id="pzT-NI-0ic"/>
@@ -3680,7 +3684,6 @@
     </scenes>
     <resources>
         <image name="app_icon_app_use" width="256" height="256"/>
-        <image name="flash_golden" width="32" height="32"/>
         <image name="flash_white" width="32" height="32"/>
         <image name="flip_camera_outside" width="32" height="32"/>
         <image name="help" width="125" height="125"/>
@@ -3700,7 +3703,7 @@
         <image name="up-stream-grey" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="J6F-ew-CMi"/>
-        <segue reference="GcN-Qs-dNr"/>
+        <segue reference="Ggw-Yc-qPC"/>
+        <segue reference="RL2-kM-k1Y"/>
     </inferredMetricsTieBreakers>
 </document>

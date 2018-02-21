@@ -95,15 +95,22 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
     }
     
     
+    
     func geoView(_ geoView: AGSGeoView, didTouchDownAtScreenPoint screenPoint: CGPoint, mapPoint: AGSPoint, completion: @escaping (Bool) -> Void) {
+        
+        print(self.mapView.rotation)
         
         let cornerCoordinates = mapView.visibleArea!.parts.array()[0]
         let topRightCoordinate = cornerCoordinates.point(at: 0).toCLLocationCoordinate2D()
 //        let bottomRightCoordinate = cornerCoordinates.point(at: 1).toCLLocationCoordinate2D()
 //        let bottomLeftCoordinate = cornerCoordinates.point(at: 2).toCLLocationCoordinate2D()
         let topLeftCoordinate = cornerCoordinates.point(at: 3).toCLLocationCoordinate2D()
+                
+        var factor = (topRightCoordinate.longitude - topLeftCoordinate.longitude)*Double(markerWidth)/(Double(screenWidth)*2)
+        factor = abs(factor)
+        factor = factor + factor/10
         
-        let factor = (topRightCoordinate.longitude - topLeftCoordinate.longitude)*Double(markerWidth)/(Double(screenWidth)*2)
+        print(factor)
         
         let mapPointLatitude = mapPoint.toCLLocationCoordinate2D().latitude
         let mapPointLongitude = mapPoint.toCLLocationCoordinate2D().longitude
@@ -122,6 +129,7 @@ class MappingInGeocodeVC: BaseVC,AGSGeoViewTouchDelegate {
             
         }
     }
+
     
     
     //MARK: Touch delegate Map View

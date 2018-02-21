@@ -360,8 +360,8 @@ class GeocodeVC: BaseVC, UITableViewDelegate, UITableViewDataSource, UITextField
             return UITableViewCell()
         }
     }
-    @objc  
-    func btnModifyLatLngPressed(_ sender:UIButton){
+    
+    @objc func btnModifyLatLngPressed(_ sender:UIButton){
         self.performSegue(withIdentifier: "segue-to-modify-lat-lng", sender: self)
     }
     
